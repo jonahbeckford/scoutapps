@@ -19,6 +19,16 @@ module type S = sig
       | Blue3
       | Undefined of int
   end
+  module EClimb2025_11396563124527522504 : sig
+    type t =
+      | Success
+      | Failed
+      | DidNotAttempt
+      | DeepCage
+      | Parked
+      | ShallowCage
+      | Undefined of int
+  end
   module EClimb_13533464256854897024 : sig
     type t =
       | Success
@@ -28,6 +38,15 @@ module type S = sig
       | Parked
       | Undefined of int
   end
+  module TBreakdown2025_15903042630962599233 : sig
+    type t =
+      | None
+      | Tipped
+      | MechanicalFailure
+      | Incapacitated
+      | GamePieceStuck
+      | Undefined of int
+  end
   module TBreakdown_16560530708388719165 : sig
     type t =
       | None
@@ -35,6 +54,13 @@ module type S = sig
       | MechanicalFailure
       | Incapacitated
       | NoteStuck
+      | Undefined of int
+  end
+  module SPosition2025_11840190094658573197 : sig
+    type t =
+      | Left
+      | Middle
+      | Right
       | Undefined of int
   end
   module SPosition_15975123903786802361 : sig
@@ -83,6 +109,35 @@ module type S = sig
       val tele_breakdown_get : t -> TBreakdown_16560530708388719165.t
       val endgame_climb_get : t -> EClimb_13533464256854897024.t
       val endgame_trap_get : t -> bool
+      val preplaced_coral_get : t -> bool
+      val auto_coral_l4_score_get : t -> int
+      val auto_coral_l3_score_get : t -> int
+      val auto_coral_l2_score_get : t -> int
+      val auto_coral_l1_score_get : t -> int
+      val auto_processor_score_get : t -> int
+      val auto_processor_miss_get : t -> int
+      val auto_net_score_get : t -> int
+      val auto_net_miss_get : t -> int
+      val auto_coral_l4_miss_get : t -> int
+      val auto_coral_l3_miss_get : t -> int
+      val auto_coral_l2_miss_get : t -> int
+      val auto_coral_l1_miss_get : t -> int
+      val auto_starting_position_get : t -> SPosition2025_11840190094658573197.t
+      val tele_op_coral_l4_score_get : t -> int
+      val tele_op_coral_l3_score_get : t -> int
+      val tele_op_coral_l2_score_get : t -> int
+      val tele_op_coral_l1_score_get : t -> int
+      val tele_op_processor_score_get : t -> int
+      val tele_op_processor_miss_get : t -> int
+      val tele_op_net_score_get : t -> int
+      val tele_op_net_miss_get : t -> int
+      val has_robot_photo : t -> bool
+      val robot_photo_get : t -> string
+      val ground_pick_up_get : t -> bool
+      val tele_op_breakdown_get : t -> TBreakdown2025_15903042630962599233.t
+      val tele_op_climb_get : t -> EClimb2025_11396563124527522504.t
+      val team_number32_get : t -> int32
+      val team_number32_get_int_exn : t -> int
       val of_message : 'cap message_t -> t
       val of_builder : struct_t builder_t -> t
     end
@@ -91,6 +146,13 @@ module type S = sig
         | AmpSide
         | Center
         | SourceSide
+        | Undefined of int
+    end
+    module SPosition2025 : sig
+      type t = SPosition2025_11840190094658573197.t =
+        | Left
+        | Middle
+        | Right
         | Undefined of int
     end
     module TBreakdown : sig
@@ -102,6 +164,15 @@ module type S = sig
         | NoteStuck
         | Undefined of int
     end
+    module TBreakdown2025 : sig
+      type t = TBreakdown2025_15903042630962599233.t =
+        | None
+        | Tipped
+        | MechanicalFailure
+        | Incapacitated
+        | GamePieceStuck
+        | Undefined of int
+    end
     module EClimb : sig
       type t = EClimb_13533464256854897024.t =
         | Success
@@ -109,6 +180,16 @@ module type S = sig
         | DidNotAttempt
         | Harmony
         | Parked
+        | Undefined of int
+    end
+    module EClimb2025 : sig
+      type t = EClimb2025_11396563124527522504.t =
+        | Success
+        | Failed
+        | DidNotAttempt
+        | DeepCage
+        | Parked
+        | ShallowCage
         | Undefined of int
     end
     module RobotPosition : sig
@@ -208,6 +289,66 @@ module type S = sig
       val endgame_climb_set_unsafe : t -> EClimb_13533464256854897024.t -> unit
       val endgame_trap_get : t -> bool
       val endgame_trap_set : t -> bool -> unit
+      val preplaced_coral_get : t -> bool
+      val preplaced_coral_set : t -> bool -> unit
+      val auto_coral_l4_score_get : t -> int
+      val auto_coral_l4_score_set_exn : t -> int -> unit
+      val auto_coral_l3_score_get : t -> int
+      val auto_coral_l3_score_set_exn : t -> int -> unit
+      val auto_coral_l2_score_get : t -> int
+      val auto_coral_l2_score_set_exn : t -> int -> unit
+      val auto_coral_l1_score_get : t -> int
+      val auto_coral_l1_score_set_exn : t -> int -> unit
+      val auto_processor_score_get : t -> int
+      val auto_processor_score_set_exn : t -> int -> unit
+      val auto_processor_miss_get : t -> int
+      val auto_processor_miss_set_exn : t -> int -> unit
+      val auto_net_score_get : t -> int
+      val auto_net_score_set_exn : t -> int -> unit
+      val auto_net_miss_get : t -> int
+      val auto_net_miss_set_exn : t -> int -> unit
+      val auto_coral_l4_miss_get : t -> int
+      val auto_coral_l4_miss_set_exn : t -> int -> unit
+      val auto_coral_l3_miss_get : t -> int
+      val auto_coral_l3_miss_set_exn : t -> int -> unit
+      val auto_coral_l2_miss_get : t -> int
+      val auto_coral_l2_miss_set_exn : t -> int -> unit
+      val auto_coral_l1_miss_get : t -> int
+      val auto_coral_l1_miss_set_exn : t -> int -> unit
+      val auto_starting_position_get : t -> SPosition2025_11840190094658573197.t
+      val auto_starting_position_set : t -> SPosition2025_11840190094658573197.t -> unit
+      val auto_starting_position_set_unsafe : t -> SPosition2025_11840190094658573197.t -> unit
+      val tele_op_coral_l4_score_get : t -> int
+      val tele_op_coral_l4_score_set_exn : t -> int -> unit
+      val tele_op_coral_l3_score_get : t -> int
+      val tele_op_coral_l3_score_set_exn : t -> int -> unit
+      val tele_op_coral_l2_score_get : t -> int
+      val tele_op_coral_l2_score_set_exn : t -> int -> unit
+      val tele_op_coral_l1_score_get : t -> int
+      val tele_op_coral_l1_score_set_exn : t -> int -> unit
+      val tele_op_processor_score_get : t -> int
+      val tele_op_processor_score_set_exn : t -> int -> unit
+      val tele_op_processor_miss_get : t -> int
+      val tele_op_processor_miss_set_exn : t -> int -> unit
+      val tele_op_net_score_get : t -> int
+      val tele_op_net_score_set_exn : t -> int -> unit
+      val tele_op_net_miss_get : t -> int
+      val tele_op_net_miss_set_exn : t -> int -> unit
+      val has_robot_photo : t -> bool
+      val robot_photo_get : t -> string
+      val robot_photo_set : t -> string -> unit
+      val ground_pick_up_get : t -> bool
+      val ground_pick_up_set : t -> bool -> unit
+      val tele_op_breakdown_get : t -> TBreakdown2025_15903042630962599233.t
+      val tele_op_breakdown_set : t -> TBreakdown2025_15903042630962599233.t -> unit
+      val tele_op_breakdown_set_unsafe : t -> TBreakdown2025_15903042630962599233.t -> unit
+      val tele_op_climb_get : t -> EClimb2025_11396563124527522504.t
+      val tele_op_climb_set : t -> EClimb2025_11396563124527522504.t -> unit
+      val tele_op_climb_set_unsafe : t -> EClimb2025_11396563124527522504.t -> unit
+      val team_number32_get : t -> int32
+      val team_number32_get_int_exn : t -> int
+      val team_number32_set : t -> int32 -> unit
+      val team_number32_set_int_exn : t -> int -> unit
       val of_message : rw message_t -> t
       val to_message : t -> rw message_t
       val to_reader : t -> struct_t reader_t
@@ -221,6 +362,13 @@ module type S = sig
         | SourceSide
         | Undefined of int
     end
+    module SPosition2025 : sig
+      type t = SPosition2025_11840190094658573197.t =
+        | Left
+        | Middle
+        | Right
+        | Undefined of int
+    end
     module TBreakdown : sig
       type t = TBreakdown_16560530708388719165.t =
         | None
@@ -230,6 +378,15 @@ module type S = sig
         | NoteStuck
         | Undefined of int
     end
+    module TBreakdown2025 : sig
+      type t = TBreakdown2025_15903042630962599233.t =
+        | None
+        | Tipped
+        | MechanicalFailure
+        | Incapacitated
+        | GamePieceStuck
+        | Undefined of int
+    end
     module EClimb : sig
       type t = EClimb_13533464256854897024.t =
         | Success
@@ -237,6 +394,16 @@ module type S = sig
         | DidNotAttempt
         | Harmony
         | Parked
+        | Undefined of int
+    end
+    module EClimb2025 : sig
+      type t = EClimb2025_11396563124527522504.t =
+        | Success
+        | Failed
+        | DidNotAttempt
+        | DeepCage
+        | Parked
+        | ShallowCage
         | Undefined of int
     end
     module RobotPosition : sig

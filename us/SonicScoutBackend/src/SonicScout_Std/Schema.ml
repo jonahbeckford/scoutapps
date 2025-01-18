@@ -19,6 +19,16 @@ module type S = sig
       | Blue3
       | Undefined of int
   end
+  module EClimb2025_11396563124527522504 : sig
+    type t =
+      | Success
+      | Failed
+      | DidNotAttempt
+      | DeepCage
+      | Parked
+      | ShallowCage
+      | Undefined of int
+  end
   module EClimb_13533464256854897024 : sig
     type t =
       | Success
@@ -28,6 +38,15 @@ module type S = sig
       | Parked
       | Undefined of int
   end
+  module TBreakdown2025_15903042630962599233 : sig
+    type t =
+      | None
+      | Tipped
+      | MechanicalFailure
+      | Incapacitated
+      | GamePieceStuck
+      | Undefined of int
+  end
   module TBreakdown_16560530708388719165 : sig
     type t =
       | None
@@ -35,6 +54,13 @@ module type S = sig
       | MechanicalFailure
       | Incapacitated
       | NoteStuck
+      | Undefined of int
+  end
+  module SPosition2025_11840190094658573197 : sig
+    type t =
+      | Left
+      | Middle
+      | Right
       | Undefined of int
   end
   module SPosition_15975123903786802361 : sig
@@ -83,6 +109,35 @@ module type S = sig
       val tele_breakdown_get : t -> TBreakdown_16560530708388719165.t
       val endgame_climb_get : t -> EClimb_13533464256854897024.t
       val endgame_trap_get : t -> bool
+      val preplaced_coral_get : t -> bool
+      val auto_coral_l4_score_get : t -> int
+      val auto_coral_l3_score_get : t -> int
+      val auto_coral_l2_score_get : t -> int
+      val auto_coral_l1_score_get : t -> int
+      val auto_processor_score_get : t -> int
+      val auto_processor_miss_get : t -> int
+      val auto_net_score_get : t -> int
+      val auto_net_miss_get : t -> int
+      val auto_coral_l4_miss_get : t -> int
+      val auto_coral_l3_miss_get : t -> int
+      val auto_coral_l2_miss_get : t -> int
+      val auto_coral_l1_miss_get : t -> int
+      val auto_starting_position_get : t -> SPosition2025_11840190094658573197.t
+      val tele_op_coral_l4_score_get : t -> int
+      val tele_op_coral_l3_score_get : t -> int
+      val tele_op_coral_l2_score_get : t -> int
+      val tele_op_coral_l1_score_get : t -> int
+      val tele_op_processor_score_get : t -> int
+      val tele_op_processor_miss_get : t -> int
+      val tele_op_net_score_get : t -> int
+      val tele_op_net_miss_get : t -> int
+      val has_robot_photo : t -> bool
+      val robot_photo_get : t -> string
+      val ground_pick_up_get : t -> bool
+      val tele_op_breakdown_get : t -> TBreakdown2025_15903042630962599233.t
+      val tele_op_climb_get : t -> EClimb2025_11396563124527522504.t
+      val team_number32_get : t -> int32
+      val team_number32_get_int_exn : t -> int
       val of_message : 'cap message_t -> t
       val of_builder : struct_t builder_t -> t
     end
@@ -91,6 +146,13 @@ module type S = sig
         | AmpSide
         | Center
         | SourceSide
+        | Undefined of int
+    end
+    module SPosition2025 : sig
+      type t = SPosition2025_11840190094658573197.t =
+        | Left
+        | Middle
+        | Right
         | Undefined of int
     end
     module TBreakdown : sig
@@ -102,6 +164,15 @@ module type S = sig
         | NoteStuck
         | Undefined of int
     end
+    module TBreakdown2025 : sig
+      type t = TBreakdown2025_15903042630962599233.t =
+        | None
+        | Tipped
+        | MechanicalFailure
+        | Incapacitated
+        | GamePieceStuck
+        | Undefined of int
+    end
     module EClimb : sig
       type t = EClimb_13533464256854897024.t =
         | Success
@@ -109,6 +180,16 @@ module type S = sig
         | DidNotAttempt
         | Harmony
         | Parked
+        | Undefined of int
+    end
+    module EClimb2025 : sig
+      type t = EClimb2025_11396563124527522504.t =
+        | Success
+        | Failed
+        | DidNotAttempt
+        | DeepCage
+        | Parked
+        | ShallowCage
         | Undefined of int
     end
     module RobotPosition : sig
@@ -208,6 +289,66 @@ module type S = sig
       val endgame_climb_set_unsafe : t -> EClimb_13533464256854897024.t -> unit
       val endgame_trap_get : t -> bool
       val endgame_trap_set : t -> bool -> unit
+      val preplaced_coral_get : t -> bool
+      val preplaced_coral_set : t -> bool -> unit
+      val auto_coral_l4_score_get : t -> int
+      val auto_coral_l4_score_set_exn : t -> int -> unit
+      val auto_coral_l3_score_get : t -> int
+      val auto_coral_l3_score_set_exn : t -> int -> unit
+      val auto_coral_l2_score_get : t -> int
+      val auto_coral_l2_score_set_exn : t -> int -> unit
+      val auto_coral_l1_score_get : t -> int
+      val auto_coral_l1_score_set_exn : t -> int -> unit
+      val auto_processor_score_get : t -> int
+      val auto_processor_score_set_exn : t -> int -> unit
+      val auto_processor_miss_get : t -> int
+      val auto_processor_miss_set_exn : t -> int -> unit
+      val auto_net_score_get : t -> int
+      val auto_net_score_set_exn : t -> int -> unit
+      val auto_net_miss_get : t -> int
+      val auto_net_miss_set_exn : t -> int -> unit
+      val auto_coral_l4_miss_get : t -> int
+      val auto_coral_l4_miss_set_exn : t -> int -> unit
+      val auto_coral_l3_miss_get : t -> int
+      val auto_coral_l3_miss_set_exn : t -> int -> unit
+      val auto_coral_l2_miss_get : t -> int
+      val auto_coral_l2_miss_set_exn : t -> int -> unit
+      val auto_coral_l1_miss_get : t -> int
+      val auto_coral_l1_miss_set_exn : t -> int -> unit
+      val auto_starting_position_get : t -> SPosition2025_11840190094658573197.t
+      val auto_starting_position_set : t -> SPosition2025_11840190094658573197.t -> unit
+      val auto_starting_position_set_unsafe : t -> SPosition2025_11840190094658573197.t -> unit
+      val tele_op_coral_l4_score_get : t -> int
+      val tele_op_coral_l4_score_set_exn : t -> int -> unit
+      val tele_op_coral_l3_score_get : t -> int
+      val tele_op_coral_l3_score_set_exn : t -> int -> unit
+      val tele_op_coral_l2_score_get : t -> int
+      val tele_op_coral_l2_score_set_exn : t -> int -> unit
+      val tele_op_coral_l1_score_get : t -> int
+      val tele_op_coral_l1_score_set_exn : t -> int -> unit
+      val tele_op_processor_score_get : t -> int
+      val tele_op_processor_score_set_exn : t -> int -> unit
+      val tele_op_processor_miss_get : t -> int
+      val tele_op_processor_miss_set_exn : t -> int -> unit
+      val tele_op_net_score_get : t -> int
+      val tele_op_net_score_set_exn : t -> int -> unit
+      val tele_op_net_miss_get : t -> int
+      val tele_op_net_miss_set_exn : t -> int -> unit
+      val has_robot_photo : t -> bool
+      val robot_photo_get : t -> string
+      val robot_photo_set : t -> string -> unit
+      val ground_pick_up_get : t -> bool
+      val ground_pick_up_set : t -> bool -> unit
+      val tele_op_breakdown_get : t -> TBreakdown2025_15903042630962599233.t
+      val tele_op_breakdown_set : t -> TBreakdown2025_15903042630962599233.t -> unit
+      val tele_op_breakdown_set_unsafe : t -> TBreakdown2025_15903042630962599233.t -> unit
+      val tele_op_climb_get : t -> EClimb2025_11396563124527522504.t
+      val tele_op_climb_set : t -> EClimb2025_11396563124527522504.t -> unit
+      val tele_op_climb_set_unsafe : t -> EClimb2025_11396563124527522504.t -> unit
+      val team_number32_get : t -> int32
+      val team_number32_get_int_exn : t -> int
+      val team_number32_set : t -> int32 -> unit
+      val team_number32_set_int_exn : t -> int -> unit
       val of_message : rw message_t -> t
       val to_message : t -> rw message_t
       val to_reader : t -> struct_t reader_t
@@ -221,6 +362,13 @@ module type S = sig
         | SourceSide
         | Undefined of int
     end
+    module SPosition2025 : sig
+      type t = SPosition2025_11840190094658573197.t =
+        | Left
+        | Middle
+        | Right
+        | Undefined of int
+    end
     module TBreakdown : sig
       type t = TBreakdown_16560530708388719165.t =
         | None
@@ -230,6 +378,15 @@ module type S = sig
         | NoteStuck
         | Undefined of int
     end
+    module TBreakdown2025 : sig
+      type t = TBreakdown2025_15903042630962599233.t =
+        | None
+        | Tipped
+        | MechanicalFailure
+        | Incapacitated
+        | GamePieceStuck
+        | Undefined of int
+    end
     module EClimb : sig
       type t = EClimb_13533464256854897024.t =
         | Success
@@ -237,6 +394,16 @@ module type S = sig
         | DidNotAttempt
         | Harmony
         | Parked
+        | Undefined of int
+    end
+    module EClimb2025 : sig
+      type t = EClimb2025_11396563124527522504.t =
+        | Success
+        | Failed
+        | DidNotAttempt
+        | DeepCage
+        | Parked
+        | ShallowCage
         | Undefined of int
     end
     module RobotPosition : sig
@@ -334,6 +501,40 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
       | Blue3 -> 5
       | Undefined x -> x
   end
+  module EClimb2025_11396563124527522504 = struct
+    type t =
+      | Success
+      | Failed
+      | DidNotAttempt
+      | DeepCage
+      | Parked
+      | ShallowCage
+      | Undefined of int
+    let decode u16 = match u16 with
+      | 0 -> Success
+      | 1 -> Failed
+      | 2 -> DidNotAttempt
+      | 3 -> DeepCage
+      | 4 -> Parked
+      | 5 -> ShallowCage
+      | v -> Undefined v
+    let encode_safe enum = match enum with
+      | Success -> 0
+      | Failed -> 1
+      | DidNotAttempt -> 2
+      | DeepCage -> 3
+      | Parked -> 4
+      | ShallowCage -> 5
+      | Undefined x -> invalid_msg "Cannot encode undefined enum value."
+    let encode_unsafe enum = match enum with
+      | Success -> 0
+      | Failed -> 1
+      | DidNotAttempt -> 2
+      | DeepCage -> 3
+      | Parked -> 4
+      | ShallowCage -> 5
+      | Undefined x -> x
+  end
   module EClimb_13533464256854897024 = struct
     type t =
       | Success
@@ -364,6 +565,36 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
       | Parked -> 4
       | Undefined x -> x
   end
+  module TBreakdown2025_15903042630962599233 = struct
+    type t =
+      | None
+      | Tipped
+      | MechanicalFailure
+      | Incapacitated
+      | GamePieceStuck
+      | Undefined of int
+    let decode u16 = match u16 with
+      | 0 -> None
+      | 1 -> Tipped
+      | 2 -> MechanicalFailure
+      | 3 -> Incapacitated
+      | 4 -> GamePieceStuck
+      | v -> Undefined v
+    let encode_safe enum = match enum with
+      | None -> 0
+      | Tipped -> 1
+      | MechanicalFailure -> 2
+      | Incapacitated -> 3
+      | GamePieceStuck -> 4
+      | Undefined x -> invalid_msg "Cannot encode undefined enum value."
+    let encode_unsafe enum = match enum with
+      | None -> 0
+      | Tipped -> 1
+      | MechanicalFailure -> 2
+      | Incapacitated -> 3
+      | GamePieceStuck -> 4
+      | Undefined x -> x
+  end
   module TBreakdown_16560530708388719165 = struct
     type t =
       | None
@@ -392,6 +623,28 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
       | MechanicalFailure -> 2
       | Incapacitated -> 3
       | NoteStuck -> 4
+      | Undefined x -> x
+  end
+  module SPosition2025_11840190094658573197 = struct
+    type t =
+      | Left
+      | Middle
+      | Right
+      | Undefined of int
+    let decode u16 = match u16 with
+      | 0 -> Left
+      | 1 -> Middle
+      | 2 -> Right
+      | v -> Undefined v
+    let encode_safe enum = match enum with
+      | Left -> 0
+      | Middle -> 1
+      | Right -> 2
+      | Undefined x -> invalid_msg "Cannot encode undefined enum value."
+    let encode_unsafe enum = match enum with
+      | Left -> 0
+      | Middle -> 1
+      | Right -> 2
       | Undefined x -> x
   end
   module SPosition_15975123903786802361 = struct
@@ -497,6 +750,67 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
         EClimb_13533464256854897024.decode discr
       let endgame_trap_get x =
         RA_.get_bit ~default:false x ~byte_ofs:9 ~bit_ofs:1
+      let preplaced_coral_get x =
+        RA_.get_bit ~default:false x ~byte_ofs:9 ~bit_ofs:2
+      let auto_coral_l4_score_get x =
+        RA_.get_int16 ~default:(0) x 30
+      let auto_coral_l3_score_get x =
+        RA_.get_int16 ~default:(0) x 32
+      let auto_coral_l2_score_get x =
+        RA_.get_int16 ~default:(0) x 34
+      let auto_coral_l1_score_get x =
+        RA_.get_int16 ~default:(0) x 36
+      let auto_processor_score_get x =
+        RA_.get_int16 ~default:(0) x 38
+      let auto_processor_miss_get x =
+        RA_.get_int16 ~default:(0) x 40
+      let auto_net_score_get x =
+        RA_.get_int16 ~default:(0) x 42
+      let auto_net_miss_get x =
+        RA_.get_int16 ~default:(0) x 44
+      let auto_coral_l4_miss_get x =
+        RA_.get_int16 ~default:(0) x 46
+      let auto_coral_l3_miss_get x =
+        RA_.get_int16 ~default:(0) x 48
+      let auto_coral_l2_miss_get x =
+        RA_.get_int16 ~default:(0) x 50
+      let auto_coral_l1_miss_get x =
+        RA_.get_int16 ~default:(0) x 52
+      let auto_starting_position_get x =
+        let discr = RA_.get_uint16 ~default:0 x 54 in
+        SPosition2025_11840190094658573197.decode discr
+      let tele_op_coral_l4_score_get x =
+        RA_.get_int16 ~default:(0) x 56
+      let tele_op_coral_l3_score_get x =
+        RA_.get_int16 ~default:(0) x 58
+      let tele_op_coral_l2_score_get x =
+        RA_.get_int16 ~default:(0) x 60
+      let tele_op_coral_l1_score_get x =
+        RA_.get_int16 ~default:(0) x 62
+      let tele_op_processor_score_get x =
+        RA_.get_int16 ~default:(0) x 64
+      let tele_op_processor_miss_get x =
+        RA_.get_int16 ~default:(0) x 66
+      let tele_op_net_score_get x =
+        RA_.get_int16 ~default:(0) x 68
+      let tele_op_net_miss_get x =
+        RA_.get_int16 ~default:(0) x 70
+      let has_robot_photo x =
+        RA_.has_field x 3
+      let robot_photo_get x =
+        RA_.get_text ~default:"" x 3
+      let ground_pick_up_get x =
+        RA_.get_bit ~default:false x ~byte_ofs:9 ~bit_ofs:3
+      let tele_op_breakdown_get x =
+        let discr = RA_.get_uint16 ~default:0 x 72 in
+        TBreakdown2025_15903042630962599233.decode discr
+      let tele_op_climb_get x =
+        let discr = RA_.get_uint16 ~default:0 x 74 in
+        EClimb2025_11396563124527522504.decode discr
+      let team_number32_get x =
+        RA_.get_int32 ~default:(0l) x 76
+      let team_number32_get_int_exn x =
+        Capnp.Runtime.Util.int_of_int32_exn (team_number32_get x)
       let of_message x = RA_.get_root_struct (RA_.Message.readonly x)
       let of_builder x = Some (RA_.StructStorage.readonly x)
     end
@@ -505,6 +819,13 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
         | AmpSide
         | Center
         | SourceSide
+        | Undefined of int
+    end
+    module SPosition2025 = struct
+      type t = SPosition2025_11840190094658573197.t =
+        | Left
+        | Middle
+        | Right
         | Undefined of int
     end
     module TBreakdown = struct
@@ -516,6 +837,15 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
         | NoteStuck
         | Undefined of int
     end
+    module TBreakdown2025 = struct
+      type t = TBreakdown2025_15903042630962599233.t =
+        | None
+        | Tipped
+        | MechanicalFailure
+        | Incapacitated
+        | GamePieceStuck
+        | Undefined of int
+    end
     module EClimb = struct
       type t = EClimb_13533464256854897024.t =
         | Success
@@ -523,6 +853,16 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
         | DidNotAttempt
         | Harmony
         | Parked
+        | Undefined of int
+    end
+    module EClimb2025 = struct
+      type t = EClimb2025_11396563124527522504.t =
+        | Success
+        | Failed
+        | DidNotAttempt
+        | DeepCage
+        | Parked
+        | ShallowCage
         | Undefined of int
     end
     module RobotPosition = struct
@@ -694,19 +1034,148 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
         BA_.get_bit ~default:false x ~byte_ofs:9 ~bit_ofs:1
       let endgame_trap_set x v =
         BA_.set_bit ~default:false x ~byte_ofs:9 ~bit_ofs:1 v
-      let of_message x = BA_.get_root_struct ~data_words:4 ~pointer_words:3 x
+      let preplaced_coral_get x =
+        BA_.get_bit ~default:false x ~byte_ofs:9 ~bit_ofs:2
+      let preplaced_coral_set x v =
+        BA_.set_bit ~default:false x ~byte_ofs:9 ~bit_ofs:2 v
+      let auto_coral_l4_score_get x =
+        BA_.get_int16 ~default:(0) x 30
+      let auto_coral_l4_score_set_exn x v =
+        BA_.set_int16 ~default:(0) x 30 v
+      let auto_coral_l3_score_get x =
+        BA_.get_int16 ~default:(0) x 32
+      let auto_coral_l3_score_set_exn x v =
+        BA_.set_int16 ~default:(0) x 32 v
+      let auto_coral_l2_score_get x =
+        BA_.get_int16 ~default:(0) x 34
+      let auto_coral_l2_score_set_exn x v =
+        BA_.set_int16 ~default:(0) x 34 v
+      let auto_coral_l1_score_get x =
+        BA_.get_int16 ~default:(0) x 36
+      let auto_coral_l1_score_set_exn x v =
+        BA_.set_int16 ~default:(0) x 36 v
+      let auto_processor_score_get x =
+        BA_.get_int16 ~default:(0) x 38
+      let auto_processor_score_set_exn x v =
+        BA_.set_int16 ~default:(0) x 38 v
+      let auto_processor_miss_get x =
+        BA_.get_int16 ~default:(0) x 40
+      let auto_processor_miss_set_exn x v =
+        BA_.set_int16 ~default:(0) x 40 v
+      let auto_net_score_get x =
+        BA_.get_int16 ~default:(0) x 42
+      let auto_net_score_set_exn x v =
+        BA_.set_int16 ~default:(0) x 42 v
+      let auto_net_miss_get x =
+        BA_.get_int16 ~default:(0) x 44
+      let auto_net_miss_set_exn x v =
+        BA_.set_int16 ~default:(0) x 44 v
+      let auto_coral_l4_miss_get x =
+        BA_.get_int16 ~default:(0) x 46
+      let auto_coral_l4_miss_set_exn x v =
+        BA_.set_int16 ~default:(0) x 46 v
+      let auto_coral_l3_miss_get x =
+        BA_.get_int16 ~default:(0) x 48
+      let auto_coral_l3_miss_set_exn x v =
+        BA_.set_int16 ~default:(0) x 48 v
+      let auto_coral_l2_miss_get x =
+        BA_.get_int16 ~default:(0) x 50
+      let auto_coral_l2_miss_set_exn x v =
+        BA_.set_int16 ~default:(0) x 50 v
+      let auto_coral_l1_miss_get x =
+        BA_.get_int16 ~default:(0) x 52
+      let auto_coral_l1_miss_set_exn x v =
+        BA_.set_int16 ~default:(0) x 52 v
+      let auto_starting_position_get x =
+        let discr = BA_.get_uint16 ~default:0 x 54 in
+        SPosition2025_11840190094658573197.decode discr
+      let auto_starting_position_set x e =
+        BA_.set_uint16 ~default:0 x 54 (SPosition2025_11840190094658573197.encode_safe e)
+      let auto_starting_position_set_unsafe x e =
+        BA_.set_uint16 ~default:0 x 54 (SPosition2025_11840190094658573197.encode_unsafe e)
+      let tele_op_coral_l4_score_get x =
+        BA_.get_int16 ~default:(0) x 56
+      let tele_op_coral_l4_score_set_exn x v =
+        BA_.set_int16 ~default:(0) x 56 v
+      let tele_op_coral_l3_score_get x =
+        BA_.get_int16 ~default:(0) x 58
+      let tele_op_coral_l3_score_set_exn x v =
+        BA_.set_int16 ~default:(0) x 58 v
+      let tele_op_coral_l2_score_get x =
+        BA_.get_int16 ~default:(0) x 60
+      let tele_op_coral_l2_score_set_exn x v =
+        BA_.set_int16 ~default:(0) x 60 v
+      let tele_op_coral_l1_score_get x =
+        BA_.get_int16 ~default:(0) x 62
+      let tele_op_coral_l1_score_set_exn x v =
+        BA_.set_int16 ~default:(0) x 62 v
+      let tele_op_processor_score_get x =
+        BA_.get_int16 ~default:(0) x 64
+      let tele_op_processor_score_set_exn x v =
+        BA_.set_int16 ~default:(0) x 64 v
+      let tele_op_processor_miss_get x =
+        BA_.get_int16 ~default:(0) x 66
+      let tele_op_processor_miss_set_exn x v =
+        BA_.set_int16 ~default:(0) x 66 v
+      let tele_op_net_score_get x =
+        BA_.get_int16 ~default:(0) x 68
+      let tele_op_net_score_set_exn x v =
+        BA_.set_int16 ~default:(0) x 68 v
+      let tele_op_net_miss_get x =
+        BA_.get_int16 ~default:(0) x 70
+      let tele_op_net_miss_set_exn x v =
+        BA_.set_int16 ~default:(0) x 70 v
+      let has_robot_photo x =
+        BA_.has_field x 3
+      let robot_photo_get x =
+        BA_.get_text ~default:"" x 3
+      let robot_photo_set x v =
+        BA_.set_text x 3 v
+      let ground_pick_up_get x =
+        BA_.get_bit ~default:false x ~byte_ofs:9 ~bit_ofs:3
+      let ground_pick_up_set x v =
+        BA_.set_bit ~default:false x ~byte_ofs:9 ~bit_ofs:3 v
+      let tele_op_breakdown_get x =
+        let discr = BA_.get_uint16 ~default:0 x 72 in
+        TBreakdown2025_15903042630962599233.decode discr
+      let tele_op_breakdown_set x e =
+        BA_.set_uint16 ~default:0 x 72 (TBreakdown2025_15903042630962599233.encode_safe e)
+      let tele_op_breakdown_set_unsafe x e =
+        BA_.set_uint16 ~default:0 x 72 (TBreakdown2025_15903042630962599233.encode_unsafe e)
+      let tele_op_climb_get x =
+        let discr = BA_.get_uint16 ~default:0 x 74 in
+        EClimb2025_11396563124527522504.decode discr
+      let tele_op_climb_set x e =
+        BA_.set_uint16 ~default:0 x 74 (EClimb2025_11396563124527522504.encode_safe e)
+      let tele_op_climb_set_unsafe x e =
+        BA_.set_uint16 ~default:0 x 74 (EClimb2025_11396563124527522504.encode_unsafe e)
+      let team_number32_get x =
+        BA_.get_int32 ~default:(0l) x 76
+      let team_number32_get_int_exn x =
+        Capnp.Runtime.Util.int_of_int32_exn (team_number32_get x)
+      let team_number32_set x v =
+        BA_.set_int32 ~default:(0l) x 76 v
+      let team_number32_set_int_exn x v = team_number32_set x (Capnp.Runtime.Util.int32_of_int_exn v)
+      let of_message x = BA_.get_root_struct ~data_words:10 ~pointer_words:4 x
       let to_message x = x.BA_.NM.StructStorage.data.MessageWrapper.Slice.msg
       let to_reader x = Some (RA_.StructStorage.readonly x)
       let init_root ?message_size () =
-        BA_.alloc_root_struct ?message_size ~data_words:4 ~pointer_words:3 ()
+        BA_.alloc_root_struct ?message_size ~data_words:10 ~pointer_words:4 ()
       let init_pointer ptr =
-        BA_.init_struct_pointer ptr ~data_words:4 ~pointer_words:3
+        BA_.init_struct_pointer ptr ~data_words:10 ~pointer_words:4
     end
     module SPosition = struct
       type t = SPosition_15975123903786802361.t =
         | AmpSide
         | Center
         | SourceSide
+        | Undefined of int
+    end
+    module SPosition2025 = struct
+      type t = SPosition2025_11840190094658573197.t =
+        | Left
+        | Middle
+        | Right
         | Undefined of int
     end
     module TBreakdown = struct
@@ -718,6 +1187,15 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
         | NoteStuck
         | Undefined of int
     end
+    module TBreakdown2025 = struct
+      type t = TBreakdown2025_15903042630962599233.t =
+        | None
+        | Tipped
+        | MechanicalFailure
+        | Incapacitated
+        | GamePieceStuck
+        | Undefined of int
+    end
     module EClimb = struct
       type t = EClimb_13533464256854897024.t =
         | Success
@@ -725,6 +1203,16 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
         | DidNotAttempt
         | Harmony
         | Parked
+        | Undefined of int
+    end
+    module EClimb2025 = struct
+      type t = EClimb2025_11396563124527522504.t =
+        | Success
+        | Failed
+        | DidNotAttempt
+        | DeepCage
+        | Parked
+        | ShallowCage
         | Undefined of int
     end
     module RobotPosition = struct
