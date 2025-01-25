@@ -131,6 +131,21 @@ class RawMatchDataUiStateSerde {
         rawMatchData.setAutoSpeakerMiss((short) v.autoSpeakerMiss());
         rawMatchData.setAutoLeave(v.autoLeave());
         rawMatchData.setpreplacedCoral(v.preplacedCoral());
+        rawMatchData.setAutoCoralL4Score((short) v.autoCoralL4Score());
+        rawMatchData.setAutoCoralL3Score((short) v.autoCoralL3Score());
+        rawMatchData.setAutoCoralL2Score((short) v.autoCoralL2Score());
+        rawMatchData.setAutoCoralL1Score((short) v.autoCoralL1Score());
+        rawMatchData.setAutoProcessorScore((short) v.autoProcessorScore());
+        rawMatchData.setAutoProcessorMiss((short) v.autoProcessorMiss());
+        rawMatchData.setAutoNetScore((short) v.autoNetScore());
+        rawMatchData.setAutoNetMiss((short) v.autoNetMiss());
+        rawMatchData.setAutoCoralL4Miss((short) v.autoCoralL4Miss());
+        rawMatchData.setAutoCoralL3Miss((short) v.autoCoralL3Miss());
+        rawMatchData.setAutoCoralL2Miss((short) v.autoCoralL2Miss());
+        rawMatchData.setAutoCoralL1Miss((short) v.autoCoralL1Miss());
+
+        
+
 
         //2024 Tele-op
         rawMatchData.setTeleSpeakerScore((short) v.teleSpeakerScore());

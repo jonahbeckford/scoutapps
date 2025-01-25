@@ -133,6 +133,12 @@ public class ScoutingSessionViewModel extends ViewModel {
             if (!clone.autoCoralL1ScoreIsSet()) clone.setAutoCoralL1Score();
             if (!clone.autoProcessorScoreIsSet()) clone.setAutoProcessorScore();
             if (!clone.autoProcessorMissIsSet()) clone.setAutoProcessorMiss();
+            if (!clone.autoNetScore()) clone.setAutoNetScore();
+            if (!clone.autoNetMiss()) clone.setAutoNetMiss();
+            if (!clone.autoCoralL4Miss()) clone.setAutoCoralL4Miss();
+            if (!clone.autoCoralL3Miss()) clone.setAutoCoralL3Miss();
+            if (!clone.autoCoralL2Miss()) clone.setAutoCoralL2Miss();
+            if (!clone.autoCoralL1Miss()) clone.setAutoCoralL1Miss();
         }
         return clone.toImmutable();
     }
@@ -221,6 +227,12 @@ public class ScoutingSessionViewModel extends ViewModel {
         rawMatchData.setAutoCoralL1Score(autoCoralL1Score);
         rawMatchData.setAutoProcessorScore(autoProcessorScore);
         rawMatchData.setAutoProcessorScore(autoProcessorMiss);
+        rawMatchData.setAutoNetScore(autoNetScore);
+        rawMatchData.setAutoNetMiss(autoNetMiss);
+        rawMatchData.setAutoCoralL4Miss(autoCoralL4Miss);
+        rawMatchData.setAutoCoralL3Miss(autoCoralL3Miss);
+        rawMatchData.setAutoCoralL2Miss(autoCoralL2Miss);
+        rawMatchData.setAutoCoralL1Miss(autoCoralL1Miss);
 
         //does this need to be called? would this overwrite/lose the previous captureMatchRobot method's session data?
         updateAndSetSession(session);

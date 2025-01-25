@@ -240,6 +240,30 @@ public final class Schema {
       public final void setAutoCoralL4Miss() {
         _setShortField(108, value);
       }
+
+      public final short getAutoCoralL3Miss() {
+        return _getShortField(109);
+      }
+
+      public final void setAutoCoralL3Miss() {
+         _setShortField(109, value);
+      }
+
+      public final short getAutoCoralL2Miss() {
+        return _getShortField(110);
+      }
+
+      public final void setAutoCoralL2Miss() {
+        _setShortField(110, value);
+      }
+
+      public final short getAutoCoralL1Miss() {
+        return _getShortField(111);
+      }
+
+      public final void setAutoCoralL1Miss() {
+        _setShortField(111);
+      }
   
 
 
@@ -490,6 +514,18 @@ public final class Schema {
 
       public final short getAutoCoralL4Miss() {
         return _getShortField(108);
+      }
+
+      public final short getAutoCoralL3Miss() {
+        return _getShortField(109);
+      }
+
+      public final short getAutoCoralL2Miss() {
+        return _getShortField(110);
+      }
+
+      public final short getAutoCoralL1Miss() {
+        return _getShortField(111);
       }
 
 
