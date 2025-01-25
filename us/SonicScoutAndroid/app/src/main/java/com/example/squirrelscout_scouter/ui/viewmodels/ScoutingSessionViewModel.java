@@ -118,6 +118,7 @@ public class ScoutingSessionViewModel extends ViewModel {
             if (!clone.autoSpeakerScoreIsSet()) clone.setAutoSpeakerScore(-1);
             if (!clone.autoSpeakerMissIsSet()) clone.setAutoSpeakerMiss(-1);
             if (!clone.autoLeaveIsSet()) clone.setAutoLeave(false);
+            if (!clone.preplacedCoralIsSet()) clone.setPreplacedCoral(false);
             if (!clone.teleSpeakerScoreIsSet()) clone.setTeleSpeakerScore(-1);
             if (!clone.teleSpeakerMissIsSet()) clone.setTeleSpeakerMiss(-1);
             if (!clone.teleAmpScoreIsSet()) clone.setTeleAmpScore(-1);
@@ -126,6 +127,12 @@ public class ScoutingSessionViewModel extends ViewModel {
             if (!clone.teleBreakdownIsSet()) clone.setTeleBreakdown("UI needs breakdown");
             if (!clone.endgameClimbIsSet()) clone.setEndgameClimb("UI needs endgame climb");
             if (!clone.endgameTrapIsSet()) clone.setEndgameTrap(false);
+            if (!clone.autoCoralL4ScoreIsSet()) clone.setAutoCoralL4Score();
+            if (!clone.autoCoralL3ScoreIsSet()) clone.setAutoCoralL3Score();
+            if (!clone.autoCoralL2ScoreIsSet()) clone.setAutoCoralL2Score();
+            if (!clone.autoCoralL1ScoreIsSet()) clone.setAutoCoralL1Score();
+            if (!clone.autoProcessorScoreIsSet()) clone.setAutoProcessorScore();
+            if (!clone.autoProcessorMissIsSet()) clone.setAutoProcessorMiss();
         }
         return clone.toImmutable();
     }
@@ -186,7 +193,7 @@ public class ScoutingSessionViewModel extends ViewModel {
         updateAndSetSession(session);
     }
 
-    public void captureAutoData(String startingPos, boolean wn1, boolean wn2, boolean wn3, boolean cn1, boolean cn2, boolean cn3, boolean cn4, boolean cn5, int ampScore, int ampMiss, int speakerScore, int speakerMiss, boolean autoLeave ){
+    public void captureAutoData(String startingPos, boolean wn1, boolean wn2, boolean wn3, boolean cn1, boolean cn2, boolean cn3, boolean cn4, boolean cn5, int ampScore, int ampMiss, int speakerScore, int speakerMiss, boolean autoLeave, boolean autoPreplacedCoral ){
         ImmutableRawMatchDataSessionUiState session = rawMatchDataSessionUiState.getValue();
         assert  session != null;
 
@@ -207,6 +214,13 @@ public class ScoutingSessionViewModel extends ViewModel {
         rawMatchData.setAutoSpeakerScore(speakerScore);
         rawMatchData.setAutoSpeakerMiss(speakerMiss);
         rawMatchData.setAutoLeave(autoLeave);
+        rawMatchData.setPreplacedCoral(autoPreplacedCoral);
+        rawMatchData.setAutoCoralL4Score(autoCoralL4Score);
+        rawMatchData.setAutoCoralL3Score(autoCoralL3Score);
+        rawMatchData.setAutoCoralL2Score(autoCoralL2Score);
+        rawMatchData.setAutoCoralL1Score(autoCoralL1Score);
+        rawMatchData.setAutoProcessorScore(autoProcessorScore);
+        rawMatchData.setAutoProcessorScore(autoProcessorMiss);
 
         //does this need to be called? would this overwrite/lose the previous captureMatchRobot method's session data?
         updateAndSetSession(session);

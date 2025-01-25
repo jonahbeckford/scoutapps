@@ -76,6 +76,10 @@ struct RawMatchData {
   teleOpClimb @52 : EClimb2025;
   #TBA prematch and results sync
   teamNumber32 @53 :Int32; #teamNumber32 bc there will be 9 and a half digits available to enter. Should be good for next 10+ years
+  teleOpCoralL4Miss @54 : Int16;
+  teleOpCoralL3Miss @55 : Int16;
+  teleOpCoralL2Miss @56 : Int16;
+  teleOpCoralL1Miss @57 : Int16;
   
   
   
@@ -92,9 +96,9 @@ enum SPosition{
 
 #Enum fields for "dropdown" methods which are categorical but not numerical
 enum SPosition2025{
-   left @0; 
+   processorSide @0; 
   middle @1; 
-  right @2; 
+  nonProcessorSide @2; 
 }
 
 enum TBreakdown{

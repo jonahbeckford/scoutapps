@@ -58,9 +58,9 @@ module type S = sig
   end
   module SPosition2025_11840190094658573197 : sig
     type t =
-      | Left
+      | ProcessorSide
       | Middle
-      | Right
+      | NonProcessorSide
       | Undefined of int
   end
   module SPosition_15975123903786802361 : sig
@@ -138,6 +138,10 @@ module type S = sig
       val tele_op_climb_get : t -> EClimb2025_11396563124527522504.t
       val team_number32_get : t -> int32
       val team_number32_get_int_exn : t -> int
+      val tele_op_coral_l4_miss_get : t -> int
+      val tele_op_coral_l3_miss_get : t -> int
+      val tele_op_coral_l2_miss_get : t -> int
+      val tele_op_coral_l1_miss_get : t -> int
       val of_message : 'cap message_t -> t
       val of_builder : struct_t builder_t -> t
     end
@@ -150,9 +154,9 @@ module type S = sig
     end
     module SPosition2025 : sig
       type t = SPosition2025_11840190094658573197.t =
-        | Left
+        | ProcessorSide
         | Middle
-        | Right
+        | NonProcessorSide
         | Undefined of int
     end
     module TBreakdown : sig
@@ -349,6 +353,14 @@ module type S = sig
       val team_number32_get_int_exn : t -> int
       val team_number32_set : t -> int32 -> unit
       val team_number32_set_int_exn : t -> int -> unit
+      val tele_op_coral_l4_miss_get : t -> int
+      val tele_op_coral_l4_miss_set_exn : t -> int -> unit
+      val tele_op_coral_l3_miss_get : t -> int
+      val tele_op_coral_l3_miss_set_exn : t -> int -> unit
+      val tele_op_coral_l2_miss_get : t -> int
+      val tele_op_coral_l2_miss_set_exn : t -> int -> unit
+      val tele_op_coral_l1_miss_get : t -> int
+      val tele_op_coral_l1_miss_set_exn : t -> int -> unit
       val of_message : rw message_t -> t
       val to_message : t -> rw message_t
       val to_reader : t -> struct_t reader_t
@@ -364,9 +376,9 @@ module type S = sig
     end
     module SPosition2025 : sig
       type t = SPosition2025_11840190094658573197.t =
-        | Left
+        | ProcessorSide
         | Middle
-        | Right
+        | NonProcessorSide
         | Undefined of int
     end
     module TBreakdown : sig
@@ -627,24 +639,24 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
   end
   module SPosition2025_11840190094658573197 = struct
     type t =
-      | Left
+      | ProcessorSide
       | Middle
-      | Right
+      | NonProcessorSide
       | Undefined of int
     let decode u16 = match u16 with
-      | 0 -> Left
+      | 0 -> ProcessorSide
       | 1 -> Middle
-      | 2 -> Right
+      | 2 -> NonProcessorSide
       | v -> Undefined v
     let encode_safe enum = match enum with
-      | Left -> 0
+      | ProcessorSide -> 0
       | Middle -> 1
-      | Right -> 2
+      | NonProcessorSide -> 2
       | Undefined x -> invalid_msg "Cannot encode undefined enum value."
     let encode_unsafe enum = match enum with
-      | Left -> 0
+      | ProcessorSide -> 0
       | Middle -> 1
-      | Right -> 2
+      | NonProcessorSide -> 2
       | Undefined x -> x
   end
   module SPosition_15975123903786802361 = struct
@@ -811,6 +823,14 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
         RA_.get_int32 ~default:(0l) x 76
       let team_number32_get_int_exn x =
         Capnp.Runtime.Util.int_of_int32_exn (team_number32_get x)
+      let tele_op_coral_l4_miss_get x =
+        RA_.get_int16 ~default:(0) x 80
+      let tele_op_coral_l3_miss_get x =
+        RA_.get_int16 ~default:(0) x 82
+      let tele_op_coral_l2_miss_get x =
+        RA_.get_int16 ~default:(0) x 84
+      let tele_op_coral_l1_miss_get x =
+        RA_.get_int16 ~default:(0) x 86
       let of_message x = RA_.get_root_struct (RA_.Message.readonly x)
       let of_builder x = Some (RA_.StructStorage.readonly x)
     end
@@ -823,9 +843,9 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
     end
     module SPosition2025 = struct
       type t = SPosition2025_11840190094658573197.t =
-        | Left
+        | ProcessorSide
         | Middle
-        | Right
+        | NonProcessorSide
         | Undefined of int
     end
     module TBreakdown = struct
@@ -1156,13 +1176,29 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
       let team_number32_set x v =
         BA_.set_int32 ~default:(0l) x 76 v
       let team_number32_set_int_exn x v = team_number32_set x (Capnp.Runtime.Util.int32_of_int_exn v)
-      let of_message x = BA_.get_root_struct ~data_words:10 ~pointer_words:4 x
+      let tele_op_coral_l4_miss_get x =
+        BA_.get_int16 ~default:(0) x 80
+      let tele_op_coral_l4_miss_set_exn x v =
+        BA_.set_int16 ~default:(0) x 80 v
+      let tele_op_coral_l3_miss_get x =
+        BA_.get_int16 ~default:(0) x 82
+      let tele_op_coral_l3_miss_set_exn x v =
+        BA_.set_int16 ~default:(0) x 82 v
+      let tele_op_coral_l2_miss_get x =
+        BA_.get_int16 ~default:(0) x 84
+      let tele_op_coral_l2_miss_set_exn x v =
+        BA_.set_int16 ~default:(0) x 84 v
+      let tele_op_coral_l1_miss_get x =
+        BA_.get_int16 ~default:(0) x 86
+      let tele_op_coral_l1_miss_set_exn x v =
+        BA_.set_int16 ~default:(0) x 86 v
+      let of_message x = BA_.get_root_struct ~data_words:11 ~pointer_words:4 x
       let to_message x = x.BA_.NM.StructStorage.data.MessageWrapper.Slice.msg
       let to_reader x = Some (RA_.StructStorage.readonly x)
       let init_root ?message_size () =
-        BA_.alloc_root_struct ?message_size ~data_words:10 ~pointer_words:4 ()
+        BA_.alloc_root_struct ?message_size ~data_words:11 ~pointer_words:4 ()
       let init_pointer ptr =
-        BA_.init_struct_pointer ptr ~data_words:10 ~pointer_words:4
+        BA_.init_struct_pointer ptr ~data_words:11 ~pointer_words:4
     end
     module SPosition = struct
       type t = SPosition_15975123903786802361.t =
@@ -1173,9 +1209,9 @@ module MakeRPC(MessageWrapper : Capnp.RPC.S) = struct
     end
     module SPosition2025 = struct
       type t = SPosition2025_11840190094658573197.t =
-        | Left
+        | ProcessorSide
         | Middle
-        | Right
+        | NonProcessorSide
         | Undefined of int
     end
     module TBreakdown = struct

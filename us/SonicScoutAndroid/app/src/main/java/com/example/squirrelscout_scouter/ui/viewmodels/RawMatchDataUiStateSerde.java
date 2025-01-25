@@ -130,6 +130,8 @@ class RawMatchDataUiStateSerde {
         rawMatchData.setAutoSpeakerScore((short) v.autoSpeakerScore());
         rawMatchData.setAutoSpeakerMiss((short) v.autoSpeakerMiss());
         rawMatchData.setAutoLeave(v.autoLeave());
+        rawMatchData.setpreplacedCoral(v.preplacedCoral());
+
         //2024 Tele-op
         rawMatchData.setTeleSpeakerScore((short) v.teleSpeakerScore());
         rawMatchData.setTeleSpeakerMiss((short) v.teleSpeakerMiss());

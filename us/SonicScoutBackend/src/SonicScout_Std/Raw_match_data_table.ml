@@ -57,6 +57,8 @@ module Table : Table_type = struct
     | Auto_Speaker_Score
     | Auto_Speaker_Miss
     | Auto_Leave
+    | Preplaced_Coral
+
     (* [Game specific] tele data points *)
     | Tele_Speaker_Score
     | Tele_Speaker_Miss
@@ -90,6 +92,8 @@ module Table : Table_type = struct
     | Auto_Speaker_Score -> "auto_speaker_score"
     | Auto_Speaker_Miss -> "auto_speaker_miss"
     | Auto_Leave -> "auto_leave"
+    | Preplaced_Coral -> "preplaced_coral"
+
     (*  *)
     | Tele_Speaker_Score -> "tele_speaker_score"
     | Tele_Speaker_Miss -> "tele_speaker_miss"
@@ -122,6 +126,8 @@ module Table : Table_type = struct
     | Auto_Speaker_Score -> "INT"
     | Auto_Speaker_Miss -> "INT"
     | Auto_Leave -> "TEXT"
+    | Preplaced_Coral -> "TEXT"
+
     (*  *)
     | Tele_Speaker_Score -> "INT"
     | Tele_Speaker_Miss -> "INT"
@@ -155,6 +161,8 @@ module Table : Table_type = struct
       Auto_Speaker_Score;
       Auto_Speaker_Miss;
       Auto_Leave;
+      Preplaced_Coral;
+
       (* Teleop *)
       Tele_Speaker_Score;
       Tele_Speaker_Miss;
@@ -274,7 +282,7 @@ module Table : Table_type = struct
         Printf.sprintf
         (*Number of %s should match number of columns*)
         "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, \n\
-        \         %s, %s, %s, %s, %s, %s, %s, %s, %s"
+        \         %s, %s, %s, %s, %s, %s, %s, %s, %s, %s"
         (match_data |> team_number_get |> string_of_int)
         (match_data |> team_name_get |> string_to_cmd_line_form)
         (match_data |> match_number_get |> string_of_int)
@@ -295,6 +303,8 @@ module Table : Table_type = struct
         (match_data |> auto_speaker_score_get |> string_of_int)
         (match_data |> auto_speaker_miss_get |> string_of_int)
         (match_data |> auto_leave_get |> bool_to_string_as_num)
+        (match_data |> preplaced_coral_get |> bool_to_string_as_num)
+
         (*  *)
         (match_data |> tele_speaker_score_get |> string_of_int)
         (match_data |> tele_speaker_miss_get |> string_of_int)

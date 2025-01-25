@@ -58,9 +58,9 @@ module type S = sig
   end
   module SPosition2025_11840190094658573197 : sig
     type t =
-      | Left
+      | ProcessorSide
       | Middle
-      | Right
+      | NonProcessorSide
       | Undefined of int
   end
   module SPosition_15975123903786802361 : sig
@@ -138,6 +138,10 @@ module type S = sig
       val tele_op_climb_get : t -> EClimb2025_11396563124527522504.t
       val team_number32_get : t -> int32
       val team_number32_get_int_exn : t -> int
+      val tele_op_coral_l4_miss_get : t -> int
+      val tele_op_coral_l3_miss_get : t -> int
+      val tele_op_coral_l2_miss_get : t -> int
+      val tele_op_coral_l1_miss_get : t -> int
       val of_message : 'cap message_t -> t
       val of_builder : struct_t builder_t -> t
     end
@@ -150,9 +154,9 @@ module type S = sig
     end
     module SPosition2025 : sig
       type t = SPosition2025_11840190094658573197.t =
-        | Left
+        | ProcessorSide
         | Middle
-        | Right
+        | NonProcessorSide
         | Undefined of int
     end
     module TBreakdown : sig
@@ -349,6 +353,14 @@ module type S = sig
       val team_number32_get_int_exn : t -> int
       val team_number32_set : t -> int32 -> unit
       val team_number32_set_int_exn : t -> int -> unit
+      val tele_op_coral_l4_miss_get : t -> int
+      val tele_op_coral_l4_miss_set_exn : t -> int -> unit
+      val tele_op_coral_l3_miss_get : t -> int
+      val tele_op_coral_l3_miss_set_exn : t -> int -> unit
+      val tele_op_coral_l2_miss_get : t -> int
+      val tele_op_coral_l2_miss_set_exn : t -> int -> unit
+      val tele_op_coral_l1_miss_get : t -> int
+      val tele_op_coral_l1_miss_set_exn : t -> int -> unit
       val of_message : rw message_t -> t
       val to_message : t -> rw message_t
       val to_reader : t -> struct_t reader_t
@@ -364,9 +376,9 @@ module type S = sig
     end
     module SPosition2025 : sig
       type t = SPosition2025_11840190094658573197.t =
-        | Left
+        | ProcessorSide
         | Middle
-        | Right
+        | NonProcessorSide
         | Undefined of int
     end
     module TBreakdown : sig

@@ -166,6 +166,94 @@ public final class Schema {
         _setShortField(5, value);
       }
 
+
+
+      
+      public final short getAutoCoralL4Score() {
+        return _getShortField(100); //TODO: change id numbers later
+      }
+
+      public final void setAutoCoralL4Score(short value) {
+        _setShortField(100, value);
+      }
+
+      public final short getAutoCoralL3Score() {
+        return _getShortField(101);
+      }
+
+      public final void setAutoCoralL3Score(short value) {
+        _setShortField(101, value);
+      }
+
+      public final short getAutoCoralL2Score() {
+        return _getShortField(102);
+      }
+
+      public final void setAutoCoralL2Score(short value) {
+        _setShortField(102, value);
+      }
+
+      public final short getAutoCoralL1Score() {
+        return _getShortField(103);
+      }
+
+      public final void setAutoCoralL1Score() {
+        _setShortField(103, value);
+      }
+
+      public final getAutoProcessorScore() {
+        return _getShortField(104);
+      }
+
+      public final void setAutoProcessorScore() {
+        _setShortField(104, value);
+      }
+
+      public final short getAutoProcessorMiss() {
+        return _getShortField(105);
+      }
+
+      public final void setAutoProcessorMiss() {
+        _setShortField(105, value);
+      }
+
+      public final getAutoNetScore() {
+        return _getShortField(106);
+      }
+
+      public final void setAutoNetScore() {
+        _setShortField(106, value);
+      }
+
+      public final short getAutoNetMiss() {
+        return _getShortField(107);
+      }
+
+      public final void setAutoNetMiss() {
+         _setShortField(107, value);
+      }
+
+      public final short getAutoCoralL4Miss() {
+        return _getShortField(108);
+      }
+
+      public final void setAutoCoralL4Miss() {
+        _setShortField(108, value);
+      }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
       public final short getAutoAmpMiss() {
         return _getShortField(6);
       }
@@ -366,6 +454,52 @@ public final class Schema {
         return _getShortField(7);
       }
 
+
+
+      public final short getAutoCoralL4Score() {
+        return _getShortField(100); //TODO: change id numbers later
+      }
+
+      public final short getAutoCoralL3Score() {
+        return _getShortField(101);
+      }
+
+      public final short getAutoCoralL2Score() {
+        return _getShortField(102);
+      }
+
+      public final short getAutoCoralL1Score() {
+        return _getShortField(103);
+      }
+
+      public final short getAutoProcessorScore() {
+        return _getShortField(104);
+      }
+
+      public final short getAutoProcessorMiss() {
+        return _getShortField(105);
+      }
+
+      public final short getAutoNetScore() {
+        return _getShortField(106);
+      }
+
+      public final short getAutoNetMiss() {
+        return _getShortField(107);
+      }
+
+      public final short getAutoCoralL4Miss() {
+        return _getShortField(108);
+      }
+
+
+
+
+
+
+
+
+
       public final short getAutoSpeakerMiss() {
         return _getShortField(8);
       }
@@ -385,7 +519,7 @@ public final class Schema {
       public final short getTeleAmpScore() {
         return _getShortField(11);
       }
-
+     
       public final short getTeleAmpMiss() {
         return _getShortField(12);
       }

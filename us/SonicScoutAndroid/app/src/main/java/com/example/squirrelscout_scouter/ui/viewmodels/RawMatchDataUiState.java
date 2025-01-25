@@ -37,6 +37,20 @@ public interface RawMatchDataUiState {
     int autoSpeakerScore();
     int autoSpeakerMiss();
     boolean autoLeave();
+    boolean preplacedCoral();
+    int autoCoralL4Score();
+    int autoCoralL3Score();
+    int autoCoralL2Score();
+    int autoCoralL1Score();
+    int autoProcessorScore();
+    int autoProcessorMiss();
+    int autoNetScore();
+    int autoNetMiss();
+    int autoCoralL4Miss();
+    int autoCoralL3Miss();
+    int autoCoralL2Miss();
+    int autoCoralL1Miss();
+
 
     //teleop
     int teleSpeakerScore();
