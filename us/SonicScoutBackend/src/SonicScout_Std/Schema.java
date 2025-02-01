@@ -264,6 +264,14 @@ public final class Schema {
       public final void setAutoCoralL1Miss() {
         _setShortField(111);
       }
+
+      public final short getTeleOpCoralL4Score() {
+        return _getShortField(112);
+      }
+
+      public final void setTeleOpCoralL4Score() {
+        _setShortField(112);
+      }
   
 
 
