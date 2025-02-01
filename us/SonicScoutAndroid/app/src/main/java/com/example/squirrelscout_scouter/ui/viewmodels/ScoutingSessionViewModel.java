@@ -133,12 +133,12 @@ public class ScoutingSessionViewModel extends ViewModel {
             if (!clone.autoCoralL1ScoreIsSet()) clone.setAutoCoralL1Score();
             if (!clone.autoProcessorScoreIsSet()) clone.setAutoProcessorScore();
             if (!clone.autoProcessorMissIsSet()) clone.setAutoProcessorMiss();
-            if (!clone.autoNetScore()) clone.setAutoNetScore();
-            if (!clone.autoNetMiss()) clone.setAutoNetMiss();
-            if (!clone.autoCoralL4Miss()) clone.setAutoCoralL4Miss();
-            if (!clone.autoCoralL3Miss()) clone.setAutoCoralL3Miss();
-            if (!clone.autoCoralL2Miss()) clone.setAutoCoralL2Miss();
-            if (!clone.autoCoralL1Miss()) clone.setAutoCoralL1Miss();
+            if (!clone.autoNetScoreIsSet()) clone.setAutoNetScore();
+            if (!clone.autoNetMissIsSet()) clone.setAutoNetMiss();
+            if (!clone.autoCoralL4MissIsSet()) clone.setAutoCoralL4Miss();
+            if (!clone.autoCoralL3MissIsSet()) clone.setAutoCoralL3Miss();
+            if (!clone.autoCoralL2MissIsSet()) clone.setAutoCoralL2Miss();
+            if (!clone.autoCoralL1MissIsSet()) clone.setAutoCoralL1Miss();
         }
         return clone.toImmutable();
     }
@@ -199,7 +199,7 @@ public class ScoutingSessionViewModel extends ViewModel {
         updateAndSetSession(session);
     }
 
-    public void captureAutoData(String startingPos, boolean wn1, boolean wn2, boolean wn3, boolean cn1, boolean cn2, boolean cn3, boolean cn4, boolean cn5, int ampScore, int ampMiss, int speakerScore, int speakerMiss, boolean autoLeave, boolean autoPreplacedCoral ){
+    public void captureAutoData(String startingPos, boolean wn1, boolean wn2, boolean wn3, boolean cn1, boolean cn2, boolean cn3, boolean cn4, boolean cn5, int ampScore, int ampMiss, int speakerScore, int speakerMiss, boolean autoLeave, boolean autoPreplacedCoral){
         ImmutableRawMatchDataSessionUiState session = rawMatchDataSessionUiState.getValue();
         assert  session != null;
 

@@ -31,6 +31,9 @@ public class AutonomousActivity extends ComponentActivity implements View.OnClic
     Button speakerScoreIncrement, speakerScoreDecrement, speakerMissIncrement, speakerMissDecrement, ampScoreIncrement, ampScoreDecrement, ampMissInrecement, ampMissDecrement;
     TextView speakerScore, speakerMiss, ampScore, ampMiss;
 
+    //2025 auto
+    TextView autoCoralL4Score, autoCoralL4Miss, autoCoralL3Score, autoCoralL3Miss;
+
     //robot position
     Button leftPosition, centerPosition, rightPosition;
     String robotPosition = "";
@@ -378,7 +381,7 @@ public class AutonomousActivity extends ComponentActivity implements View.OnClic
 
         //ScoutingSessionViewModel object which calls the .captureAutoData and then passes in the information
         //gathered form this page
-        model.captureAutoData(
+        return model.captureAutoData(
                 robotPosition,
                 wing1,
                 wing2,
@@ -392,7 +395,14 @@ public class AutonomousActivity extends ComponentActivity implements View.OnClic
                 Integer.parseInt(ampMiss.getText().toString()),
                 Integer.parseInt(speakerScore.getText().toString()),
                 Integer.parseInt(speakerMiss.getText().toString()),
-                leaveBool
+                leaveBool,
+                //2025 captureAutoData
+                Integer.parseInt(autoCoralL4Score.getText().toString()),
+                Integer.parseInt(autoCoralL4Miss.getText().toString()),
+                Integer.parseInt(autoCoralL3Score.getText().toString()),
+                Integer.parseInt(autoCoralL3Miss.getText().toString())
+
+
         );
 
     }
