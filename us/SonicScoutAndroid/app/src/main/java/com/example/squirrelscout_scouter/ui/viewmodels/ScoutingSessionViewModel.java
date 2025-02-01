@@ -127,18 +127,18 @@ public class ScoutingSessionViewModel extends ViewModel {
             if (!clone.teleBreakdownIsSet()) clone.setTeleBreakdown("UI needs breakdown");
             if (!clone.endgameClimbIsSet()) clone.setEndgameClimb("UI needs endgame climb");
             if (!clone.endgameTrapIsSet()) clone.setEndgameTrap(false);
-            if (!clone.autoCoralL4ScoreIsSet()) clone.setAutoCoralL4Score();
-            if (!clone.autoCoralL3ScoreIsSet()) clone.setAutoCoralL3Score();
-            if (!clone.autoCoralL2ScoreIsSet()) clone.setAutoCoralL2Score();
-            if (!clone.autoCoralL1ScoreIsSet()) clone.setAutoCoralL1Score();
-            if (!clone.autoProcessorScoreIsSet()) clone.setAutoProcessorScore();
-            if (!clone.autoProcessorMissIsSet()) clone.setAutoProcessorMiss();
-            if (!clone.autoNetScoreIsSet()) clone.setAutoNetScore();
-            if (!clone.autoNetMissIsSet()) clone.setAutoNetMiss();
-            if (!clone.autoCoralL4MissIsSet()) clone.setAutoCoralL4Miss();
-            if (!clone.autoCoralL3MissIsSet()) clone.setAutoCoralL3Miss();
-            if (!clone.autoCoralL2MissIsSet()) clone.setAutoCoralL2Miss();
-            if (!clone.autoCoralL1MissIsSet()) clone.setAutoCoralL1Miss();
+            if (!clone.autoCoralL4ScoreIsSet()) clone.setAutoCoralL4Score(-1);
+            if (!clone.autoCoralL3ScoreIsSet()) clone.setAutoCoralL3Score(-1);
+            if (!clone.autoCoralL2ScoreIsSet()) clone.setAutoCoralL2Score(-1);
+            if (!clone.autoCoralL1ScoreIsSet()) clone.setAutoCoralL1Score(-1);
+            if (!clone.autoProcessorScoreIsSet()) clone.setAutoProcessorScore(-1);
+            if (!clone.autoProcessorMissIsSet()) clone.setAutoProcessorMiss(-1);
+            if (!clone.autoNetScoreIsSet()) clone.setAutoNetScore(-1);
+            if (!clone.autoNetMissIsSet()) clone.setAutoNetMiss(-1);
+            if (!clone.autoCoralL4MissIsSet()) clone.setAutoCoralL4Miss(-1);
+            if (!clone.autoCoralL3MissIsSet()) clone.setAutoCoralL3Miss(-1);
+            if (!clone.autoCoralL2MissIsSet()) clone.setAutoCoralL2Miss(-1);
+            if (!clone.autoCoralL1MissIsSet()) clone.setAutoCoralL1Miss(-1);
         }
         return clone.toImmutable();
     }
@@ -199,7 +199,7 @@ public class ScoutingSessionViewModel extends ViewModel {
         updateAndSetSession(session);
     }
 
-    public void captureAutoData(String startingPos, boolean wn1, boolean wn2, boolean wn3, boolean cn1, boolean cn2, boolean cn3, boolean cn4, boolean cn5, int ampScore, int ampMiss, int speakerScore, int speakerMiss, boolean autoLeave, boolean autoPreplacedCoral){
+    public void captureAutoData(String startingPos, boolean wn1, boolean wn2, boolean wn3, boolean cn1, boolean cn2, boolean cn3, boolean cn4, boolean cn5, int ampScore, int ampMiss, int speakerScore, int speakerMiss, boolean autoLeave, boolean autoPreplacedCoral, int autoCoralL4Score, int autoCoralL4Miss, int autoCoralL3Score, int autoCoralL3Miss, int autoCoralL2Score, int autoCoralL2Miss, int autoCoralL1Score, int autoCoralL1Miss, int autoProcessorScore, int autoProcessorMiss, int autoNetScore, int autoNetMiss){
         ImmutableRawMatchDataSessionUiState session = rawMatchDataSessionUiState.getValue();
         assert  session != null;
 

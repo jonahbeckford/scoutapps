@@ -132,7 +132,7 @@ class RawMatchDataUiStateSerde {
         rawMatchData.setAutoLeave(v.autoLeave());
 
         //2025 auto
-        rawMatchData.setpreplacedCoral(v.preplacedCoral());
+        //rawMatchData.setPreplacedCoral(v.preplacedCoral());
         rawMatchData.setAutoCoralL4Score((short) v.autoCoralL4Score());
         rawMatchData.setAutoCoralL3Score((short) v.autoCoralL3Score());
         rawMatchData.setAutoCoralL2Score((short) v.autoCoralL2Score());
@@ -147,7 +147,7 @@ class RawMatchDataUiStateSerde {
         rawMatchData.setAutoCoralL1Miss((short) v.autoCoralL1Miss());
 
         //2025 Tele-OP
-        rawMatchData.setTeleOpL4Score((short) v.teleOpCoralL4Score());
+        //rawMatchData.setTeleOpCoralL4Score((short) v.teleOpCoralL4Score());
 
         
 
