@@ -65,10 +65,7 @@ let clean areas =
   if List.mem `AndroidGradleCxx areas then begin
     start_step "Cleaning SonicScoutAndroid Android Gradle C++ artifacts";
     DkFs_C99.Path.rm ~recurse:() ~force:() ~kill:()
-      Fpath.
-        [
-          projectdir / "data" / ".cxx";
-        ]
+      Fpath.[ projectdir / "data" / ".cxx" ]
     |> rmsg
   end;
   if List.mem `AndroidBuilds areas then begin
@@ -102,7 +99,8 @@ let clean areas =
     |> Utils.rmsg
   end;
   if Sys.win32 && List.mem `DkSdkWsl2 areas then begin
-    start_step "Cleaning SonicScoutAndroid build artifacts referencing DkSDK WSL2";
+    start_step
+      "Cleaning SonicScoutAndroid build artifacts referencing DkSDK WSL2";
     (* Avoids:
         [CXX1409]
         C:\scoutapps\us\SonicScoutAndroid\data\.cxx\Debug\5b4k3l6q\arm64-v8a\android_gradle_build.json
@@ -111,11 +109,8 @@ let clean areas =
         '\\wsl.localhost\DkSDK-1.0-Debian-12-NDK-23.1.7779620\home\dksdkbob\source\34880665\build\_deps\c-capnproto-src\CMakeLists.txt'
         to exist *)
     DkFs_C99.Path.rm ~recurse:() ~force:() ~kill:()
-      Fpath.
-        [
-          projectdir / "data" / ".cxx";
-        ]
-    |> rmsg;
+      Fpath.[ projectdir / "data" / ".cxx" ]
+    |> rmsg
   end;
   RunGradle.clean areas
 
@@ -126,6 +121,12 @@ let run ?opts ~slots () =
   let projectdir = Fpath.(cwd / "us" / "SonicScoutAndroid") in
   let dk_env = Utils.dk_env ?opts () in
   let dk = Utils.dk ~env:dk_env ~slots in
+  let android_native_ocaml =
+    if
+      Utils.android_native_ocaml (Option.value ~default:Utils.default_opts opts)
+    then Some ()
+    else None
+  in
   let dkmlHostAbi =
     match Tr1HostMachine.abi with
     | `darwin_x86_64 -> "darwin_x86_64"
@@ -175,17 +176,17 @@ let run ?opts ~slots () =
 
       (* Display the Java toolchains. https://docs.gradle.org/current/userguide/toolchains.html *)
       RunGradle.run ~env:dk_env ~debug_env:() ~no_local_properties:()
-        ~projectdir
+        ?android_native_ocaml ~projectdir
         [ "-p"; "fetch/dksdk-ffi-java/core"; "-q"; "javaToolchains" ];
       RunGradle.run ~env:dk_env ~debug_env:() ~no_local_properties:()
-        ~projectdir
+        ?android_native_ocaml ~projectdir
         [
           "-p";
           "fetch/dksdk-ffi-java/core";
           ":abi:publishToMavenLocal";
           ":gradle:publishToMavenLocal";
         ];
-      RunGradle.run ~env:dk_env ~debug_env:() ~projectdir
+      RunGradle.run ~env:dk_env ~debug_env:() ?android_native_ocaml ~projectdir
         [
           "-p";
           "fetch/dksdk-ffi-java";
@@ -197,7 +198,7 @@ let run ?opts ~slots () =
           "-P";
           Fmt.str "dkmlHostAbi=%s" dkmlHostAbi;
         ];
-      RunGradle.run ~env:dk_env ~debug_env:() ~projectdir
+      RunGradle.run ~env:dk_env ~debug_env:() ?android_native_ocaml ~projectdir
         [
           "-p";
           "fetch/dksdk-ffi-java";

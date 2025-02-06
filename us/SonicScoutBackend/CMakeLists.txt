@@ -22,15 +22,17 @@ set(DKSDK_DUNE_LOCK_TIMEOUT_SECS 480 CACHE STRING "" FORCE)
 
 #   Define the project
 #       * The VERSION is the version of your application
-#       * The "OCamlDune" language is used to build OCaml source code into
-#         executables and libraries using Dune.
-#           You'll want to use at least the C language so that you can
+#       * (removed) The "OCamlDune" language is used to build OCaml source code into
+#         executables and libraries using Dune. In the Future a "DkCoder" language
+#         may do the same thing but using DkCoder.
+#           For OCamlDune, you'll want to use at least the C language so that you can
 #           link the native code executables.
-#       * OCaml requires the C and a compatible ASM language. ASM should be
-#         listed last per best practices
+#       * OCamlDune requires the C and a compatible ASM language (ie.
+#         ${dksdk-cmake_LANG_ASM}). ASM should be listed last per best practices
+#       * C and CXX is required to build Cap n' Proto
 #       * You do not need CXX (C++) compiler unless you bring in your own
 #         C++ code or dependencies
-project(SonicScout VERSION 1.0.0 LANGUAGES C CXX OCamlDune ${dksdk-cmake_LANG_ASM})
+project(SonicScout VERSION 1.0.0 LANGUAGES C CXX)
 
 # Project wide setup
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
@@ -60,7 +62,6 @@ DkSDKProject_AddProject(
 add_subdirectory(dependencies)
 
 # Main targets built by this project
-set(SONIC_SCOUT_BACKEND_FEATURES "Objs;CLI;ManagerApp" CACHE STRING "Semicolon separated list of features to build: Objs, CLI, ManagerApp")
 add_subdirectory(src)
 
 # Typically needed only if we are the top level project

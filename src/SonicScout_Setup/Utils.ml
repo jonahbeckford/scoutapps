@@ -11,6 +11,7 @@ type opts = {
           on the user's PC. We can't copy the "d" DLLs either because
           Microsoft restricts redistribution of the debug DLLS. *)
   skip_fetch : bool;
+  android_native_ocaml : bool;
 }
 
 (** [default_opts] are the default options.
@@ -23,7 +24,11 @@ let default_opts : opts =
     fetch_siblings = false;
     build_type = `Release;
     skip_fetch = true;
+    android_native_ocaml = false;
   }
+
+let build_type { build_type; _ } = build_type
+let android_native_ocaml { android_native_ocaml; _ } = android_native_ocaml
 
 (** {1 Progress} *)
 

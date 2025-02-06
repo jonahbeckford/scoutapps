@@ -11,6 +11,7 @@
       "binaryDir": "build",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "DKSDK_GENERATOR": "DKCODER",
         "DKSDK_GOLDEN_SOURCE_CODE": "ON",
         "DKSDK_DEV_TOOLS": "OFF",
         "FETCHCONTENT_SOURCE_DIR_DKML-COMPILER": {

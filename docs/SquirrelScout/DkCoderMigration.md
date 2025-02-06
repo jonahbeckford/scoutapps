@@ -6,8 +6,8 @@ Android Gradle Plugin will use DkSDK CMake, however, meaning that what is in the
 
 There are two relevant Diskuv goals:
 
-1. DkSDK CMake uses DkCoder underneath (`dksdk-coder`) to produce native code.
-2. DkCoder produces native shared libraries by linking an embedded bytecode interpreter into a skeleton shared library. That is, expand `Run` and `Repl` to `SharedLib`.
+- [ ] A. DkSDK CMake uses DkCoder underneath (`dksdk-coder`) to produce native code.
+- [ ] B. DkCoder produces native shared libraries by linking an embedded bytecode interpreter into a skeleton shared library. That is, expand `Run` and `Repl` to `SharedLib`.
 
 Either of these two goals will remove the DkSDK CMake / DkCoder discrepancy. The latter will make for a fast development experience (no WSL2).
 
@@ -33,3 +33,25 @@ This will compile with DkSDK CMake:
 ./dk src/SonicScout_Setup/Clean.ml --builds
 ./dk src/SonicScout_Setup/Develop.ml android
 ```
+
+## Goal B - DkCoder embeds bytecode interpreter into shared library
+
+Flush technique A:
+
+- Make sure Android Studio works locally with `./dk src/SonicScout_Setup/Develop.ml android`
+- Run the app up until generating the QR scanner page.
+- Hide the DkSDK CMake bits in us/SonicScoutBackend/CMakeLists.txt behind a CMake variable set in the presets.
+- Compile with `./dk src/SonicScout_Setup/Develop.ml compile` until Android Studio works again.
+- Run the app up until generating the QR scanner page.
+
+Drawbacks: Important bits like the capnp generation will not run.
+
+---
+
+Flush technique B:
+
+- Make sure Android Studio works locally with `./dk src/SonicScout_Setup/Develop.ml android`
+- Run the app up until generating the QR scanner page.
+- Edit DkSDK CMake so that OCaml compiler is never run. Ditto for WSL2. Hide that "never run" feature behind a CMake variable set in the presets.
+- Compile with `./dk src/SonicScout_Setup/Develop.ml compile` until Android Studio works again.
+- Run the app up until generating the QR scanner page.

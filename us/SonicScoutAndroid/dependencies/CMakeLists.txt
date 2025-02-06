@@ -55,7 +55,8 @@ endif()
 
 # --- Local override
 
-set(SONIC_SCOUT_BACKEND_FEATURES Objs)
+set(SONIC_SCOUT_BACKEND_FEATURES Objs) # Legacy alternative to SONIC_SCOUT_FEATURE_COM
+set(SONIC_SCOUT_FEATURE_COM)
 DkSDKFetchContent_DeclareSecondParty(
         NAME ocaml-backend
         GIT_REPOSITORY "https://github.com/SquirrelScout/ocaml-backend.git"

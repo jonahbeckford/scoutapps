@@ -19,52 +19,53 @@ DkSDKProject_AddPackage(
 # the package. This library is what other OCaml packages in this project
 # will use; even other OCaml projects can use this library if you publish
 # it to an opam repository.
-add_library(SquirrelScout_Std OBJECT
-        StdEntry.ml
-        Intf.ml
+if(NOT DKSDK_GENERATOR STREQUAL DKCODER) # DkCoder compiles OCaml itself
+    add_library(SquirrelScout_Std OBJECT
+            StdEntry.ml
+            Intf.ml
 
-        Qr_manager.ml
-        Aws_manager.ml
-        Main.ml
+            Qr_manager.ml
+            Aws_manager.ml
+            Main.ml
 
-        Db_utils.ml
+            Db_utils.ml
 
-        Schema.ml
-        Schema.mli
+            Schema.ml
+            Schema.mli
 
-        Match_schedule_table.ml
-        Raw_match_data_table.ml
-        Robot_pictures_table.ml
-        Team_names_table.ml
+            Match_schedule_table.ml
+            Raw_match_data_table.ml
+            Robot_pictures_table.ml
+            Team_names_table.ml
 
-        # This can be removed once DkCoder integrated into DkSDK CMake
-        DkSDKFFI_OCaml0.ml
-        )
-add_library(SquirrelScout::Std ALIAS SquirrelScout_Std)
-set_target_properties(SquirrelScout_Std PROPERTIES EXPORT_NAME Std)
+            # This can be removed once DkCoder integrated into DkSDK CMake
+            DkSDKFFI_OCaml0.ml
+            )
+    add_library(SquirrelScout::Std ALIAS SquirrelScout_Std)
+    set_target_properties(SquirrelScout_Std PROPERTIES EXPORT_NAME Std)
 
-target_sources(SquirrelScout_Std INTERFACE
-        StdEntry.mli)
-target_link_libraries(SquirrelScout_Std PRIVATE
-        Findlib::fmt
+    target_sources(SquirrelScout_Std INTERFACE
+            StdEntry.mli)
+    target_link_libraries(SquirrelScout_Std PRIVATE
+            Findlib::fmt
 
-        Findlib::logs.fmt
-        Findlib::logs.lwt
-        Findlib::lwt
-       
-        Findlib::capnp
-        Findlib::vector
-        Findlib::yojson  
-        Findlib::base64
-       
-        Findlib::sqlite3
-        Findlib::qrc
-        Findlib::xdg
-        Findlib::fpath
-        Findlib::bos
+            Findlib::logs.fmt
+            Findlib::logs.lwt
+            Findlib::lwt
+        
+            Findlib::capnp
+            Findlib::vector
+            Findlib::yojson  
+            Findlib::base64
+        
+            Findlib::sqlite3
+            Findlib::qrc
+            Findlib::xdg
+            Findlib::fpath
+            Findlib::bos
 
-        Findlib::lwt.unix)
-
+            Findlib::lwt.unix)
+endif()
 
 # ----- CAPNP ---- 
 

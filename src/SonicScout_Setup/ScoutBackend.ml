@@ -163,7 +163,14 @@ let cmake_properties ~cwd ~(opts : Utils.opts) slots : string list =
   in
   let cprops =
     Fmt.str "-DCMAKE_BUILD_TYPE=%s"
-      (match opts.build_type with `Debug -> "Debug" | `Release -> "Release")
+      (match Utils.build_type opts with
+      | `Debug -> "Debug"
+      | `Release -> "Release")
+    :: cprops
+  in
+  let cprops =
+    Printf.sprintf "-DDKSDK_GENERATOR=%s"
+      (if Utils.android_native_ocaml opts then "DUNE" else "DKCODER")
     :: cprops
   in
   let open Utils in

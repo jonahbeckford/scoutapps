@@ -106,7 +106,9 @@ let add_java_env ~projectdir env =
       env)
 
 let add_ninja_env ~projectdir env =
-  let ninja_bin = Fpath.(projectdir / ".ci" / "ninja" / "bin") |> Fpath.to_string in
+  let ninja_bin =
+    Fpath.(projectdir / ".ci" / "ninja" / "bin") |> Fpath.to_string
+  in
   OSEnvMap.(
     update "PATH"
       (function
@@ -175,7 +177,7 @@ let forward_slash p =
     Because ["bin/cmake.exe"] is an output of a Gradle task, it is deleted
     at arbitrary times by Android Gradle (ex. during a clean). {b Always} call
     this function to mitigate the deletion. *)
-let rec generate_local_properties ~projectdir () =
+let rec generate_local_properties ?android_native_ocaml ~projectdir () =
   (* keep the directories forward-slashed so readable *)
   let sdk_dir =
     forward_slash Fpath.(projectdir / ".ci" / "local" / "share" / "android-sdk")
@@ -200,7 +202,11 @@ let rec generate_local_properties ~projectdir () =
   (* If dkconfig is present and we are on Windows we assume WSL2 proxy will
        be used. *)
   let dkconfig = Fpath.(projectdir / "dkconfig") in
-  if Sys.win32 && OS.Dir.exists dkconfig |> rmsg then begin
+  if
+    Sys.win32
+    && android_native_ocaml = Some ()
+    && OS.Dir.exists dkconfig |> rmsg
+  then begin
     (* WSL2 proxy is used. So find a native Windows cmake.exe 3.25.3
        (must specify exact versions with Android Gradle Plugin!).
 
@@ -233,7 +239,8 @@ let rec generate_local_properties ~projectdir () =
     Always use the flag [~no_local_properties:()] for each [run] until the
     [":dkconfig:dksdkCmakeNdkEmulator"] target can run (which needs
     ["dksdk-ffi-java/core"] built first). *)
-and run ?stopcycle ?env ?debug_env ?no_local_properties ~projectdir args =
+and run ?stopcycle ?env ?debug_env ?no_local_properties ?android_native_ocaml
+    ~projectdir args =
   let env =
     match env with Some env -> env | None -> OS.Env.current () |> rmsg
   in
@@ -253,7 +260,7 @@ and run ?stopcycle ?env ?debug_env ?no_local_properties ~projectdir args =
 
   (* Create a valid local.properties *)
   (match (stopcycle, no_local_properties) with
-  | None, None -> generate_local_properties ~projectdir ()
+  | None, None -> generate_local_properties ?android_native_ocaml ~projectdir ()
   | None, Some () | Some (), _ -> ());
 
   (* Run *)
