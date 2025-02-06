@@ -8,17 +8,9 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        "FETCHCONTENT_SOURCE_DIR_DKML-COMPILER": {
-          "type": "FILEPATH",
-          "value": "${sourceDir}/fetch/dkml-compiler"
-        },
         "FETCHCONTENT_SOURCE_DIR_DKML-RUNTIME-COMMON": {
           "type": "FILEPATH",
           "value": "${sourceDir}/fetch/dkml-runtime-common"
-        },
-        "FETCHCONTENT_SOURCE_DIR_DKML-RUNTIME-DISTRIBUTION": {
-          "type": "FILEPATH",
-          "value": "${sourceDir}/fetch/dkml-runtime-distribution"
         },
         "FETCHCONTENT_SOURCE_DIR_DKSDK-ACCESS": {
           "type": "FILEPATH",
@@ -27,22 +19,6 @@
         "FETCHCONTENT_SOURCE_DIR_DKSDK-CMAKE": {
           "type": "FILEPATH",
           "value": "${sourceDir}/fetch/dksdk-cmake"
-        },
-        "FETCHCONTENT_SOURCE_DIR_DKSDK-OPAM-REPOSITORY": {
-          "type": "FILEPATH",
-          "value": "${sourceDir}/fetch/dksdk-opam-repository"
-        },
-        "FETCHCONTENT_SOURCE_DIR_DKSDK-OPAM-REPOSITORY-JS": {
-          "type": "FILEPATH",
-          "value": "${sourceDir}/fetch/dksdk-opam-repository-js"
-        },
-        "FETCHCONTENT_SOURCE_DIR_OPAM-OVERLAYS": {
-          "type": "FILEPATH",
-          "value": "${sourceDir}/fetch/opam-overlays"
-        },
-        "FETCHCONTENT_SOURCE_DIR_OPAM-REPOSITORY": {
-          "type": "FILEPATH",
-          "value": "${sourceDir}/fetch/opam-repository"
         }
       },
       "environment": {

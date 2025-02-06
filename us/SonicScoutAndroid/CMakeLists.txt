@@ -12,12 +12,11 @@ FetchContent_Declare(dksdk-access
     GIT_TAG main)
 FetchContent_MakeAvailable(dksdk-access)
 get_property(dksdk-cmake_MODULES GLOBAL PROPERTY DKSDK_CMAKE_MODULES)
-get_property(dksdk-cmake_LANG_ASM GLOBAL PROPERTY DKSDK_CMAKE_LANG_ASM)
 list(APPEND CMAKE_MODULE_PATH ${dksdk-cmake_MODULES})
 
 set(languages C)
 if(NOT GENERATE_CAPNP_ONLY)
-    list(APPEND languages CXX OCamlDune ${dksdk-cmake_LANG_ASM})
+    list(APPEND languages CXX)
 endif()
 project(SquirrelScoutAndroidApp VERSION 1.0.0 LANGUAGES ${languages})
 

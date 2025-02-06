@@ -55,3 +55,15 @@ Flush technique B:
 - Edit DkSDK CMake so that OCaml compiler is never run. Ditto for WSL2. Hide that "never run" feature behind a CMake variable set in the presets.
 - Compile with `./dk SonicScout_Setup.Develop compile --skip-fetch --next --build-type Debug` until Android Studio works again.
 - Run the app up until generating the QR scanner page.
+
+---
+
+Quick Steps:
+
+```powershell
+# SCANNER, CLI
+del -force -recurse build_dev\DkSDKFiles\host ; del -force -recurse build_dev/_deps/bytecode_to_c_host_tools-build
+
+# COM (Android Studio)
+del -force -recurse Y:\source\scoutapps\us\SonicScoutAndroid\data\.cxx\Debug\y5xc2i16\arm64-v8a\DkSDKFiles\host ; del -force -recurse Y:\source\scoutapps\us\SonicScoutAndroid\data\.cxx\Debug\y5xc2i16\arm64-v8a\_deps\bytecode_to_c_host_tools-build\ ; del -force Y:\source\scoutapps\us\SonicScoutAndroid\data\.cxx\Debug\y5xc2i16\arm64-v8a\data\src\main\cpp\SonicScout_ObjsLib-bc.c
+```

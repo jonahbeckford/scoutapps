@@ -3,6 +3,7 @@
 /#s/
 /dune-project
 /dune-workspace
+/.z-dk/
 /.z-dk-dune-project
 /.merlin
 
@@ -13,6 +14,9 @@ build_dev/
 
 # SonicScout_Setup.Qt
 msvc2019_64/
+
+# SonicScout_Setup.Dependencies
+/fetch/
 
 # vim
 *.swp

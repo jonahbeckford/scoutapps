@@ -11,7 +11,6 @@ type opts = {
           on the user's PC. We can't copy the "d" DLLs either because
           Microsoft restricts redistribution of the debug DLLS. *)
   skip_fetch : bool;
-  android_native_ocaml : bool;
 }
 
 (** [default_opts] are the default options.
@@ -24,11 +23,29 @@ let default_opts : opts =
     fetch_siblings = false;
     build_type = `Release;
     skip_fetch = true;
-    android_native_ocaml = false;
   }
 
 let build_type { build_type; _ } = build_type
-let android_native_ocaml { android_native_ocaml; _ } = android_native_ocaml
+
+(** {1 File Paths} *)
+
+let mixed_path p =
+  Stringext.replace_all ~pattern:"\\" ~with_:"/" (Fpath.to_string p)
+
+(** [sibling_dir_mixed] is the directory of the project [project]
+    that is directly next (a "sibling") to the current directory [cwd].
+
+    The return value is a mixed path directory, where all backslashes are
+    replaced with forward slashes. On Unix the path does not change. But on
+    Windows an example would be ["C:/x/y/z"]. *)
+let sibling_dir_mixed ~cwd ~project =
+  let parentdir_mixed =
+    Fpath.parent cwd |> Fpath.to_string
+    |> Stringext.replace_all ~pattern:"\\" ~with_:"/"
+  in
+  if String.ends_with ~suffix:"/" parentdir_mixed then
+    Printf.sprintf "%s%s" parentdir_mixed project
+  else Printf.sprintf "%s/%s" parentdir_mixed project
 
 (** {1 Progress} *)
 
@@ -293,21 +310,6 @@ let dk_ninja_link_or_copy ~dk =
       (* Avoid error 'failed to create symbolic link' for dksdk.ninja.link on Win32 *)
       dk [ "dksdk.ninja.copy"; "QUIET" ]
   | _ -> dk [ "dksdk.ninja.link"; "QUIET" ]
-
-(** [sibling_dir_mixed] is the directory of the project [project]
-    that is directly next (a "sibling") to the current directory [cwd].
-
-    The return value is a mixed path directory, where all backslashes are
-    replaced with forward slashes. On Unix the path does not change. But on
-    Windows an example would be ["C:/x/y/z"]. *)
-let sibling_dir_mixed ~cwd ~project =
-  let parentdir_mixed =
-    Fpath.parent cwd |> Fpath.to_string
-    |> Stringext.replace_all ~pattern:"\\" ~with_:"/"
-  in
-  if String.ends_with ~suffix:"/" parentdir_mixed then
-    Printf.sprintf "%s%s" parentdir_mixed project
-  else Printf.sprintf "%s/%s" parentdir_mixed project
 
 let dk_env ?(opts = default_opts) () =
   let env = Bos.OS.Env.current () |> rmsg in

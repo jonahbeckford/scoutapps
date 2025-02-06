@@ -18,13 +18,6 @@ plugins {
 }
 apply plugin: CMakeNdkEnvironmentPlugin
 
-configurations {
-    cmakeEmulatorpath {
-        canBeResolved = true
-        canBeConsumed = false
-    }
-}
-
 dependencies {
     api 'com.diskuv.dksdk.ffi:ffi-java-android:2.2.1-SNAPSHOT'
     api 'com.caverock:androidsvg-aar:1.4'
@@ -38,23 +31,36 @@ dependencies {
     androidTestImplementation "androidx.test:rules:1.5.0"
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-
-    cmakeEmulatorpath project(configuration: 'cmakeEmulatorFiles', path: ':dkconfig')
 }
 
-// Allow local development
-def localDevProjects = [
-        // DkSDK standards
-        'dksdk-access',
-        'dksdk-cmake'
-]
-def localDevCmakeArgs = localDevProjects.
+// --- CMake arguments
+def setupProps = new Properties()
+def setupPropsFile = rootProject.file("setup.properties")
+if (setupPropsFile.exists()) setupPropsFile.withInputStream { setupProps.load(it) }
+def commonCmakeArgs = setupProps.stringPropertyNames().
+        findAll { it.startsWith("FETCHCONTENT_")
+                || it == "DKSDK_MSYS2_DIR"
+                || it == "SonicScoutBackend_SOURCE_DIR"}.
+        collect { it ->
+            def value = setupProps.get(it)
+            "-D${it}=${value}"
+        }
+def abiCmakeArgs = setupProps.stringPropertyNames().
+        findAll { it == "CMAKE_MAKE_PROGRAM" }.
+        collect { it ->
+            def value = setupProps.get(it)
+            "-D${it}=${value}"
+        }
+def localDevCmakeArgs = [
+            // DkSDK standard projects
+            'dksdk-access',
+            'dksdk-cmake'
+        ].
         findAll { rootProject.file("../${it}").exists() }.
         collect { it ->
             def path = rootProject.file("../${it}").getAbsolutePath()
             "-DFETCHCONTENT_SOURCE_DIR_${it.toUpperCase()}=${path}"
         }
-
 tasks.register('cmakeConfigureTemplate', CMakeConfigureWithJniTask) {
     def jniCompiler = javaToolchains.compilerFor {
         // Avoid: androidx/activity/lint/ActivityIssueRegistry has been compiled by a more recent version of the Java Runtime (class file version 61.0), this version of the Java Runtime only recognizes class file versions up to 55.0
@@ -64,10 +70,11 @@ tasks.register('cmakeConfigureTemplate', CMakeConfigureWithJniTask) {
 
     template true
     androidGradlePlugin true
-    emulator configurations.cmakeEmulatorpath.elements
     jdkHome = jniCompiler.map { it.metadata.installationPath }
     defaultFetchContentDksdkAccess = rootProject.file("fetch/dksdk-access")
     defaultFetchContentDksdkCmake = rootProject.file("fetch/dksdk-cmake")
+    arguments.addAll commonCmakeArgs
+    arguments.addAll abiCmakeArgs
     arguments.addAll localDevCmakeArgs
     if (getLogger().isInfoEnabled()) {
         arguments.add "--trace-expand"
@@ -145,15 +152,27 @@ androidComponents {
     onVariants(selector().all(), { variant ->
         def java = variant.sources.java
         if (java) {
+            /* The capnp generation is a build tool so it must be compiled for the host ABI. */
+            final Provider<String> osNameProvider = project.getProviders().systemProperty("os.name");
+            final String isWindows = (osNameProvider.isPresent() && osNameProvider.get().startsWith("Windows"));
+
             def taskName = "cmakeConfigure${variant.name.capitalize()}Capnp"
             def generatedJavaDir0 = layout.buildDirectory.dir("generated/java/${taskName}") // can't change this for some reason
             def cmakeConfigureForCapnp = tasks.register(taskName, GeneratedJavaCMakeConfigureTask) {
-                emulator configurations.cmakeEmulatorpath.elements
-
                 arguments.add "--no-warn-unused-cli"
                 arguments.add "-DGENERATE_CAPNP_ONLY=1"
                 arguments.add "-DGENERATE_CAPNP_DIR=${generatedJavaDir0.get()}"
+                arguments.addAll commonCmakeArgs
                 arguments.addAll localDevCmakeArgs
+
+                if(isWindows) {
+                    /* Why Visual Studio 2XXX generator? Because it does not require that
+                       Android Studio is run from the Visual Studio Developer Prompt like
+                       Ninja does. */
+                    /* Perhase use setup.properties to find the correct generator? Run a
+                     * command with vsdev like in RunCMake to find the vsdir directory. */
+                    cmakeGenerator = "Visual Studio 16 2019"
+                }
 
                 sources fileTree(
                         dir: rootDir,

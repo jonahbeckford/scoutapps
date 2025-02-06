@@ -171,19 +171,19 @@ let cmake_properties ~cwd ~(opts : Utils.opts) slots : string list =
   let cprops = "-DSONIC_SCOUT_FEATURE_CLI=ON" :: cprops in
   let open Utils in
   let cprops =
-    match opts with
-    | { fetch_siblings = true; _ } ->
-        (* Override what is forced in CMakePresets.json *)
-        let sib project =
-          let project_upcase = String.uppercase_ascii project in
+    (* Override what is forced in CMakePresets.json *)
+    let p project =
+      let project_upcase = String.uppercase_ascii project in
+      match opts with
+      | { fetch_siblings = true; _ } ->
           Fmt.str "-DFETCHCONTENT_SOURCE_DIR_%s=%s" project_upcase
             (Utils.sibling_dir_mixed ~cwd ~project)
-        in
-        sib "dkml-runtime-common"
-        :: sib "dkml-runtime-distribution"
-        :: sib "dkml-compiler" :: sib "dksdk-access" :: sib "dksdk-cmake"
-        :: cprops
-    | { fetch_siblings = false; _ } -> cprops
+      | { fetch_siblings = false; _ } ->
+          Fmt.str "-DFETCHCONTENT_SOURCE_DIR_%s=%s" project_upcase
+            (Utils.mixed_path Fpath.(cwd / "fetch" / project))
+    in
+    p "dkml-runtime-common" :: p "dkml-compiler" :: p "dksdk-access"
+    :: p "dksdk-cmake" :: p "dksdk-ffi-c" :: cprops
   in
   cprops
 
@@ -208,11 +208,6 @@ let run ?(opts = Utils.default_opts) ?global_dkml ~slots () =
   in
   OS.Dir.with_current projectdir
     (fun () ->
-      (if not opts.skip_fetch then
-         let project_get =
-           if opts.next then [ "DKSDK_CMAKE_GITREF"; "next" ] else []
-         in
-         dk ~slots ("dksdk.project.get" :: project_get));
       dk ~slots [ "dksdk.cmake.link"; "QUIET" ];
       Utils.dk_ninja_link_or_copy ~dk:(dk ~slots);
       let user_presets = Fpath.v "CMakeUserPresets.json" in

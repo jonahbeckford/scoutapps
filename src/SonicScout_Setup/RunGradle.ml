@@ -17,20 +17,6 @@ open Bos
 (* Ported from Utils since this script is standalone. *)
 let rmsg = function Ok v -> v | Error (`Msg msg) -> failwith msg
 
-let clean areas =
-  let open Utils in
-  if Sys.win32 && List.mem `DkSdkWsl2 areas then begin
-    start_step "Cleaning DkSDK WSL2 distributions";
-    let dksdk_distributions =
-      wsl2_list []
-      |> List.filter (fun distribution ->
-             String.starts_with ~prefix:"DkSDK-" distribution)
-    in
-    List.iter
-      (fun distribution -> wsl2 [ "--unregister"; distribution ])
-      dksdk_distributions
-  end
-
 (** Don't leak DkCoder OCaml environment to Android Gradle Plugin which will infect DkSDK CMake
     host detection of OCaml (`ocamlc -where` in dksdk-cmake/.../115-ocaml-config).
     In fact, don't leak any existing OCaml environment. *)
@@ -63,21 +49,22 @@ let remove_ocaml_dkcoder_env env =
            )
   | _ -> env
 
-let find_java_home ~projectdir =
+let find_java_home ~slots =
+  let jdk =
+    match Slots.jdk slots with
+    | None -> failwith "Missing jdk slot"
+    | Some jdk -> jdk
+  in
   let java_home_opt =
-    let home =
-      Fpath.(
-        projectdir / ".ci" / "local" / "share" / "jdk" / "Contents" / "Home")
-    in
+    let home = Fpath.(jdk / "Contents" / "Home") in
     if OS.File.exists Fpath.(home / "bin" / "javac") |> rmsg then Some home
-    else
-      let home = Fpath.(projectdir / ".ci" / "local" / "share" / "jdk") in
-      if Sys.win32 && OS.File.exists Fpath.(home / "bin" / "javac.exe") |> rmsg
-      then Some home
-      else if
-        (not Sys.win32) && OS.File.exists Fpath.(home / "bin" / "javac") |> rmsg
-      then Some home
-      else None
+    else if
+      Sys.win32 && OS.File.exists Fpath.(jdk / "bin" / "javac.exe") |> rmsg
+    then Some jdk
+    else if
+      (not Sys.win32) && OS.File.exists Fpath.(jdk / "bin" / "javac") |> rmsg
+    then Some jdk
+    else None
   in
   match java_home_opt with
   | Some h -> h
@@ -86,9 +73,9 @@ let find_java_home ~projectdir =
         "No local JAVA_HOME detected. Make sure that './dk \
          dksdk.java.jdk.download NO_SYSTEM_PATH JDK 17' has been run."
 
-let add_java_env ~projectdir env =
+let add_java_env ~slots env =
   (* Add JAVA_HOME *)
-  let java_home = find_java_home ~projectdir in
+  let java_home = find_java_home ~slots in
   let env = OSEnvMap.(add "JAVA_HOME" (Fpath.to_string java_home) env) in
 
   (* Gradle jvmToolchain detection has problems if the Java
@@ -105,28 +92,33 @@ let add_java_env ~projectdir env =
                else java_bin ^ ":" ^ path))
       env)
 
-let add_ninja_env ~projectdir env =
-  let ninja_bin =
-    Fpath.(projectdir / ".ci" / "ninja" / "bin") |> Fpath.to_string
-  in
+let add_ninja_env ~slots env =
+  let ninja_dir = Fpath.to_string (Slots.ninja_dir slots) in
   OSEnvMap.(
     update "PATH"
       (function
-        | None -> Some ninja_bin
+        | None -> Some ninja_dir
         | Some path ->
             Some
-              (if Sys.win32 then ninja_bin ^ ";" ^ path
-               else ninja_bin ^ ":" ^ path))
+              (if Sys.win32 then ninja_dir ^ ";" ^ path
+               else ninja_dir ^ ":" ^ path))
       env)
 
-let find_gradle_binary ~projectdir =
+let find_gradle_binary ~slots =
+  let gradle_home =
+    match Slots.gradle_home slots with
+    | None -> failwith "Missing gradle_home slot"
+    | Some gradle_home -> gradle_home
+  in
   let binary_opt =
-    let home = Fpath.(projectdir / ".ci" / "local" / "share" / "gradle") in
-    if Sys.win32 && OS.File.exists Fpath.(home / "bin" / "gradle.bat") |> rmsg
-    then Some Fpath.(home / "bin" / "gradle.bat")
+    if
+      Sys.win32
+      && OS.File.exists Fpath.(gradle_home / "bin" / "gradle.bat") |> rmsg
+    then Some Fpath.(gradle_home / "bin" / "gradle.bat")
     else if
-      (not Sys.win32) && OS.File.exists Fpath.(home / "bin" / "gradle") |> rmsg
-    then Some Fpath.(home / "bin" / "gradle")
+      (not Sys.win32)
+      && OS.File.exists Fpath.(gradle_home / "bin" / "gradle") |> rmsg
+    then Some Fpath.(gradle_home / "bin" / "gradle")
     else None
   in
   match binary_opt with
@@ -150,97 +142,32 @@ let android_local_properties_escape s =
   Stringext.replace_all s ~pattern:"\\" ~with_:"\\\\"
   |> Stringext.replace_all ~pattern:":" ~with_:"\\:"
 
-let forward_slash p =
-  Stringext.replace_all ~pattern:"\\" ~with_:"/" (Fpath.to_string p)
-
 (** [generate_local_properties] creates a ["local.properties"].
-
-    On Windows it will create the properties file without a ["cmake.dir"] property,
-    and then run a Gradle target to download a ["cmake.exe"] proxy for WSL2,
-    and then recreate the properties file with a ["cmake.dir"] property
-    referencing the WSL2 cmake.exe proxy.
-    
-    On non-Windows systems, the final properties file is written immediately.
-    
-    If you don't use this, you are subject to a chicken-and-egg problem
-    on Windows. When you open Android Studio and
-    ["cmake.dir" = "...//dkconfig/build/emulators/dksdk-wsl2/cmake.dir"] you
-    get:
-       org.gradle.api.ProjectConfigurationException: A problem occurred configuring project ':data'.
-       Caused by: java.lang.NullPointerException
-       at com.android.build.gradle.internal.cxx.settings.CxxAbiModelSettingsRewriterKt.calculateConfigurationHash(CxxAbiModelSettingsRewriter.kt:226)
-    if there is no ["bin/cmake.exe"] in the cmake.dir folder.
-    However, a Gradle task needs to run to generate that ["bin/cmake.exe"].
-    So the two-step procedure this function follows leaves Gradle in a good
-    state.
 
     Because ["bin/cmake.exe"] is an output of a Gradle task, it is deleted
     at arbitrary times by Android Gradle (ex. during a clean). {b Always} call
     this function to mitigate the deletion. *)
-let rec generate_local_properties ?android_native_ocaml ~projectdir () =
+let generate_local_properties ~slots ~projectdir () =
   (* keep the directories forward-slashed so readable *)
   let sdk_dir =
-    forward_slash Fpath.(projectdir / ".ci" / "local" / "share" / "android-sdk")
+    match Slots.android_sdk_dir slots with
+    | None -> failwith "Expected slot android_sdk_dir"
+    | Some sdk_dir -> Utils.mixed_path sdk_dir
   in
   let local_properties = Fpath.(projectdir / "local.properties") in
   let content ~cmake_dir =
     [
-      "# Generated by DkSDK RunGradle script";
-      Fmt.str "sdk.dir=%s" (android_local_properties_escape sdk_dir);
-      Fmt.str "cmake.dir=%s"
-        (android_local_properties_escape (forward_slash cmake_dir));
+      Printf.sprintf "# Generated by %s script" __MODULE_ID__;
+      Printf.sprintf "sdk.dir=%s" (android_local_properties_escape sdk_dir);
+      Printf.sprintf "cmake.dir=%s"
+        (android_local_properties_escape (Utils.mixed_path cmake_dir));
     ]
   in
-  let cmake_3_25_3_home =
-    match Sys.getenv_opt "DKCODER_CMAKE_EXE" with
-    | Some cmake_exe -> Fpath.(v cmake_exe |> parent |> parent)
-    | None ->
-        failwith
-          "Expected to be run within DkCoder. But no DKCODER_CMAKE_EXE \
-           environment variable was available."
-  in
-  (* If dkconfig is present and we are on Windows we assume WSL2 proxy will
-       be used. *)
-  let dkconfig = Fpath.(projectdir / "dkconfig") in
-  if
-    Sys.win32
-    && android_native_ocaml = Some ()
-    && OS.Dir.exists dkconfig |> rmsg
-  then begin
-    (* WSL2 proxy is used. So find a native Windows cmake.exe 3.25.3
-       (must specify exact versions with Android Gradle Plugin!).
+  let cmake_3_25_3_home = Slots.cmake_home slots in
+  OS.File.write_lines local_properties (content ~cmake_dir:cmake_3_25_3_home)
+  |> rmsg
 
-       We can either place the native cmake.exe in the PATH or
-       modify the local.properties cmake.dir property. Since we
-       already must write the local.properties to ensure that a
-       previous but now invalid cmake.dir is not present, we choose
-       to set a new cmake.dir property here (always!). *)
-    let emulators = Fpath.(dkconfig / "build" / "emulators") in
-    let cmake_wsl2_home = Fpath.(emulators / "dksdk-wsl2" / "cmake.dir") in
-    let cmake_exe = Fpath.(cmake_wsl2_home / "bin" / "cmake.exe") in
-    if not (OS.File.exists cmake_exe |> rmsg) then (
-      Logs.info (fun l -> l "Downloading WSL2 proxy %a" Fpath.pp cmake_exe);
-      (* Deleting cmake-ndk.json is insurance that the Gradle task is rerun. *)
-      OS.File.delete Fpath.(emulators / "cmake-ndk.json") |> rmsg;
-      OS.File.write_lines local_properties
-        (content ~cmake_dir:cmake_3_25_3_home)
-      |> rmsg;
-      run ~stopcycle:() ~projectdir [ ":dkconfig:dksdkCmakeNdkEmulator" ]);
-    (* Now use WSL2 proxy as cmake.dir *)
-    OS.File.write_lines local_properties (content ~cmake_dir:cmake_wsl2_home)
-    |> rmsg
-  end
-  else begin
-    OS.File.write_lines local_properties (content ~cmake_dir:cmake_3_25_3_home)
-    |> rmsg
-  end
-
-(** [run ?no_local_properties].
-    Always use the flag [~no_local_properties:()] for each [run] until the
-    [":dkconfig:dksdkCmakeNdkEmulator"] target can run (which needs
-    ["dksdk-ffi-java/core"] built first). *)
-and run ?stopcycle ?env ?debug_env ?no_local_properties ?android_native_ocaml
-    ~projectdir args =
+and run ?env ?debug_env ~projectdir ~slots args =
   let env =
     match env with Some env -> env | None -> OS.Env.current () |> rmsg
   in
@@ -249,19 +176,14 @@ and run ?stopcycle ?env ?debug_env ?no_local_properties ?android_native_ocaml
   let env = remove_ocaml_dkcoder_env env in
 
   (* Add JAVA_HOME and Java to PATH *)
-  let env = add_java_env ~projectdir env in
+  let env = add_java_env ~slots env in
 
   (* Add Ninja to PATH.
      Fixes: [CXX1416] Could not find Ninja on PATH or in SDK CMake bin folders. *)
-  let env = add_ninja_env ~projectdir env in
+  let env = add_ninja_env ~slots env in
 
   (* Find Gradle *)
-  let gradle = find_gradle_binary ~projectdir in
-
-  (* Create a valid local.properties *)
-  (match (stopcycle, no_local_properties) with
-  | None, None -> generate_local_properties ?android_native_ocaml ~projectdir ()
-  | None, Some () | Some (), _ -> ());
+  let gradle = find_gradle_binary ~slots in
 
   (* Run *)
   (match debug_env with

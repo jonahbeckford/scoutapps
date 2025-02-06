@@ -1,5 +1,3 @@
-open Utils
-
 let ask_launch () =
   let rec ask () =
     StdIo.print_string
@@ -33,10 +31,6 @@ BUILDING INSIDE ANDROID STUDIO
    if on a macOS).
 6. If Windows Firewall asks, you should GRANT ACCESS to "adb.exe". If you
    don't it is likely connecting to your Android devices will be difficult.
-7. You will get very slow `Scanning index files`, `Loading symbols` and `Indexing` actions.
-   To avoid these, right-click on any `\\wsl.localhost` based `build/DkSDKFiles` and
-   `build/_deps` folders and **Mark Directory as Excluded**. That is shown on the picture:
-   https://raw.githubusercontent.com/diskuv/scoutapps/ff400352dea7df67f83f46f21dd387acf3f07132/us/SonicScoutAndroid/static/exclude-DkSDKFiles.png
 
 Do you want to launch Android Studio now? (y/N) |};
     StdIo.flush StdIo.stdout;
@@ -44,23 +38,57 @@ Do you want to launch Android Studio now? (y/N) |};
       match StdIo.input_line StdIo.stdin with
       | "y" | "Y" -> true
       | "n" | "N" -> false
-      | "" -> raise StopProvisioning
+      | "" -> raise Utils.StopProvisioning
       | _ -> ask ()
     with End_of_file ->
       StdIo.print_endline "<terminal or standard input closed> ... exiting";
-      raise StopProvisioning
+      raise Utils.StopProvisioning
   in
   ask ()
 
 let run ~slots () =
   let open Bos in
-  start_step "Running Android Studio";
-  let cwd = OS.Dir.current () |> rmsg in
+  Utils.start_step "Running Android Studio";
+  let cwd = OS.Dir.current () |> Utils.rmsg in
   let projectdir = Fpath.(cwd / "us" / "SonicScoutAndroid") in
 
+  (* Download Android Studio *)
   OS.Dir.with_current projectdir
-    (fun () -> dk ~slots [ "dksdk.android.studio.download"; "NO_SYSTEM_PATH" ])
+    (fun () -> Utils.dk ~slots [ "dksdk.android.studio.download"; "NO_SYSTEM_PATH" ])
     ()
-  |> rmsg;
+  |> Utils.rmsg;
 
-  if ask_launch () then RunAndroidStudio.run ~debug_env:() ~projectdir []
+  (* Find the executable or script launcher *)
+  let launcher =
+    let studio_app_bin =
+      Fpath.(
+        projectdir / ".ci" / "local" / "share" / "Android Studio.app"
+        / "Contents" / "MacOS" / "studio")
+    in
+    Logs.debug (fun l -> l "Checking for macOS at %a" Fpath.pp studio_app_bin);
+    if OS.File.exists studio_app_bin |> Utils.rmsg then Some studio_app_bin
+    else
+      let home =
+        Fpath.(projectdir / ".ci" / "local" / "share" / "android-studio")
+      in
+      Logs.debug (fun l -> l "Checking for Linux/Windows in %a" Fpath.pp home);
+      if Sys.win32 then
+        if OS.File.exists Fpath.(home / "bin" / "studio.bat") |> Utils.rmsg then
+          Some Fpath.(home / "bin" / "studio.bat")
+        else None
+      else if OS.File.exists Fpath.(home / "bin" / "studio") |> Utils.rmsg then
+        Some Fpath.(home / "bin" / "studio")
+      else if OS.File.exists Fpath.(home / "bin" / "studio.sh") |> Utils.rmsg
+      then Some Fpath.(home / "bin" / "studio.sh")
+      else None
+  in
+  let slots =
+    match launcher with
+    | Some b -> Slots.set_android_studio_launcher slots b
+    | None ->
+        failwith
+          "No local Android Studio detected. The './dk \
+           dksdk.android.studio.download NO_SYSTEM_PATH' had a failure."
+  in
+
+  if ask_launch () then RunAndroidStudio.run ~debug_env:() ~projectdir ~slots []

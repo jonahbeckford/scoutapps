@@ -84,13 +84,6 @@ let skip_fetch_t =
   in
   Arg.(value & flag & info ~docs:s_advanced ~doc [ "skip-fetch" ])
 
-let android_native_ocaml_t =
-  let doc =
-    "Use an older, much slower-to-compile, WSL2-needing nativecode OCaml \
-     compilation."
-  in
-  Arg.(value & flag & info ~docs:s_advanced ~doc [ "android-native-ocaml" ])
-
 let build_type_t =
   let default =
     match Utils.default_opts.build_type with
@@ -122,18 +115,9 @@ let build_type_t =
 
 let opts_t =
   Term.(
-    const
-      (fun
-        next
-        fetch_siblings
-        build_type
-        skip_fetch
-        android_native_ocaml
-        :
-        Utils.opts
-      -> { next; fetch_siblings; build_type; skip_fetch; android_native_ocaml })
-    $ next_t $ fetch_siblings_t $ build_type_t $ skip_fetch_t
-    $ android_native_ocaml_t)
+    const (fun next fetch_siblings build_type skip_fetch : Utils.opts ->
+        { next; fetch_siblings; build_type; skip_fetch })
+    $ next_t $ fetch_siblings_t $ build_type_t $ skip_fetch_t)
 
 let global_dkml_t =
   let doc =
