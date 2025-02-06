@@ -33,7 +33,7 @@ endif()
 # The OCaml code
 # ------
 
-if(NOT DKSDK_GENERATOR STREQUAL DKCODER) # DkCoder compiles OCaml itself
+if(SONIC_SCOUT_FEATURE_SCANNER)
     add_library(ManagerApp_ml STATIC ManagerApp_ml.ml)
     add_library(SquirrelScout::ManagerApp_ml ALIAS ManagerApp_ml)
     target_link_libraries(ManagerApp_ml PRIVATE
@@ -76,6 +76,7 @@ zxing_add_package_stb()
 
 include (GNUInstallDirs)
 
+add_custom_target(ManagerApp_ALL)
 if(SONIC_SCOUT_FEATURE_SCANNER)
     add_executable (ManagerAppReader ZXingReader.cpp)
 
@@ -267,7 +268,6 @@ if(SONIC_SCOUT_FEATURE_SCANNER)
     endif()
 
     # ~~~ ADDITIONS
-    add_custom_target(ManagerApp_ALL)
     add_dependencies(ManagerApp_ALL ManagerAppReader)
     target_link_libraries(ManagerAppReader
         SquirrelScout::ManagerApp_c SquirrelScout::ManagerApp_ml
@@ -291,6 +291,9 @@ if(SONIC_SCOUT_FEATURE_SCANNER)
             # required for executables that embed OCaml
             DkSDK::OCaml::ForStaticBinary)
     endif()
+else()
+    add_custom_command(TARGET ManagerApp_ALL POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E echo "The QR scanner application is disabled. To enable, set the SONIC_SCOUT_FEATURE_SCANNER CMake variable to ON.")
 endif() # if(SONIC_SCOUT_FEATURE_SCANNER)
 
 list(POP_BACK CMAKE_MESSAGE_INDENT)

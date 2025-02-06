@@ -19,7 +19,7 @@ DkSDKProject_AddPackage(
 # the package. This library is what other OCaml packages in this project
 # will use; even other OCaml projects can use this library if you publish
 # it to an opam repository.
-if(NOT DKSDK_GENERATOR STREQUAL DKCODER) # DkCoder compiles OCaml itself
+if(SONIC_SCOUT_FEATURE_COM)
     add_library(SquirrelScout_Std OBJECT
             StdEntry.ml
             Intf.ml

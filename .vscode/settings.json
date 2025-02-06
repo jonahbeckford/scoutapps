@@ -22,5 +22,22 @@
     "cmake.useCMakePresets": "always",
     "cmakeExplorer.cmakeIntegration": true,
     "cmakeExplorer.buildDir": "us/SonicScoutBackend/build_dev",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "files.associations": {
+        "dune-file": "dune",
+        "*.h": "c",
+        "xlocnum": "c",
+        "chrono": "c",
+        "optional": "c",
+        "system_error": "c",
+        "type_traits": "c",
+        "xlocmon": "c",
+        "xtr1common": "c",
+        "algorithm": "c",
+        "complex": "c",
+        "functional": "c",
+        "xutility": "c",
+        "exception": "c",
+        "domain_stable.tbl": "c"
+    }
 }

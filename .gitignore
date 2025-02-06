@@ -9,6 +9,10 @@
 # Opam and conventional OCaml development
 /_opam/
 /src/*/dune
+build_dev/
+
+# SonicScout_Setup.Qt
+msvc2019_64/
 
 # vim
 *.swp

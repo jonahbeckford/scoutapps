@@ -173,6 +173,7 @@ let cmake_properties ~cwd ~(opts : Utils.opts) slots : string list =
       (if Utils.android_native_ocaml opts then "DUNE" else "DKCODER")
     :: cprops
   in
+  let cprops = "-DSONIC_SCOUT_FEATURE_CLI=ON" :: cprops in
   let open Utils in
   let cprops =
     match opts with
@@ -239,7 +240,7 @@ let run ?(opts = Utils.default_opts) ?global_dkml ~slots () =
           "--build";
           Fpath.to_string build_reldir;
           "--target";
-          "main-cli";
+          "sonic-scout-cli";
           "DkSDK_DevTools";
           "DkSDKTest_UnitTests_ALL";
           "ManagerApp_ALL";

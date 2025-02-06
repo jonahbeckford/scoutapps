@@ -2,7 +2,7 @@ DkSDKProject_AddPackage(AUTO_OPAM_PACKAGE TESTS)
 
 include(DkSDKTest)
 
-if(NOT DKSDK_GENERATOR STREQUAL DKCODER) # DkCoder has its own test frameworks for OCaml code
+if(SONIC_SCOUT_FEATURE_COM)
   # Test Std
   DkSDKTest_AddUnitTest(NAME Std
     STANDARD_MAIN

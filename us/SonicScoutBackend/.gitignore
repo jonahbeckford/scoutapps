@@ -4,7 +4,7 @@
 # ./dk dksdk.project.get
 /.z-dk/
 
-# main-cli
+# sonic-scout-cli
 testing.db
 example.db
 

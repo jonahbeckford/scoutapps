@@ -14,8 +14,46 @@
             "cwd": "${workspaceRoot}/us/SonicScoutBackend/build_dev/_CPack_Packages/win64/ZIP/SonicScoutBackend-1.0.0-win64/bin",
             "environment": [],
             "console": "externalTerminal"
+        },
+        {
+            "name": "sonic-scout-cli",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/us/SonicScoutBackend/build_dev/src/SonicScout_MainCLI/sonic-scout-cli.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/us/SonicScoutBackend/build_dev",
+            "environment": [],
+            "console": "internalConsole"
+        },
+        {
+            "name": "sonic-scout-cli (dynamic for beckf)",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "program": "Y:/source/dksdk-foundations/build/d/st-d/o/src/ocaml/runtime/ocamlrun.exe",
+            "args": [
+                "${workspaceFolder}/us/SonicScoutBackend/build_dev/DkSDKFiles/c/a1f898ea/229a130a/_build/install/default/bin/SonicScout_MainCLI-SquirrelScout_cli.bc.exe"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}/us/SonicScoutBackend/build_dev",
+            "environment": [
+                {
+                    "name": "CAML_LD_LIBRARY_PATH",
+                    // dksdk-foundations' Dune build folder has the Foundation stublibs
+                    // which won't include stub libraries that do not have a static library
+                    // counterpart. Example: dllctypes_foreign_stubs.
+                    // So we include DkCoder installation later in the path to get a complete set.
+                    //
+                    // Why use dksdk-foundations at all? Because that can be compiled in
+                    // CREATE_DEBUG=ON mode.
+                    "value": "Y:/source/dksdk-foundations/build/d/_build/install/default/lib/stublibs;C:/Users/beckf/AppData/Local/Programs/DkCoder/coder/h/2.2.1-4/lib/stublibs"
+                },
+                {
+                    "name": "PATH",
+                    "value": "C:/Users/beckf/AppData/Local/Programs/DkCoder/coder/h/2.2.1-4/bin;${env:PATH}"
+                }
+            ],
+            "console": "internalConsole"
         }
-        
-
     ]
 }

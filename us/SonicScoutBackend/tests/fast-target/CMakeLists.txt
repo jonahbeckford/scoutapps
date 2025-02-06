@@ -5,7 +5,7 @@
 # If CMake is cross-compiling then these tests will _not_
 # be executed.
 
-set(test1 "${PROJECT_NAME}. GIVEN status WHEN main-cli THEN does not exit with errors")
-add_test(NAME ${test1} COMMAND main-cli status)
+set(test1 "${PROJECT_NAME}. GIVEN status WHEN sonic-scout-cli THEN does not exit with errors")
+add_test(NAME ${test1} COMMAND sonic-scout-cli status)
 set_tests_properties(${test1} PROPERTIES
         ENVIRONMENT "TEST_FILE=${CMAKE_CURRENT_LIST_FILE};TEST_LINE=${CMAKE_CURRENT_LIST_LINE}")

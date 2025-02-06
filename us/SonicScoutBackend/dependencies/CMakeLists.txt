@@ -112,34 +112,40 @@ DkSDKProject_DeclareAvailable(bos
 # Using DkSDKProject_DeclareAvailable() alone does not pull it into CMake.
 # You also have to use DkSDKProject_MakeAvailable(xxx FINDLIBS yyy) and use a
 # target_link_libraries() on one of the `yyy`.
-DkSDKProject_MakeAvailable(
-        cmdliner
-        fmt
-        logs
-        lwt
 
-        capnp_ocaml
-        qrc
-        vector
-        yojson
-        core
-        base64
-        sqlite3
-        xdg
-        fpath
-        bos
-)
+if(SONIC_SCOUT_FEATURE_COM)
+    DkSDKProject_MakeAvailable(
+            cmdliner
+            fmt
+            logs
+            lwt
+
+            capnp_ocaml
+            qrc
+            vector
+            yojson
+            core
+            base64
+            sqlite3
+            xdg
+            fpath
+            bos
+    )
+
+    DkSDKProject_MakeAvailable(TEST
+            tezt)
+endif()
+
 DkSDKFetchContent_MakeAvailableNoInstall(
-        # "Build tools" that must run on the build host.
-        # Implementation: Built by CMake directly.
+    # "Build tools" that must run on the build host.
+    # Implementation: Built by CMake directly.
 
-        capnproto_and_host_tools
-        capnproto_java_and_host_tools
+    capnproto_and_host_tools
+    capnproto_java_and_host_tools
 )
-
-DkSDKProject_MakeAvailable(TEST
-        tezt)
 
 add_subdirectory(zxing)
 
-DkSDKRequire_Add(FFI OCaml)
+if(SONIC_SCOUT_FEATURE_COM)
+    DkSDKRequire_Add(FFI OCaml)
+endif()

@@ -12,4 +12,8 @@ if(SONIC_SCOUT_FEATURE_COM)
         add_library(SquirrelScout::ObjsLib ALIAS SquirrelScout_ObjsLib)
         target_link_libraries(SquirrelScout_ObjsLib PRIVATE SquirrelScout_Objs)
         target_include_directories(SquirrelScout_ObjsLib INTERFACE DkSDK::OCamlCompile)
+else()
+        add_custom_target(SquirrelScout_ObjsLib)
+        add_custom_command(TARGET SquirrelScout_ObjsLib POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E echo "The COM library is disabled. To enable, set the SONIC_SCOUT_FEATURE_COM CMake variable to ON.")
 endif()
