@@ -212,7 +212,12 @@ let main () =
     ]
   in
 
-  (* let default =  Cmdliner.Term.(ret (const (fun _ -> `Help (`Pager, None)) *)
-  exit (Cmdliner.Cmd.eval (Cmdliner.Cmd.group info cmds))
+  let default =
+    let open Cmdliner in
+    let i_query = Arg.(value & opt (some file) None & info ["introspect-query"]) in
+    let i_answer = Arg.(value & opt (some string) None & info ["introspect-answer"]) in
+    Cmdliner.Term.(const (fun _ _ -> ()) $ i_query $ i_answer)
+  in
+  exit (Cmdliner.Cmd.eval (Cmdliner.Cmd.group ~default info cmds))
 
 let () = main ()
