@@ -13,7 +13,6 @@ FetchContent_Declare(dksdk-access
     GIT_TAG origin/main)
 FetchContent_MakeAvailable(dksdk-access)
 get_property(dksdk-cmake_MODULES GLOBAL PROPERTY DKSDK_CMAKE_MODULES)
-get_property(dksdk-cmake_LANG_ASM GLOBAL PROPERTY DKSDK_CMAKE_LANG_ASM)
 list(APPEND CMAKE_MODULE_PATH ${dksdk-cmake_MODULES})
 
 # [Fri, Jan 19, 2024  9:57:01 AM] Failed waiting for concurrent [dune build] using a timeout of 120 seconds. Increasing it!
@@ -22,13 +21,6 @@ set(DKSDK_DUNE_LOCK_TIMEOUT_SECS 480 CACHE STRING "" FORCE)
 
 #   Define the project
 #       * The VERSION is the version of your application
-#       * (removed) The "OCamlDune" language is used to build OCaml source code into
-#         executables and libraries using Dune. In the Future a "DkCoder" language
-#         may do the same thing but using DkCoder.
-#           For OCamlDune, you'll want to use at least the C language so that you can
-#           link the native code executables.
-#       * OCamlDune requires the C and a compatible ASM language (ie.
-#         ${dksdk-cmake_LANG_ASM}). ASM should be listed last per best practices
 #       * C and CXX is required to build Cap n' Proto
 #       * You do not need CXX (C++) compiler unless you bring in your own
 #         C++ code or dependencies

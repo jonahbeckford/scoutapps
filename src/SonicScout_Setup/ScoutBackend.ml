@@ -168,11 +168,6 @@ let cmake_properties ~cwd ~(opts : Utils.opts) slots : string list =
       | `Release -> "Release")
     :: cprops
   in
-  let cprops =
-    Printf.sprintf "-DDKSDK_GENERATOR=%s"
-      (if Utils.android_native_ocaml opts then "DUNE" else "DKCODER")
-    :: cprops
-  in
   let cprops = "-DSONIC_SCOUT_FEATURE_CLI=ON" :: cprops in
   let open Utils in
   let cprops =
@@ -200,21 +195,14 @@ let run ?(opts = Utils.default_opts) ?global_dkml ~slots () =
   let dk_env = dk_env ~opts () in
   let dk = dk ~env:dk_env in
   let preset =
-    match (Tr1HostMachine.abi, global_dkml) with
-    | `darwin_x86_64, _ -> "dev-AppleIntel"
-    | `darwin_arm64, _ ->
+    match Tr1HostMachine.abi with
+    | `darwin_x86_64 -> "dev-AppleIntel"
+    | `darwin_arm64 ->
         (* We would like [dev-AppleSilicon]. But only Qt6.2.0+ are universal binaries!
            So until the manager app (SonicScoutBackend) has an upgrade to Qt6, we are stuck with Rosetta emulation. *)
         "dev-AppleIntel"
-    | `windows_x86_64, Some () ->
-        (* We get the Qt scanning application abort in caml_startup() if we mix and match DkML
-           with Visual Studio of RunCMake. Instead use local OCaml (no DkML). *)
-        "dev-Windows64"
-    | `windows_x86_64, None ->
-        (* We get the Qt scanning application abort in caml_startup() if we mix and match DkML
-           with Visual Studio of RunCMake. So use local OCaml (no DkML). *)
-        "dev-Windows64-with-localocaml"
-    | `linux_x86_64, _ -> "dev-Linux-x86_64"
+    | `windows_x86_64 -> "dev-Windows64"
+    | `linux_x86_64 -> "dev-Linux-x86_64"
     | _ ->
         failwith "Currently your host machine is not supported by Sonic Scout"
   in

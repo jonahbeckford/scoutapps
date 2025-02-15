@@ -50,7 +50,7 @@ void squirrel_scout_manager_init(int argc0, SQUIRREL_SCOUT_MANAGER_portable_char
   caml_argv[1 + i - argv0_start_ocaml_inc] = NULL;
 
   /* Run module initializers of OCaml and wait for them to finish */
-  caml_startup(caml_argv);
+  dksdk_caml_startup(caml_argv);
 
   /* Allow other threads, especially the Qt render thread, to grab
      the OCaml runtime lock and run OCaml code. */

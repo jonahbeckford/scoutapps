@@ -7,7 +7,7 @@ DkSDKProject_AddPackage(
         SUMMARY_PARAGRAPHS
         [[SquirrelScout_ManagerApp is ... fill me in ....]]
 )
-option(SONIC_SCOUT_FEATURE_SCANNER "Enable the QR scanner program")
+option(SONIC_SCOUT_FEATURE_SCANNER "Enable the QR scanner program" ON)
 
 include (GNUInstallDirs)
 
@@ -34,12 +34,9 @@ endif()
 # ------
 
 if(SONIC_SCOUT_FEATURE_SCANNER)
-    add_library(ManagerApp_ml STATIC ManagerApp_ml.ml)
-    add_library(SquirrelScout::ManagerApp_ml ALIAS ManagerApp_ml)
-    target_link_libraries(ManagerApp_ml PRIVATE
-        # We want the library that we wrote in ../Std/
-        # to be available to the node's .ml code.
-        SquirrelScout::Std)
+    DkSDKProject_AddLibrary(TARGET SquirrelScout_ManagerApp_ml STATIC
+        MODULE_FILE ManagerApp_ml.ml)
+    add_library(SquirrelScout::ManagerApp_ml ALIAS SquirrelScout_ManagerApp_ml)
 endif()
 
 # ------
@@ -47,17 +44,17 @@ endif()
 # ------
 
 if(SONIC_SCOUT_FEATURE_SCANNER)
-    add_library(ManagerApp_c STATIC squirrel_scout_manager.c)
-    add_library(SquirrelScout::ManagerApp_c ALIAS ManagerApp_c)
-    target_link_libraries(ManagerApp_c
+    add_library(ManagerApp_backend STATIC squirrel_scout_manager.c)
+    add_library(SquirrelScout::ManagerApp_backend ALIAS ManagerApp_backend)
+    target_link_libraries(ManagerApp_backend
         PRIVATE DkSDK::OCaml::Compile
         PUBLIC Threads::Threads
         # The manager app will be a binary that statically links
         # to OCaml (dynamic linking is not required because we
         # are not mixing multiple libraries that use OCaml, and
         # would have been more complicated to deploy).
-        DkSDK::OCaml::ForLibOfStaticBinary)
-    target_include_directories(ManagerApp_c PUBLIC
+        SquirrelScout::ManagerApp_ml)
+    target_include_directories(ManagerApp_backend PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
     )
@@ -270,26 +267,20 @@ if(SONIC_SCOUT_FEATURE_SCANNER)
     # ~~~ ADDITIONS
     add_dependencies(ManagerApp_ALL ManagerAppReader)
     target_link_libraries(ManagerAppReader
-        SquirrelScout::ManagerApp_c SquirrelScout::ManagerApp_ml
-        # required for executables that embed OCaml
-        DkSDK::OCaml::ForStaticBinary)
+        SquirrelScout::ManagerApp_backend)
     if (TARGET Qt::Gui)
         add_dependencies(ManagerApp_ALL ManagerAppQtReader)
         target_link_libraries(ManagerAppQtReader
-            SquirrelScout::ManagerApp_c SquirrelScout::ManagerApp_ml
-            # for caml_c_thread_register()
-            DkSDK::OCaml::Compile
-            # required for executables that embed OCaml
-            DkSDK::OCaml::ForStaticBinary)
+            SquirrelScout::ManagerApp_backend
+            # ZXingQtReader.h needs caml/ headers
+            DkSDK::OCaml::Compile)
     endif()
     if (TARGET Qt::Multimedia AND TARGET Qt::Quick)
         add_dependencies(ManagerApp_ALL ManagerAppQtCamReader)
         target_link_libraries(ManagerAppQtCamReader
-            SquirrelScout::ManagerApp_c SquirrelScout::ManagerApp_ml
-            # for caml_c_thread_register()
-            DkSDK::OCaml::Compile
-            # required for executables that embed OCaml
-            DkSDK::OCaml::ForStaticBinary)
+            SquirrelScout::ManagerApp_backend
+            # ZXingQtReader.h needs caml/ headers
+            DkSDK::OCaml::Compile)
     endif()
 else()
     add_custom_command(TARGET ManagerApp_ALL POST_BUILD

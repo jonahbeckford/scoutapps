@@ -8,8 +8,6 @@
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        "DKSDK_OPAM_ROOT_DISABLE_USER": "ON",
-        "DKSDK_DEV_TOOLS": "ON",
         "FETCHCONTENT_SOURCE_DIR_DKML-COMPILER": {
           "type": "FILEPATH",
           "value": "${sourceDir}/fetch/dkml-compiler"
@@ -170,41 +168,6 @@
         "dev-Windows64"
       ],
       "displayName": "Dev Windows 64-bit + local sources",
-      "vendor": {
-        "microsoft.com/VisualStudioSettings/CMake/1.0": {
-          "hostOS": [
-            "Windows"
-          ]
-        }
-      }
-    },
-    {
-      "name": "dev-Windows64-with-localocaml",
-      "inherits": [
-        "dev-Windows64"
-      ],
-      "displayName": "Dev Windows 64-bit + local OCaml",
-      "cacheVariables": {
-        "CMAKE_OCamlDune_COMPILER_EXTERNAL_REQUIRED": "OFF",
-        "DKML_AVOID_GLOBAL_INSTALLATION": "ON"
-      },
-      "vendor": {
-        "microsoft.com/VisualStudioSettings/CMake/1.0": {
-          "hostOS": [
-            "Windows"
-          ]
-        }
-      }
-    },
-    {
-      "name": "dev-Windows64-with-localsources-localocaml",
-      "inherits": [
-        "dev-Windows64-with-localsources"
-      ],
-      "cacheVariables": {
-        "CMAKE_OCamlDune_COMPILER_EXTERNAL_REQUIRED": "OFF"
-      },
-      "displayName": "Dev Windows 64-bit + local OCaml + local sources",
       "vendor": {
         "microsoft.com/VisualStudioSettings/CMake/1.0": {
           "hostOS": [

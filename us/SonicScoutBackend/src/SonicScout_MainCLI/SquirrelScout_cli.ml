@@ -1,3 +1,5 @@
+let prerr_endline = Tr1Stdlib_V414Io.StdIo.prerr_endline
+
 let do_setup_log style_renderer level =
   Fmt_tty.setup_std_outputs ?style_renderer ();
   Logs.set_level level;
@@ -216,7 +218,12 @@ let main () =
     let open Cmdliner in
     let i_query = Arg.(value & opt (some file) None & info ["introspect-query"]) in
     let i_answer = Arg.(value & opt (some string) None & info ["introspect-answer"]) in
-    Cmdliner.Term.(const (fun _ _ -> ()) $ i_query $ i_answer)
+    Cmdliner.Term.(
+      const (fun query_file _ ->
+        match query_file with
+        Some _ -> prerr_endline ("introspect query " ^ __MODULE_ID__)
+        | None -> ())
+      $ i_query $ i_answer)
   in
   exit (Cmdliner.Cmd.eval (Cmdliner.Cmd.group ~default info cmds))
 

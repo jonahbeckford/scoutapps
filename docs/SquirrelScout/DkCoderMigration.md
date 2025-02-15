@@ -41,7 +41,7 @@ Flush technique A:
 - Make sure Android Studio works locally with `./dk src/SonicScout_Setup/Develop.ml android`
 - Run the app up until generating the QR scanner page.
 - Hide the DkSDK CMake bits in us/SonicScoutBackend/CMakeLists.txt behind a CMake variable set in the presets.
-- Compile with `./dk src/SonicScout_Setup/Develop.ml compile` until Android Studio works again.
+- Compile with `./dk SonicScout_Setup.Develop compile --skip-fetch --next --build-type Debug` until Android Studio works again.
 - Run the app up until generating the QR scanner page.
 
 Drawbacks: Important bits like the capnp generation will not run.
@@ -53,5 +53,5 @@ Flush technique B:
 - Make sure Android Studio works locally with `./dk src/SonicScout_Setup/Develop.ml android`
 - Run the app up until generating the QR scanner page.
 - Edit DkSDK CMake so that OCaml compiler is never run. Ditto for WSL2. Hide that "never run" feature behind a CMake variable set in the presets.
-- Compile with `./dk src/SonicScout_Setup/Develop.ml compile` until Android Studio works again.
+- Compile with `./dk SonicScout_Setup.Develop compile --skip-fetch --next --build-type Debug` until Android Studio works again.
 - Run the app up until generating the QR scanner page.

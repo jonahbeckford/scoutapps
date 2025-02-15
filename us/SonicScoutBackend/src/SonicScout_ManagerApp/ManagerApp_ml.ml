@@ -1,3 +1,6 @@
+module Arg = Tr1Stdlib_V414CRuntime.Arg
+let prerr_endline = Tr1Stdlib_V414Io.StdIo.prerr_endline
+
 open Bos
 
 (** [hex_encode] modified from https://github.com/mimoo/hexstring. Apache 2.0 license. *)
@@ -42,6 +45,17 @@ let process_qr db qr_format qr_bytes =
          %!"
         __FILE__ __LINE__ qr_format (hex_encode qr_bytes) args
 
+let usage_msg = Printf.sprintf "%s database_file\nadvanced: [--introspect-query file] [--introspect-answer file]" __MODULE_ID__
+let database_file = ref ""
+
+let anon_fun s = database_file := s
+
+let speclist =
+  [("--introspect-query",
+      Arg.String (fun _ -> prerr_endline ("introspect query " ^ __MODULE_ID__)),
+      "Advanced.");
+   ("--introspect-answer", Arg.String ignore, "Advanced.")]
+
 let main () =
   (* Set up logging *)
   print_endline "Starting ManagerApp_ml.ml ...";
@@ -49,9 +63,10 @@ let main () =
   Logs.set_level (Some Logs.Info);
 
   (* Parse command line options *)
+  Arg.parse speclist anon_fun usage_msg;
   let db_path =
-    if Array.length Sys.argv < 2 then StdEntry.default_db_path ()
-    else Fpath.v Sys.argv.(1)
+    if !database_file = "" then StdEntry.default_db_path ()
+    else Fpath.v (!database_file)
   in
 
   (* Make sure the database folder is created *)
