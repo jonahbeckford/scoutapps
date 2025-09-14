@@ -28,8 +28,8 @@ module _ = DkSDKFFI_OCaml
          `sec [ `scheme "dkcoder" ];
          `kind (
            `std [
-             `blib ["https://gitlab.com/api/v4/projects/62703194/packages/generic/@DKML_TARGET_ABI@/2.2.2/@DKML_TARGET_ABI@-4.14.2-DkSDKFFI_OCaml-2.2.2-none.blib.zip"];
-             `clib ["https://gitlab.com/api/v4/projects/62703194/packages/generic/@DKML_TARGET_ABI@/2.2.2/@DKML_TARGET_ABI@-4.14.2-DkSDKFFI_OCaml-2.2.2-none.clib.zip"];
+             `blib ["https://gitlab.com/api/v4/projects/62703194/packages/generic/@DKML_TARGET_ABI@/2.4.2/@DKML_TARGET_ABI@-4.14.2-DkSDKFFI_OCaml-2.4.2-none.blib.zip"];
+             `clib ["https://gitlab.com/api/v4/projects/62703194/packages/generic/@DKML_TARGET_ABI@/2.4.2/@DKML_TARGET_ABI@-4.14.2-DkSDKFFI_OCaml-2.4.2-none.clib.zip"];
             ]
           )
         ] ]} *)

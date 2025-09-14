@@ -5,7 +5,7 @@ import com.diskuv.dksdk.core.gradle.tasks.DisplayAllSourcesTask
 
 buildscript {
     dependencies {
-        classpath 'com.diskuv.dksdk.core:gradle:2.2.2-SNAPSHOT'
+        classpath 'com.diskuv.dksdk.core:gradle:2.4.2-SNAPSHOT'
     }
     configurations.all {
         // Don't wait forever if using -SNAPSHOT in the above dependencies.
@@ -19,7 +19,7 @@ plugins {
 apply plugin: CMakeNdkEnvironmentPlugin
 
 dependencies {
-    api 'com.diskuv.dksdk.ffi:ffi-java-android:2.2.2-SNAPSHOT'
+    api 'com.diskuv.dksdk.ffi:ffi-java-android:2.4.2-SNAPSHOT'
     api 'com.caverock:androidsvg-aar:1.4'
 
     implementation 'androidx.startup:startup-runtime:1.1.1'
