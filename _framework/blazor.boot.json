@@ -1,0 +1,63 @@
+{
+  "mainAssemblyName": "ScoutApp.Browser",
+  "resources": {
+    "hash": "sha256-jJljUyerqfQZ/cl5tic9Xg+2BWqtRkRp13zte+mvSHc=",
+    "jsModuleNative": {
+      "dotnet.native.js": "sha256-2Mf4wLedSUs3tLTxpLTUq45qTo2NHLH9eSFu0cPYrIc="
+    },
+    "jsModuleRuntime": {
+      "dotnet.runtime.js": "sha256-nlm9ZX+9Z8SHWuCfVhHT5pkK9QzTgBn3opfL6mMas20="
+    },
+    "wasmNative": {
+      "dotnet.native.wasm": "sha256-9pPCv9ppub8l0uz7jN5anSleg5tvDQRLviFhH7TWGck="
+    },
+    "icu": {
+      "icudt_CJK.dat": "sha256-SZLtQnRc0JkwqHab0VUVP7T3uBPSeYzxzDnpxPpUnHk=",
+      "icudt_EFIGS.dat": "sha256-8fItetYY8kQ0ww6oxwTLiT3oXlBwHKumbeP2pRF4yTc=",
+      "icudt_no_CJK.dat": "sha256-L7sV7NEYP37/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs="
+    },
+    "coreAssembly": {},
+    "assembly": {
+      "Avalonia.Base.wasm": "sha256-P3LxtJxuI8AuB9Z0AabsYKjcY1dUwD0LCx9KWj0m7XQ=",
+      "Avalonia.Browser.wasm": "sha256-TGj6IuEDzAUW8a8yKvH1z0BiEnjoYNORCVlkTtvgJMI=",
+      "Avalonia.Controls.wasm": "sha256-ONrVYS+FI4gsL+o6fQ9xiltI9lLgQZDT0iNoYhs/pFc=",
+      "Avalonia.Dialogs.wasm": "sha256-Sjg9v/mJJMvHXk2WsdXki/D6btwEutAygdsFuH06O4o=",
+      "Avalonia.Fonts.Inter.wasm": "sha256-1f5qLu4qWaKJXgEL2KDyM6Err5eXQXP1mhVQsuh+fv8=",
+      "Avalonia.Markup.wasm": "sha256-bitbsl9Brrw1j1k9PLAfUn0Ejd5LkAIVwRrI7+Fmxtw=",
+      "Avalonia.Markup.Xaml.wasm": "sha256-j5b/mWOiYhDZHacH/vcUnBsoniEm6mjDnvAl59Q/iKI=",
+      "Avalonia.Metal.wasm": "sha256-YZ6DyyWFktUsn19hu4pzEK5FAYafA6wJTFRahvb+TxE=",
+      "Avalonia.OpenGL.wasm": "sha256-JuirqB0L4d8jGRm9OG7YykA9p97fNrqFqx/dYfzL+/Y=",
+      "Avalonia.Skia.wasm": "sha256-5xh/YhDtk4kBUni9WYXbhS/tUhYtwBfdnHvn2mLa3Kc=",
+      "Avalonia.Themes.Fluent.wasm": "sha256-t6lPsskmfkTV+r/Zz7d6xfZZrlX1H3A0TdDBu5SWU+s=",
+      "Avalonia.Vulkan.wasm": "sha256-1HVKZgwSSyrtxpZE2rtzUeqRYeX/fyI+WDSykAnRfSY=",
+      "CommunityToolkit.Mvvm.wasm": "sha256-ERYiXhvGJxC8QAcBRktQ9EOv4e7C8PtZ5j2aC7pTRnw=",
+      "HarfBuzzSharp.wasm": "sha256-0WGuxJxnT+k8LXRv/dLzJRZa8xBpku2OMQXVmenK2TI=",
+      "QRCoder.wasm": "sha256-ZzwWNFQdtt5s5K87SuLNqq3q6Fr890cIy34jaIeBKYg=",
+      "ScoutApp.Browser.wasm": "sha256-0ol52K0WO+oNE0gapTZMtuzhJc7TGd9I5X6ncGXnfUs=",
+      "ScoutApp.wasm": "sha256-NrlI1SNPIPaSwxed3uoRWKOErQp5vQqV4pfoG7HyR9o=",
+      "SkiaSharp.wasm": "sha256-b187YKahCJg0dyTI8kn7TOzrWHUvMAmNApc0pbnnNMc=",
+      "System.Collections.Concurrent.wasm": "sha256-I4d/qQ2omflfuYO8iWG3rCw7map5pRtDkbDa4dOmmH4=",
+      "System.Collections.NonGeneric.wasm": "sha256-QbkvQ0SJkP5sVUNCD/YFevYXSrC+3gnslnJXT8NKFvQ=",
+      "System.Collections.Specialized.wasm": "sha256-31jVh5aTTO8FGkNIAa70V5dgaUo/QeKgfPDNMOrVBKc=",
+      "System.Collections.wasm": "sha256-lhlvHL/TTUml6Ggjh87P/fDw8Sc2pLkewK56aH6EHQM=",
+      "System.ComponentModel.Annotations.wasm": "sha256-CIdJ0R0cP+kUnV8zJmLjYQY6OfjqeLtjr+XLbO2rR+A=",
+      "System.ComponentModel.Primitives.wasm": "sha256-37IHxUHLDIA8dNDvmQumlUhc5VSOO+cgBBuZjkORJPs=",
+      "System.ComponentModel.TypeConverter.wasm": "sha256-jCGLRGtlsUqMrA8SSvcIgJc2kCtr9MpV03tAIHKSPlU=",
+      "System.ComponentModel.wasm": "sha256-Nia9kwUAUmvKmFnWaQBm8DKzY8MDa8VX2Di9/chKXOU=",
+      "System.Diagnostics.DiagnosticSource.wasm": "sha256-CyIVYtzflfunVPkTmKChNjrcKyXpqS5OIYibt8b9uhY=",
+      "System.IO.Compression.wasm": "sha256-r+1CkMuvIpZswFK/wE6I0+SsEi1fEGtj6Q26s1n5cBg=",
+      "System.Linq.Expressions.wasm": "sha256-sBJVoKUsJ2/o0CCpqoVYeWTxUopbug7wrVhWWkpG0+Y=",
+      "System.Linq.wasm": "sha256-Ll63kY8AX0ge/FnAIX8tpW0IdfrHomwufeZu7riRyeE=",
+      "System.ObjectModel.wasm": "sha256-oFwRq8TJ54koeg71sn0vb4W8s7qDgw6AyVj0I3zdrkI=",
+      "System.Private.CoreLib.wasm": "sha256-4KH5oOKxmp6FV/ATKtvOB9MDMb3Yt/CnqxhKkT38ctU=",
+      "System.Private.Uri.wasm": "sha256-BGg7mxNQVPOZEYRZF0cSd9wUlHqH6YOO9LQfpdtTAQc=",
+      "System.Runtime.InteropServices.JavaScript.wasm": "sha256-YguFAYoXgRFG1L6u3n0/sQROnMGFqHFF5hOzDjeWD/g=",
+      "System.Text.RegularExpressions.wasm": "sha256-7xQBQpvnsq+iPfCA6YndJUGGGYVE9kcCxJ+dqGynVDw=",
+      "System.wasm": "sha256-ovI9fLxLRfh4RwNCi87t4luRVFfNap5GiBEwY0eh3bc="
+    }
+  },
+  "cacheBootResources": true,
+  "debugLevel": 0,
+  "linkerEnabled": true,
+  "globalizationMode": "sharded"
+}
