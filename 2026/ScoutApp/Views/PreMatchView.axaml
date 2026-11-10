@@ -1,0 +1,99 @@
+<UserControl
+    x:Class="ScoutApp.Views.PreMatchView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cvt="using:ScoutApp.Converter"
+    xmlns:vm="using:ScoutApp.ViewModels"
+    x:DataType="vm:PreMatchViewModel">
+
+    <UserControl.Resources>
+        <cvt:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <cvt:EnumMemberValueConverter x:Key="EnumMemberValueConverter" />
+
+        <SolidColorBrush x:Key="black" Color="#000000" />
+        <SolidColorBrush x:Key="text" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="background" Color="#3D3D3D" />
+        <SolidColorBrush x:Key="accent" Color="#F36716" />
+        <SolidColorBrush x:Key="lightgrey" Color="#C2C4C3" />
+        <SolidColorBrush x:Key="offwhite" Color="#D1CAC3" />
+        <SolidColorBrush x:Key="darkgrey" Color="#4D4D4D" />
+        <SolidColorBrush x:Key="orange" Color="#FF5722" />
+        <SolidColorBrush x:Key="thirdbutton" Color="#DED6CE" />
+        <SolidColorBrush x:Key="secondary" Color="#0D6EFD" />
+        <SolidColorBrush x:Key="error" Color="#F2110C" />
+        <SolidColorBrush x:Key="green" Color="#1FA659" />
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+
+        <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
+
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontSize="{Binding TextSize}"
+                FontWeight="Bold">
+                SCOUT NAME:
+            </TextBlock>
+            <ComboBox
+                Width="225"
+                Margin="0,10,0,50"
+                HorizontalAlignment="Center"
+                ItemsSource="{Binding ScoutNames}"
+                SelectedItem="{Binding ScoutName}" />
+
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontSize="{Binding TextSize}"
+                FontWeight="Bold">
+                MATCH NUMBER:
+            </TextBlock>
+            <NumericUpDown
+                Margin="0,10,0,50"
+                HorizontalAlignment="Center"
+                FormatString="0"
+                Minimum="0"
+                Value="{Binding MatchNumber}" />
+
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontSize="{Binding TextSize}"
+                FontWeight="Bold">
+                TEAM NUMBER:
+            </TextBlock>
+            <NumericUpDown
+                Margin="0,10,0,50"
+                HorizontalAlignment="Center"
+                FormatString="0"
+                Minimum="0"
+                Value="{Binding TeamNumber}" />
+
+            <TextBlock
+                HorizontalAlignment="Center"
+                FontSize="{Binding TextSize}"
+                FontWeight="Bold">
+                ALLIANCE POSITION:
+            </TextBlock>
+            <ComboBox
+                Width="225"
+                Margin="0,10,0,0"
+                SelectedItem="{Binding SelectedAlliancePosition, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource EnumMemberValueConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                <ComboBox.Items>
+                    <x:Static Member="vm:AlliancePosition.Red1" />
+                    <x:Static Member="vm:AlliancePosition.Red2" />
+                    <x:Static Member="vm:AlliancePosition.Red3" />
+                    <x:Static Member="vm:AlliancePosition.Blue1" />
+                    <x:Static Member="vm:AlliancePosition.Blue2" />
+                    <x:Static Member="vm:AlliancePosition.Blue3" />
+                </ComboBox.Items>
+            </ComboBox>
+
+        </StackPanel>
+
+    </ScrollViewer>
+
+</UserControl>

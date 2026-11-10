@@ -20,7 +20,7 @@ let install_sqlite3 ~projectdir ~os ~cpu ~sha3_256 =
         cpu
     in
     Lwt_main.run
-    @@ DkNet_Std.Http.download_uri ~max_time_ms:300_000
+    @@ DkNet_Std.Http.download_url ~max_time_ms:300_000
          ~checksum:(`SHA3_256 sha3_256) ~destination:zip (Uri.of_string uri);
     if Sys.win32 then
       OS.Cmd.run
@@ -43,16 +43,16 @@ let run () =
   let open Bos in
   let cwd = OS.Dir.current () |> rmsg in
   let projectdir = Fpath.(cwd / "us" / "SonicScoutBackend") in
-  match Tr1HostMachine.abi with
-  | `darwin_x86_64 | `darwin_arm64 ->
+  match DkCoder_Std.Context.(abi (get_exn ())) with
+  | `Darwin_x86_64 | `Darwin_arm64 ->
       install_sqlite3 ~projectdir ~os:"osx" ~cpu:"x64"
         ~sha3_256:
           "99e2b1014211151e94d6ce0c91de03494bc8d3b749a739af120f5387effe5de8"
-  | `windows_x86_64 ->
+  | `Windows_x86_64 ->
       install_sqlite3 ~projectdir ~os:"win" ~cpu:"x64"
         ~sha3_256:
           "a0cf6a21509210d931f1f174fe68cbfaa1979d555158efdc059a5171ce108e1a"
-  | `linux_x86_64 ->
+  | `Linux_x86_64 ->
       install_sqlite3 ~projectdir ~os:"linux" ~cpu:"x64"
         ~sha3_256:
           "7ba6ea0d94e7b945b22e98cc306220e35156a34fe6e7a370beb88580569a4caf"

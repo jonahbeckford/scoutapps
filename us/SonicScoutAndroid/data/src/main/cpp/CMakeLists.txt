@@ -1,4 +1,5 @@
 include(FetchContent)
+include(DkSDKProject)
 
 if(GENERATE_CAPNP_ONLY)
     if(NOT GENERATE_CAPNP_DIR)
@@ -6,18 +7,25 @@ if(GENERATE_CAPNP_ONLY)
     endif()
 
     # Get the source code for the OCaml backend
-    FetchContent_GetProperties(ocaml-backend)
-    if(NOT ocaml-backend_POPULATED)
-        FetchContent_Populate(ocaml-backend)
+    if(NOT SonicScoutBackend_SOURCE_DIR)
+        FetchContent_GetProperties(SonicScoutBackend)
+        if(NOT SonicScoutBackend_POPULATED)
+            FetchContent_Populate(SonicScoutBackend)
+        endif()
     endif()
 
-    # Create a Java package that contains Schema.java from ocaml-backend
-    configure_file(${ocaml-backend_SOURCE_DIR}/src/SonicScout_Std/Schema.java
-        ${GENERATE_CAPNP_DIR}/com/example/squirrelscout/data/capnp/Schema.java
+    # Create a Java package that contains Schema.java from SonicScoutBackend
+    configure_file("${SonicScoutBackend_SOURCE_DIR}/src/SonicScout_Std/Schema.java"
+        "${GENERATE_CAPNP_DIR}/com/example/squirrelscout/data/capnp/Schema.java"
         COPYONLY)
 else()
     # Get the source code for the Java FFI
     FetchContent_GetProperties(dksdk-ffi-java)
+
+    # Compile [SonicScoutBackend] SonicScout_ObjsLib.Init
+    DkSDKProject_AddLibrary(TARGET SonicScout_ObjsLib STATIC
+            YOU_DIRS "${SonicScoutBackend_SOURCE_DIR}/src"
+            MODULE_FILE ${SonicScoutBackend_SOURCE_DIR}/src/SonicScout_ObjsLib/Init.ml)
 
     # Creates a SHARED library called "data_foreground". The Android Gradle
     # Plugin (AGP) will call the CMake target "data_foreground" which will build
@@ -41,6 +49,7 @@ else()
             "${dksdk-ffi-java_SOURCE_DIR}/ffi-java-android-standalone/src/main/c/*.h")
     target_sources(data_foreground PRIVATE
             register.c # [a1] tweak this comment to force a reconfigure
+            android_hacks.c
             ${impl_FILES}
             ${ffi_java_FILES}
             ${ffi_java_android_FILES}
@@ -61,10 +70,9 @@ else()
     # can link multiple libraries, such as libraries you define in this
     # build script, prebuilt third-party libraries, or system libraries.
     target_link_libraries(data_foreground PRIVATE
-            # The data backend defined in [ocaml-backend]/src/ObjsLib/CMakeLists.txt.
-            # [ocaml-backend] is available as part of our dependencies/ folder.
-            SquirrelScout_ObjsLib
-            DkSDK_OCamlCompile # REMOVEME: when new SquirrelScout_ObjsLib w/ INTERFACE dependency
+            SonicScout_ObjsLib
+            # For <caml/callback.h> etc. headers in register.c
+            DkSDK::OCaml::Compile
             # The Java FFI makes use of some JNI
             JNI::JNI
             # The C FFI is the kernel used by the Java FFI. We link to the

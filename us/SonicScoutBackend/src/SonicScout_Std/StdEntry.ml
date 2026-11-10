@@ -1,5 +1,5 @@
 include Intf
-let __init () = ()
+
 module DkCoderHackPublicPrivateExports1 = Db_utils
 module DkCoderHackPublicPrivateExports2 = Schema
 

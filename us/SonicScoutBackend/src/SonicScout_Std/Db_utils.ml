@@ -7,12 +7,6 @@ let return_code_to_string = function
 module type Generic_Table = sig
   val table_name : string
 
-  type colums
-
-  val colum_name : colums -> string
-  val colum_datatype : colums -> string
-  val primary_keys : colums list
-  val colums_in_order : colums list
   val create_table : Sqlite3.db -> return_code
   val drop_table : Sqlite3.db -> return_code
   val insert_record : Sqlite3.db -> string -> return_code

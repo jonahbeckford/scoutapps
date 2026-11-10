@@ -13,7 +13,6 @@ FetchContent_Declare(dksdk-access
     GIT_TAG origin/main)
 FetchContent_MakeAvailable(dksdk-access)
 get_property(dksdk-cmake_MODULES GLOBAL PROPERTY DKSDK_CMAKE_MODULES)
-get_property(dksdk-cmake_LANG_ASM GLOBAL PROPERTY DKSDK_CMAKE_LANG_ASM)
 list(APPEND CMAKE_MODULE_PATH ${dksdk-cmake_MODULES})
 
 # [Fri, Jan 19, 2024  9:57:01 AM] Failed waiting for concurrent [dune build] using a timeout of 120 seconds. Increasing it!
@@ -22,15 +21,10 @@ set(DKSDK_DUNE_LOCK_TIMEOUT_SECS 480 CACHE STRING "" FORCE)
 
 #   Define the project
 #       * The VERSION is the version of your application
-#       * The "OCamlDune" language is used to build OCaml source code into
-#         executables and libraries using Dune.
-#           You'll want to use at least the C language so that you can
-#           link the native code executables.
-#       * OCaml requires the C and a compatible ASM language. ASM should be
-#         listed last per best practices
+#       * C and CXX is required to build Cap n' Proto
 #       * You do not need CXX (C++) compiler unless you bring in your own
 #         C++ code or dependencies
-project(SonicScout VERSION 1.0.0 LANGUAGES C CXX OCamlDune ${dksdk-cmake_LANG_ASM})
+project(SonicScout VERSION 1.0.0 LANGUAGES C CXX)
 
 # Project wide setup
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake)
@@ -56,11 +50,12 @@ DkSDKProject_AddProject(
         DUNE_VERSION 3.8
 )
 
+option(SONIC_SCOUT_NATIVE_COM "Enable native compilation and tests for the COM library that runs the Sonic Scout backend inside Android/iOS")
+
 # Externally provided content
 add_subdirectory(dependencies)
 
 # Main targets built by this project
-set(SONIC_SCOUT_BACKEND_FEATURES "Objs;CLI;ManagerApp" CACHE STRING "Semicolon separated list of features to build: Objs, CLI, ManagerApp")
 add_subdirectory(src)
 
 # Typically needed only if we are the top level project

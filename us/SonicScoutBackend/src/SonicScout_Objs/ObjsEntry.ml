@@ -7,8 +7,8 @@ module _ = DkSDKFFI_OCaml
          `sec [ `scheme "dkcoder" ];
          `kind (
            `std [
-             `blib ["https://gitlab.com/api/v4/projects/62703194/packages/generic/@DKML_TARGET_ABI@/2.2.1/@DKML_TARGET_ABI@-4.14.2-DkSDKFFI_OCaml-2.2.1-none.blib.zip"];
-             `clib ["https://gitlab.com/api/v4/projects/62703194/packages/generic/@DKML_TARGET_ABI@/2.2.1/@DKML_TARGET_ABI@-4.14.2-DkSDKFFI_OCaml-2.2.1-none.clib.zip"];
+             `blib ["https://gitlab.com/api/v4/projects/62703194/packages/generic/@DKML_TARGET_ABI@/2.4.2/@DKML_TARGET_ABI@-4.14.2-DkSDKFFI_OCaml-2.4.2-none.blib.zip"];
+             `clib ["https://gitlab.com/api/v4/projects/62703194/packages/generic/@DKML_TARGET_ABI@/2.4.2/@DKML_TARGET_ABI@-4.14.2-DkSDKFFI_OCaml-2.4.2-none.clib.zip"];
             ]
           )
         ] ]} *)
@@ -20,7 +20,7 @@ module _ = DkSDKFFI_OCaml
           `kind (
            `std [
              `blib ["file:///Y:/source/dksdk-coder/build/blibs.zip"];
-             `clib ["https://gitlab.com/api/v4/projects/62703194/packages/generic/@DKML_TARGET_ABI@/2.2.1/@DKML_TARGET_ABI@-4.14.2-DkSDKFFI_OCaml-2.2.1-none.clib.zip"];
+             `clib ["https://gitlab.com/api/v4/projects/62703194/packages/generic/@DKML_TARGET_ABI@/2.4.2/@DKML_TARGET_ABI@-4.14.2-DkSDKFFI_OCaml-2.4.2-none.clib.zip"];
             ]
           )
         ] ]} *)

@@ -8,34 +8,16 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.activity.ComponentActivity;
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
-import com.example.squirrelscout_scouter.MainActivity;
 import com.example.squirrelscout_scouter.R;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 public class ImageTrial extends ComponentActivity implements View.OnClickListener{
 
@@ -44,7 +26,7 @@ public class ImageTrial extends ComponentActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.heatmap_trial);
         //image capture
-        ImageView imageView = findViewById(R.id.imageView);
+        ImageView imageView = findViewById(R.id.fieldImageView);
         Button saveButton = (Button) findViewById(R.id.cancel);
         saveButton.setOnClickListener(this);
 
@@ -76,7 +58,7 @@ public class ImageTrial extends ComponentActivity implements View.OnClickListene
 
         if(clickedId == R.id.cancel){
             // Save the marked image to the device's gallery
-            ImageView imageView = findViewById(R.id.imageView);
+            ImageView imageView = findViewById(R.id.fieldImageView);
             saveImageToGallery(getMarkedImage(imageView), "Marked_Image");
             Toast.makeText(ImageTrial.this, "saved", Toast.LENGTH_SHORT).show();
         }

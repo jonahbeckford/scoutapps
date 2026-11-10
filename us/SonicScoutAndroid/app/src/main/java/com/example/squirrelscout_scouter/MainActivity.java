@@ -16,10 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.squirrelscout_scouter.match_scouting_pages.AutonomousActivity;
-import com.example.squirrelscout_scouter.match_scouting_pages.ImageTrial;
 import com.example.squirrelscout_scouter.match_scouting_pages.StartScoutingActivity;
-import com.example.squirrelscout_scouter.match_scouting_pages.TeleopActivity;
 import com.example.squirrelscout_scouter.ui.viewmodels.MainViewModel;
 import com.example.squirrelscout_scouter.ui.viewmodels.ScoutingSessionViewModel;
 import com.example.squirrelscout_scouter.util.ScoutSingleton;
@@ -73,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         titleSecondary = findViewById(R.id.textView3);
         teamText = findViewById(R.id.TeamNum_Label);
         nameText = findViewById(R.id.Name_Label);
-        firstCard = findViewById(R.id.view2);
+        firstCard = findViewById(R.id.bodyView);
         secondCard = findViewById(R.id.view3);
 
         // bind view model updates to the UI
@@ -141,7 +138,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(MainActivity.this, StartScoutingActivity.class);
                 intent.putExtra(ScoutingSessionViewModel.INTENT_INITIAL_LONG_SESSION_NUMBER, s);
                 intent.putExtra(ScoutingSessionViewModel.INTENT_INITIAL_STRING_SCOUT_NAME, ScoutName);
+                /* This is the _scout_ team number, not the match team number. */
                 intent.putExtra(ScoutingSessionViewModel.INTENT_INITIAL_SHORT_TEAM_NUMBER, validatedTeamNum);
+                //intent.putExtra(ScoutingSessionViewModel.INTENT_MATCH_SHORT_MATCH_NUMBER, 1);
                 startActivity(intent);
                 Log.d("d", "scouter name: " + ScoutName);
                 Toast.makeText(MainActivity.this, ScoutName, Toast.LENGTH_SHORT).show();

@@ -74,21 +74,21 @@ cd scoutapps
 
   ```powershell
   cd C:\scoutapps # Use correct directory on macOS or linux
-  ./dk src/SonicScout_Setup/Develop.ml android
+  ./dk SonicScout_Setup.Develop android
   ```
 
 - **or** run the following to build and **run the QR scanner** (the Scout Backend):
 
   ```powershell
   cd C:\scoutapps # Use correct directory on macOS or linux
-  ./dk src/SonicScout_Setup/Develop.ml scanner
+  ./dk SonicScout_Setup.Develop scanner
   ```
 
 - **or** run the following to build and **query the QR scanner database**:
 
   ```powershell
   cd C:\scoutapps # Use correct directory on macOS or linux
-  ./dk src/SonicScout_Setup/Develop.ml database
+  ./dk SonicScout_Setup.Develop database
   ```
 
 When you are in Android Studio (`us/SonicScoutAndroid`) and you make a code change in
@@ -97,14 +97,14 @@ so that your changes are visible:
 
 ```powershell
 cd C:\scoutapps # Use correct directory on macOS or linux
-./dk src/SonicScout_Setup/Develop.ml compile
+./dk SonicScout_Setup.Develop compile
 ```
 
 After the end of the robotics season, you can save space by doing:
 
 ```powershell
 cd C:\scoutapps # Use correct directory on macOS or linux
-./dk src/SonicScout_Setup/Clean.ml --all
+./dk SonicScout_Setup.Clean --all
 ```
 
 ## Licenses

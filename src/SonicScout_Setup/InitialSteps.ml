@@ -35,9 +35,7 @@ Enter 1, 2 or 3: |}
     let open Utils in
     try
       match StdIo.input_line StdIo.stdin with
-      | "1" ->
-          DkNet_Std.Browser.open_url ~os:Tr1HostMachine.os (Uri.of_string url)
-          |> rmsg
+      | "1" -> DkNet_Std.Browser.open_url (Uri.of_string url) |> rmsg
       | "2" -> ()
       | "3" -> raise StopProvisioning
       | _ -> ask ()
@@ -107,9 +105,7 @@ module OnCmdliner (Cmdliner : module type of Cmdliner) = struct
     Cmdliner.Cmd.v (Cmdliner.Cmd.info ~doc __MODULE_ID__) configure_t
 end
 
-let __init () =
-  if Tr1EntryName.module_id = __MODULE_ID__ then begin
-    Tr1Logs_Term.TerminalCliOptions.init ();
-    let module V = OnCmdliner (Cmdliner) in
-    StdExit.exit (Cmdliner.Cmd.eval (V.f ()))
-  end
+let __init (_ : DkCoder_Std.Context.t) =
+  Tr1Logs_Term.TerminalCliOptions.init ();
+  let module V = OnCmdliner (Cmdliner) in
+  StdExit.exit (Cmdliner.Cmd.eval (V.f ()))

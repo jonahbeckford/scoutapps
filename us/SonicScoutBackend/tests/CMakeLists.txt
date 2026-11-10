@@ -28,11 +28,28 @@ if (BUILD_TESTING)
     include(DkSDKDetectEmulation)
     check_apple_host_fast_emulate_x86_64()
 
-    if (CMAKE_OCamlDune_TARGET_IS_COMPATIBLE_HOST_ABI
-            OR (CMAKE_OCamlDune_TARGET_ABI MATCHES "^darwin_" AND APPLE_HOST_FAST_EMULATE_x86_64))
+    # Calculate whether we are cross-compiling.
+    set(is_cross_compiling OFF)
+    if(CMAKE_OCamlDune_COMPILER)
+        # LANGUAGES OCamlDune is enabled
+        if (CMAKE_OCamlDune_TARGET_IS_COMPATIBLE_HOST_ABI
+                OR (CMAKE_OCamlDune_TARGET_ABI MATCHES "^darwin_" AND APPLE_HOST_FAST_EMULATE_x86_64))
+            # Host compiling
+        else ()
+            # Cross-compiling
+            set(is_cross_compiling ON)
+            message(STATUS "No fast target ABI executable tests will be run because target ABI ${CMAKE_OCamlDune_TARGET_ABI} is being cross-compiled on ${CMAKE_OCamlDune_HOST_ABI}, and no fast emulator is available")
+        endif ()
+    else()
+        # No LANGUAGES OCamlDune. Use conventional CMake variable
+        set(is_cross_compiling ${CMAKE_CROSSCOMPILING})
+        if(is_cross_compiling)
+            message(STATUS "No fast target ABI executable tests will be run because the target ABI (${CMAKE_C_COMPILER_ARCHITECTURE_ID}/${CMAKE_C_COMPILER_TARGET}/${CMAKE_C_COMPILER_ABI}) is being cross-compiled")
+        endif()
+    endif() # if(CMAKE_OCamlDune_COMPILER)
+
+    # Do the fast target if and only if not cross-compiling
+    if(NOT is_cross_compiling)
         add_subdirectory(fast-target)
-    else ()
-        # Cross-compiling.
-        message(STATUS "No fast target ABI executable tests will be run because target ABI ${CMAKE_OCamlDune_TARGET_ABI} is being cross-compiled on ${CMAKE_OCamlDune_HOST_ABI}, and no fast emulator is available")
-    endif ()
+    endif()
 endif ()

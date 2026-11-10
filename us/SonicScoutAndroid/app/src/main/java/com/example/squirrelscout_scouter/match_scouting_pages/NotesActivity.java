@@ -62,8 +62,8 @@ public class NotesActivity extends ComponentActivity implements View.OnClickList
         page2.setOnClickListener(this);
 
         //...
-        topCard = (View) findViewById(R.id.view);
-        mainCard = (View) findViewById(R.id.view2);
+        topCard = (View) findViewById(R.id.headerView);
+        mainCard = (View) findViewById(R.id.bodyView);
         scoutInfo = (TextView) findViewById(R.id.textView3);
         pageTitle = (TextView) findViewById(R.id.textView2);
         notesText = (EditText) findViewById(R.id.Name_Input);

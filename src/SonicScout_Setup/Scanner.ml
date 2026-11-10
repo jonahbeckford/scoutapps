@@ -10,7 +10,7 @@ let run ~slots () =
   (* Find locations *)
   let scanner_projectrel_exe =
     let subpath =
-      match Tr1HostMachine.os with
+      match DkCoder_Std.Context.(os (get_exn ())) with
       | `IOS | `OSX ->
           Fpath.(
             v "SonicScoutQRScanner.app"
@@ -27,7 +27,7 @@ let run ~slots () =
 
   (* Clone the scanner if necessary *)
   let scanner_exe, scanner_projectrel_dir =
-    match Tr1HostMachine.os with
+    match DkCoder_Std.Context.(os (get_exn ())) with
     | `IOS | `OSX ->
         (* Since we will be changing the executable with
            [install_name_tool] later, we clone the file.
@@ -54,7 +54,7 @@ let run ~slots () =
   let qt_projectrel_lib = Fpath.(v qt_ver / aqt_subdir / "lib") in
   let env = OS.Env.current () |> rmsg in
   let env =
-    match Tr1HostMachine.os with
+    match DkCoder_Std.Context.(os (get_exn ())) with
     | `IOS | `OSX ->
         (* Need Qt5 .so available to RPATH *)
         let ancestors_to_projectdir =

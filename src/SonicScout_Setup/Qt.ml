@@ -31,25 +31,26 @@ type qt_locations = {
 
 let qt_locations ?host_abi () =
   let aqt_host, aqt_target, aqt_subdir =
-    match Option.value host_abi ~default:Tr1HostMachine.abi with
-    | `darwin_x86_64 | `darwin_arm64 -> ("mac", "clang_64", "clang_64")
-    | `windows_x86_64 | `windows_x86 ->
+    let default = DkCoder_Std.Context.(abi (get_exn ())) in
+    match Option.value host_abi ~default with
+    | `Darwin_x86_64 | `Darwin_arm64 -> ("mac", "clang_64", "clang_64")
+    | `Windows_x86_64 | `Windows_x86 ->
         ("windows", "win64_msvc2019_64", "msvc2019_64")
-    | `linux_x86_64 -> ("linux", "gcc_64", "gcc_64")
+    | `Linux_x86_64 -> ("linux", "gcc_64", "gcc_64")
     | _ ->
         failwith "Currently your host machine is not supported by Sonic Scout"
   in
   let qt_abi =
     (* https://github.com/miurahr/aqtinstall/blob/7917b2d725f56e8ceb6ba17b41ea0571506c7320/aqt/archives.py#L408-L421 *)
     (* http://mirrors.ocf.berkeley.edu/qt/online/qtsdkrepository/ *)
-    match Tr1HostMachine.abi with
-    | `android_arm32v7a | `android_arm64v8a | `android_x86 | `android_x86_64 ->
+    match DkCoder_Std.Context.(abi (get_exn ())) with
+    | `Android_arm32v7a | `Android_arm64v8a | `Android_x86 | `Android_x86_64 ->
         "all_os"
-    | `darwin_x86_64 | `darwin_arm64 -> "mac_x64"
-    | `windows_x86_64 | `windows_x86 -> "windows_x86"
-    | `windows_arm64 -> "windows_arm64"
-    | `linux_x86_64 -> "linux_x64"
-    | `linux_arm64 -> "linux_arm64"
+    | `Darwin_x86_64 | `Darwin_arm64 -> "mac_x64"
+    | `Windows_x86_64 | `Windows_x86 -> "windows_x86"
+    | `Windows_arm64 -> "windows_arm64"
+    | `Linux_x86_64 -> "linux_x64"
+    | `Linux_arm64 -> "linux_arm64"
     | _ ->
         failwith "Currently your host machine is not supported by Sonic Scout"
   in
@@ -157,17 +158,17 @@ let show_asset_spec_contents ~archives_dir ~qt_abi ~qt_downloadver ~qt_updatever
     in
     `O
       [
-        ("path_unencrypted", `String archive_path);
+        ("path", `String archive_path);
         ("checksum", `O [ ("sha256", `String sha256) ]);
       ]
     :: `O
          [
-           ("path_unencrypted", `String (archive_path ^ ".sha1"));
+           ("path", `String (archive_path ^ ".sha1"));
            ("checksum", `O [ ("sha256", `String sha256_of_dot_sha1) ]);
          ]
     :: `O
          [
-           ("path_unencrypted", `String (archive_path ^ ".sha256"));
+           ("path", `String (archive_path ^ ".sha256"));
            ("checksum", `O [ ("sha256", `String sha256_of_dot_sha256) ]);
          ]
     :: acc
@@ -256,19 +257,19 @@ let run ?create_asset_spec ?host_abi ~slots () =
     show_asset_spec_contents ~archives_dir ~qt_abi ~qt_downloadver ~qt_updatever
       ~aqt_target
 
-let __init () =
+let __init (_ : DkCoder_Std.Context.t) =
   if Array.length Sys.argv <= 1 then
     failwith
       (Printf.sprintf "usage: ./dk %s windows_x86_64|darwin_arm64|..."
          __MODULE_ID__);
   let host_abi =
     match Sys.argv.(1) with
-    | "darwin_x86_64" -> `darwin_x86_64
-    | "darwin_arm64" -> `darwin_arm64
-    | "windows_x86_64" -> `windows_x86_64
-    | "windows_x86" -> `windows_x86
-    | "linux_x86_64" -> `linux_x86_64
-    | "linux_x86" -> `linux_x86
+    | "darwin_x86_64" -> `Darwin_x86_64
+    | "darwin_arm64" -> `Darwin_arm64
+    | "windows_x86_64" -> `Windows_x86_64
+    | "windows_x86" -> `Windows_x86
+    | "linux_x86_64" -> `Linux_x86_64
+    | "linux_x86" -> `Linux_x86
     | _ ->
         failwith "Currently your host machine is not supported by Sonic Scout"
   in

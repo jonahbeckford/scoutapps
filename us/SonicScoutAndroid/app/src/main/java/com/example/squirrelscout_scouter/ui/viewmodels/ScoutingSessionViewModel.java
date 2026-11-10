@@ -22,9 +22,11 @@ public class ScoutingSessionViewModel extends ViewModel {
     /**
      * Some unique identifier so we know when a new session has been started
      */
+    /* These "INITIAL" are meant to be the scout information from the "Homepage" */
     public static final String INTENT_INITIAL_LONG_SESSION_NUMBER = "Initial:SessionNumber";
     public static final String INTENT_INITIAL_STRING_SCOUT_NAME = "Initial:ScoutName";
     public static final String INTENT_INITIAL_SHORT_TEAM_NUMBER = "Initial:TeamNumber";
+    public static final String INTENT_MATCH_SHORT_MATCH_NUMBER = "Match:MatchNumber";
 
     /**
      * Be careful with Mutable on top of a Modifiable! Any modifications need to
@@ -118,14 +120,43 @@ public class ScoutingSessionViewModel extends ViewModel {
             if (!clone.autoSpeakerScoreIsSet()) clone.setAutoSpeakerScore(-1);
             if (!clone.autoSpeakerMissIsSet()) clone.setAutoSpeakerMiss(-1);
             if (!clone.autoLeaveIsSet()) clone.setAutoLeave(false);
+            if (!clone.preplacedCoralIsSet()) clone.setPreplacedCoral(false);
             if (!clone.teleSpeakerScoreIsSet()) clone.setTeleSpeakerScore(-1);
             if (!clone.teleSpeakerMissIsSet()) clone.setTeleSpeakerMiss(-1);
             if (!clone.teleAmpScoreIsSet()) clone.setTeleAmpScore(-1);
             if (!clone.teleAmpMissIsSet()) clone.setTeleAmpMiss(-1);
             if (!clone.teleRangeIsSet()) clone.setTeleRange("UI needs Tele Range");
-            if (!clone.teleBreakdownIsSet()) clone.setTeleBreakdown("UI needs breakdown");
-            if (!clone.endgameClimbIsSet()) clone.setEndgameClimb("UI needs endgame climb");
+            if (!clone.breakdownDropdownIsSet()) clone.setBreakdownDropdown("UI needs breakdown");
+            if (!clone.climbDropdownIsSet()) clone.setClimbDropdown("UI needs endgame climb");
             if (!clone.endgameTrapIsSet()) clone.setEndgameTrap(false);
+            if (!clone.autoCoralL4ScoreIsSet()) clone.setAutoCoralL4Score(-1);
+            if (!clone.autoCoralL3ScoreIsSet()) clone.setAutoCoralL3Score(-1);
+            if (!clone.autoCoralL2ScoreIsSet()) clone.setAutoCoralL2Score(-1);
+            if (!clone.autoCoralL1ScoreIsSet()) clone.setAutoCoralL1Score(-1);
+            if (!clone.autoProcessorScoreIsSet()) clone.setAutoProcessorScore(-1);
+            if (!clone.autoProcessorMissIsSet()) clone.setAutoProcessorMiss(-1);
+            if (!clone.autoNetScoreIsSet()) clone.setAutoNetScore(-1);
+            if (!clone.autoNetMissIsSet()) clone.setAutoNetMiss(-1);
+            if (!clone.autoCoralL4MissIsSet()) clone.setAutoCoralL4Miss(-1);
+            if (!clone.autoCoralL3MissIsSet()) clone.setAutoCoralL3Miss(-1);
+            if (!clone.autoCoralL2MissIsSet()) clone.setAutoCoralL2Miss(-1);
+            if (!clone.autoCoralL1MissIsSet()) clone.setAutoCoralL1Miss(-1);
+
+            //tele2025
+            if (!clone.teleOpCoralL4ScoreIsSet()) clone.setTeleOpCoralL4Score(-1);
+            if (!clone.teleOpCoralL3ScoreIsSet()) clone.setTeleOpCoralL3Score(-1);
+            if (!clone.teleOpCoralL2ScoreIsSet()) clone.setTeleOpCoralL2Score(-1);
+            if (!clone.teleOpCoralL1ScoreIsSet()) clone.setTeleOpCoralL1Score(-1);
+            if (!clone.teleOpProcessorScoreIsSet()) clone.setTeleOpProcessorScore(-1);
+            if (!clone.teleOpProcessorMissIsSet()) clone.setTeleOpProcessorMiss(-1);
+            if (!clone.teleOpNetScoreIsSet()) clone.setTeleOpNetScore(-1);
+            if (!clone.teleOpNetMissIsSet()) clone.setTeleOpNetMiss(-1);
+            if (!clone.teleOpCoralL4MissIsSet()) clone.setTeleOpCoralL4Miss(-1);
+            if (!clone.teleOpCoralL3MissIsSet()) clone.setTeleOpCoralL3Miss(-1);
+            if (!clone.teleOpCoralL2MissIsSet()) clone.setTeleOpCoralL2Miss(-1);
+            if (!clone.teleOpCoralL1MissIsSet()) clone.setTeleOpCoralL1Miss(-1);
+
+
         }
         return clone.toImmutable();
     }
@@ -135,12 +166,13 @@ public class ScoutingSessionViewModel extends ViewModel {
         return session == null ? "no session" : session.toString();
     }
 
-    public void startNewSessionIfNecessary(long sessionNumber, String scoutName, short teamNumber) {
+    public void startNewSessionIfNecessary(long sessionNumber, String scoutName, short scoutTeamNumber, short matchNumber) {
         ImmutableRawMatchDataSessionUiState oldState = rawMatchDataSessionUiState.getValue();
         if (oldState == null || oldState.sessionNumber() != sessionNumber) {
-            // new session! everything should be cleared except the scout name and team number
+            // new session! everything should be cleared except the scout name and match number
             ModifiableRawMatchDataUiState state = ModifiableRawMatchDataUiState.create();
             state.setScoutName(scoutName);
+            state.setMatchScouting(matchNumber);
 
             rawMatchDataSessionUiState.setValue(
                     ImmutableRawMatchDataSessionUiState.builder()
@@ -186,7 +218,7 @@ public class ScoutingSessionViewModel extends ViewModel {
         updateAndSetSession(session);
     }
 
-    public void captureAutoData(String startingPos, boolean wn1, boolean wn2, boolean wn3, boolean cn1, boolean cn2, boolean cn3, boolean cn4, boolean cn5, int ampScore, int ampMiss, int speakerScore, int speakerMiss, boolean autoLeave ){
+    public void captureAutoData(String startingPos, boolean wn1, boolean wn2, boolean wn3, boolean cn1, boolean cn2, boolean cn3, boolean cn4, boolean cn5, int ampScore, int ampMiss, int speakerScore, int speakerMiss, boolean autoLeave, boolean autoPreplacedCoral, int autoCoralL4Score, int autoCoralL4Miss, int autoCoralL3Score, int autoCoralL3Miss, int autoCoralL2Score, int autoCoralL2Miss, int autoCoralL1Score, int autoCoralL1Miss, int autoProcessorScore, int autoProcessorMiss, int autoNetScore, int autoNetMiss){
         ImmutableRawMatchDataSessionUiState session = rawMatchDataSessionUiState.getValue();
         assert  session != null;
 
@@ -207,12 +239,25 @@ public class ScoutingSessionViewModel extends ViewModel {
         rawMatchData.setAutoSpeakerScore(speakerScore);
         rawMatchData.setAutoSpeakerMiss(speakerMiss);
         rawMatchData.setAutoLeave(autoLeave);
+        rawMatchData.setPreplacedCoral(autoPreplacedCoral);
+        rawMatchData.setAutoCoralL4Score(autoCoralL4Score);
+        rawMatchData.setAutoCoralL3Score(autoCoralL3Score);
+        rawMatchData.setAutoCoralL2Score(autoCoralL2Score);
+        rawMatchData.setAutoCoralL1Score(autoCoralL1Score);
+        rawMatchData.setAutoProcessorScore(autoProcessorScore);
+        rawMatchData.setAutoProcessorMiss(autoProcessorMiss);
+        rawMatchData.setAutoNetScore(autoNetScore);
+        rawMatchData.setAutoNetMiss(autoNetMiss);
+        rawMatchData.setAutoCoralL4Miss(autoCoralL4Miss);
+        rawMatchData.setAutoCoralL3Miss(autoCoralL3Miss);
+        rawMatchData.setAutoCoralL2Miss(autoCoralL2Miss);
+        rawMatchData.setAutoCoralL1Miss(autoCoralL1Miss);
 
         //does this need to be called? would this overwrite/lose the previous captureMatchRobot method's session data?
         updateAndSetSession(session);
     }
 
-    public void captureTeleData(int speakerScore, int speakerMiss, int ampScore, int ampMiss, String distance, String breakdown, String climb, boolean trap, String pickup){
+    public void captureTeleData(int speakerScore, int speakerMiss, int ampScore, int ampMiss, String distance, String breakdownDropdown, String climbDropdown, boolean trap, String pickup, int teleOpCoralL4Score, int teleOpCoralL4Miss, int teleOpCoralL3Score, int teleOpCoralL3Miss, int teleOpCoralL2Score, int teleOpCoralL2Miss, int teleOpCoralL1Score, int teleOpCoralL1Miss, int teleOpProcessorScore, int teleOpProcessorMiss, int teleOpNetScore, int teleOpNetMiss) {
         ImmutableRawMatchDataSessionUiState session = rawMatchDataSessionUiState.getValue();
         assert  session != null;
 
@@ -224,10 +269,25 @@ public class ScoutingSessionViewModel extends ViewModel {
         rawMatchData.setTeleAmpScore(ampScore);
         rawMatchData.setTeleAmpMiss(ampMiss);
         rawMatchData.setTeleRange(distance);
-        rawMatchData.setTeleBreakdown(breakdown);
-        rawMatchData.setEndgameClimb(climb);
+        rawMatchData.setBreakdownDropdown(breakdownDropdown);
+        rawMatchData.setClimbDropdown(climbDropdown);
         rawMatchData.setEndgameTrap(trap);
         rawMatchData.setPickUpAbility(pickup);
+        //2025 tele
+        rawMatchData.setTeleOpCoralL4Score(teleOpCoralL4Score);
+        rawMatchData.setTeleOpCoralL4Miss(teleOpCoralL4Miss);
+        rawMatchData.setTeleOpCoralL3Score(teleOpCoralL3Score);
+        rawMatchData.setTeleOpCoralL3Miss(teleOpCoralL3Miss);
+        rawMatchData.setTeleOpCoralL2Score(teleOpCoralL2Score);
+        rawMatchData.setTeleOpCoralL2Miss(teleOpCoralL2Miss);
+        rawMatchData.setTeleOpCoralL1Score(teleOpCoralL1Score);
+        rawMatchData.setTeleOpCoralL1Miss(teleOpCoralL1Miss);
+        rawMatchData.setTeleOpProcessorScore(teleOpProcessorScore);
+        rawMatchData.setTeleOpProcessorMiss(teleOpProcessorMiss);
+        rawMatchData.setTeleOpNetScore(teleOpNetScore);
+        rawMatchData.setTeleOpNetMiss(teleOpNetMiss);
+
+
 
         updateAndSetSession(session);
     }

@@ -14,7 +14,7 @@ $shell = New-Object -ComObject WScript.Shell
 $shortcut = $shell.CreateShortcut("$scoutDir\Scout Android Studio.lnk")
 $shortcut.TargetPath = "$projectDir\dk.cmd"
 $shortcut.IconLocation = "$projectDir\packaging\icons\android-studio.ico"
-$shortcut.Arguments = "SonicScout_Setup.Develop android"
+$shortcut.Arguments = "SonicScout_Setup.Develop android & pause"
 $shortcut.Save()
 
 # Link to QR Scanner
@@ -22,7 +22,7 @@ $shell = New-Object -ComObject WScript.Shell
 $shortcut = $shell.CreateShortcut("$scoutDir\Scout QR Scanner.lnk")
 $shortcut.TargetPath = "$projectDir\dk.cmd"
 $shortcut.IconLocation = "$projectDir\packaging\icons\qrscanner.ico"
-$shortcut.Arguments = "SonicScout_Setup.Develop scanner"
+$shortcut.Arguments = "SonicScout_Setup.Develop scanner & pause"
 $shortcut.Save()
 
 # Link to compile. Pause at end since text with no UI.
@@ -38,7 +38,7 @@ $shell = New-Object -ComObject WScript.Shell
 $shortcut = $shell.CreateShortcut("$scoutDir\Scout Database.lnk")
 $shortcut.TargetPath = "$projectDir\dk.cmd"
 $shortcut.IconLocation = "$projectDir\packaging\icons\database.ico"
-$shortcut.Arguments = "SonicScout_Setup.Develop database"
+$shortcut.Arguments = "SonicScout_Setup.Develop database & pause"
 $shortcut.Save()
 
 # Link to clean. Pause at end since text with no UI.
@@ -49,9 +49,19 @@ $shortcut.IconLocation = "$projectDir\packaging\icons\clean-danger2.ico"
 $shortcut.Arguments = "SonicScout_Setup.Clean --all & pause"
 $shortcut.Save()
 
-# Link to upgrade. Pause at end since text with no UI.
+# Link to source update. Pause at end since text with no UI.
 $shell = New-Object -ComObject WScript.Shell
-$shortcut = $shell.CreateShortcut("$scoutDir\Scout Update.lnk")
+$shortcut = $shell.CreateShortcut("$scoutDir\Scout Schema Update.lnk")
+$shortcut.TargetPath = "$projectDir\dk.cmd"
+$shortcut.WorkingDirectory = "$projectDir"
+$shortcut.IconLocation = "$projectDir\packaging\icons\update.ico"
+$shortcut.Arguments = "SonicScout_Setup.Develop source-update & pause"
+$shortcut.Save()
+
+# Link to pulling source code. Pause at end since text with no UI.
+$shell = New-Object -ComObject WScript.Shell
+if (Test-Path "$scoutDir\Scout Update.lnk") { Remove-Item -Force -Path "$scoutDir\Scout Update.lnk" }
+$shortcut = $shell.CreateShortcut("$scoutDir\Scout Source Pull.lnk")
 $shortcut.TargetPath = "cmd"
 $shortcut.WorkingDirectory = "$projectDir"
 $shortcut.IconLocation = "$projectDir\packaging\icons\update.ico"

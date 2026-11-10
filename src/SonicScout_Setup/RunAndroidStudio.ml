@@ -14,40 +14,7 @@
 
 open Bos
 
-let find_studio_binary ~projectdir =
-  let binary_opt =
-    let studio_app_bin =
-      Fpath.(
-        projectdir / ".ci" / "local" / "share" / "Android Studio.app"
-        / "Contents" / "MacOS" / "studio")
-    in
-    Logs.debug (fun l -> l "Checking for macOS at %a" Fpath.pp studio_app_bin);
-    if OS.File.exists studio_app_bin |> RunGradle.rmsg then Some studio_app_bin
-    else
-      let home =
-        Fpath.(projectdir / ".ci" / "local" / "share" / "android-studio")
-      in
-      Logs.debug (fun l -> l "Checking for Linux/Windows in %a" Fpath.pp home);
-      if Sys.win32 then
-        if OS.File.exists Fpath.(home / "bin" / "studio.bat") |> RunGradle.rmsg
-        then Some Fpath.(home / "bin" / "studio.bat")
-        else None
-      else if OS.File.exists Fpath.(home / "bin" / "studio") |> RunGradle.rmsg
-      then Some Fpath.(home / "bin" / "studio")
-      else if
-        OS.File.exists Fpath.(home / "bin" / "studio.sh") |> RunGradle.rmsg
-      then Some Fpath.(home / "bin" / "studio.sh")
-      else None
-  in
-
-  match binary_opt with
-  | Some b -> b
-  | None ->
-      failwith
-        "No local Gradle detected. Make sure that './dk \
-         dksdk.android.studio.download NO_SYSTEM_PATH' has been run."
-
-let run ?env ?debug_env ~projectdir args =
+let run ?env ?debug_env ~projectdir ~slots args =
   let env =
     match env with
     | Some env -> env
@@ -58,17 +25,21 @@ let run ?env ?debug_env ~projectdir args =
   let env = RunGradle.remove_ocaml_dkcoder_env env in
 
   (* Add JAVA_HOME and Java to PATH (not part of original `dksdk.android.studio.run`) *)
-  let env = RunGradle.add_java_env ~projectdir env in
+  let env = RunGradle.add_java_env ~slots env in
 
   (* Add Ninja to PATH (not part of original `dksdk.android.studio.run`).
      Fixes: [CXX1416] Could not find Ninja on PATH or in SDK CMake bin folders. *)
-  let env = RunGradle.add_ninja_env ~projectdir env in
+  let env = RunGradle.add_ninja_env ~slots env in
 
   (* Find Android Studio *)
-  let studio = find_studio_binary ~projectdir in
+  let studio =
+    match Slots.android_studio_launcher slots with
+    | Some b -> b
+    | None -> failwith "No android_studio_launcher slot set."
+  in
 
   (* Generate a valid local.properties *)
-  RunGradle.generate_local_properties ~projectdir ();
+  RunGradle.generate_local_properties ~projectdir ~slots ();
 
   (* Run *)
   (match debug_env with

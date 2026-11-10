@@ -1,0 +1,164 @@
+{
+    "tasks": [
+        {
+            "label": "Build .NET",
+            "detail": "Build the Browser app continuously",
+            "type": "process",
+            "command": "./dk",
+            "windows": {
+                "command": ".\\dk.cmd"
+            },
+            "options": {
+                "env": {
+                    "DK_FACADE": "UPGRADE_NEVER"
+                }
+            },
+            "args": [
+                "SonicScout_Setup.DotNetBuild"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "Clean .NET",
+            "detail": "Clean .NET intermediate and output directories",
+            "type": "process",
+            "command": "./dk",
+            "windows": {
+                "command": ".\\dk.cmd"
+            },
+            "options": {
+                "env": {
+                    "DK_FACADE": "UPGRADE_NEVER"
+                }
+            },
+            "args": [
+                "SonicScout_Setup.Clean",
+                "--dotnet"
+            ],
+            "group": {
+                "kind": "build",
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Run .NET",
+            "detail": "Build and start the Desktop app",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "run",
+                "--project",
+                "2026/ScoutApp.Desktop"
+            ],
+            "group": {
+                "kind": "test",
+            },
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared",
+                "showReuseMessage": false
+            }
+        },
+        {
+            "label": "Show Debug .NET",
+            "detail": "Run a HTTP server for the Debug Browser app",
+            "type": "process",
+            "command": "./dk",
+            "windows": {
+                "command": ".\\dk.cmd"
+            },
+            "options": {
+                "env": {
+                    "DK_FACADE": "UPGRADE_NEVER"
+                }
+            },
+            "args": [
+                "SonicScout_Setup.HttpServer",
+                "--addr",
+                "127.0.0.1",
+                "--port",
+                "3100",
+                "--dir",
+                "2026/ScoutApp.Browser/bin/Debug/net8.0-browser/publish/wwwroot",
+            ],
+            "group": {
+                "kind": "test",
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "silent",
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "Show Release .NET",
+            "detail": "Run a HTTP server for the Release Browser app",
+            "type": "process",
+            "command": "./dk",
+            "windows": {
+                "command": ".\\dk.cmd"
+            },
+            "options": {
+                "env": {
+                    "DK_FACADE": "UPGRADE_NEVER"
+                }
+            },
+            "args": [
+                "SonicScout_Setup.HttpServer",
+                "--addr",
+                "127.0.0.1",
+                "--port",
+                "3100",
+                "--dir",
+                "2026/ScoutApp.Browser/bin/Release/net8.0-browser/publish/wwwroot",
+            ],
+            "group": {
+                "kind": "test",
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "silent",
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "python show published wwwroot",
+            "detail": "Only for advanced users: A python version of show me",
+            "type": "process",
+            "command": "python3",
+            "windows": {
+                "command": "python"
+            },
+            "args": [
+                "-m",
+                "http.server",
+                "--bind",
+                "127.0.0.1",
+                "-d",
+                "2026/ScoutApp.Browser/bin/Release/net8.0-browser/publish/wwwroot",
+                "3100"
+            ],
+            "group": {
+                "kind": "test",
+            },
+            "isBackground": true,
+            "presentation": {
+                "reveal": "silent",
+                "panel": "dedicated"
+            }
+        },
+    ],
+    "version": "2.0.0"
+}

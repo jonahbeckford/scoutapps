@@ -15,7 +15,7 @@ You will want to start with the following targets in your IDE:
 
 1. `DkSDK_DevTools`
 2. `DkSDKTest_UnitTests_ALL`
-3. `main-cli` in `src/MainCLI`
+3. `sonic-scout-cli` in `src/SonicScout_MainCLI`
 
 or do it from the **Linux**, **WSL2 Debian** or **WSL2 Ubuntu** command line:
 
@@ -23,7 +23,7 @@ or do it from the **Linux**, **WSL2 Debian** or **WSL2 Ubuntu** command line:
 ./dk dksdk.cmake.link QUIET
 cp CMakeUserPresets-SUGGESTED.json CMakeUserPresets.json
 .ci/cmake/bin/cmake --preset dev-Linux-x86_64
-.ci/cmake/bin/cmake --build build_dev --target main-cli DkSDK_DevTools DkSDKTest_UnitTests_ALL ManagerApp_ALL
+.ci/cmake/bin/cmake --build build_dev --target sonic-scout-cli DkSDK_DevTools DkSDKTest_UnitTests_ALL ManagerApp_ALL
 ```
 
 or do it from the **Windows with DkML** command line:
@@ -32,7 +32,7 @@ or do it from the **Windows with DkML** command line:
 ./dk dksdk.cmake.link QUIET
 with-dkml cp CMakeUserPresets-SUGGESTED.json CMakeUserPresets.json
 with-dkml .ci/cmake/bin/cmake --preset dev-Windows64
-with-dkml .ci/cmake/bin/cmake --build build_dev --target main-cli DkSDK_DevTools DkSDKTest_UnitTests_ALL ManagerApp_ALL
+with-dkml .ci/cmake/bin/cmake --build build_dev --target sonic-scout-cli DkSDK_DevTools DkSDKTest_UnitTests_ALL ManagerApp_ALL
 ```
 
 ## Launching Manager App
@@ -58,27 +58,27 @@ SECOND, run the following to see an `example.db` database get created
 but without any content:
 
 ```sh
-build_dev/src/MainCLI/main-cli status           -d example.db
-build_dev/src/MainCLI/main-cli matches-for-team -d example.db 1318
-build_dev/src/MainCLI/main-cli matches-for-team -d example.db 5588
-build_dev/src/MainCLI/main-cli matches-for-team -d example.db 949
-build_dev/src/MainCLI/main-cli match-schedule   -d example.db
+build_dev/src/SonicScout_MainCLI/sonic-scout-cli status           -d example.db
+build_dev/src/SonicScout_MainCLI/sonic-scout-cli matches-for-team -d example.db 1318
+build_dev/src/SonicScout_MainCLI/sonic-scout-cli matches-for-team -d example.db 5588
+build_dev/src/SonicScout_MainCLI/sonic-scout-cli matches-for-team -d example.db 949
+build_dev/src/SonicScout_MainCLI/sonic-scout-cli match-schedule   -d example.db
 ```
 
 THIRD, load in some scheduled match data:
 
 ```sh
-build_dev/src/MainCLI/main-cli insert-scheduled-matches -d example.db --match-json data/schedule.json
+build_dev/src/SonicScout_MainCLI/sonic-scout-cli insert-scheduled-matches -d example.db --match-json data/schedule.json
 ```
 
 FOURTH, when we look at the data everything except `status` has information:
 
 ```sh
-build_dev/src/MainCLI/main-cli status           -d example.db
-build_dev/src/MainCLI/main-cli matches-for-team -d example.db 1318
-build_dev/src/MainCLI/main-cli matches-for-team -d example.db 5588
-build_dev/src/MainCLI/main-cli matches-for-team -d example.db 949
-build_dev/src/MainCLI/main-cli match-schedule   -d example.db
+build_dev/src/SonicScout_MainCLI/sonic-scout-cli status           -d example.db
+build_dev/src/SonicScout_MainCLI/sonic-scout-cli matches-for-team -d example.db 1318
+build_dev/src/SonicScout_MainCLI/sonic-scout-cli matches-for-team -d example.db 5588
+build_dev/src/SonicScout_MainCLI/sonic-scout-cli matches-for-team -d example.db 949
+build_dev/src/SonicScout_MainCLI/sonic-scout-cli match-schedule   -d example.db
 ```
 
 FIFTH, because there is some hard-coded data that has not been cleaned
@@ -86,8 +86,8 @@ up. You need to insert it until the hard-coding is fixed, and then
 you will be able to see the `status`:
 
 ```sh
-build_dev/src/MainCLI/main-cli insert-raw-match-test-data -d example.db
-build_dev/src/MainCLI/main-cli status                     -d example.db
+build_dev/src/SonicScout_MainCLI/sonic-scout-cli insert-raw-match-test-data -d example.db
+build_dev/src/SonicScout_MainCLI/sonic-scout-cli status                     -d example.db
 ```
 
 ### Building for Android

@@ -19,52 +19,53 @@ DkSDKProject_AddPackage(
 # the package. This library is what other OCaml packages in this project
 # will use; even other OCaml projects can use this library if you publish
 # it to an opam repository.
-add_library(SquirrelScout_Std OBJECT
-        StdEntry.ml
-        Intf.ml
+if(SONIC_SCOUT_FEATURE_COM AND SONIC_SCOUT_NATIVE_COM)
+    add_library(SquirrelScout_Std OBJECT
+            StdEntry.ml
+            Intf.ml
 
-        Qr_manager.ml
-        Aws_manager.ml
-        Main.ml
+            Qr_manager.ml
+            Aws_manager.ml
+            Main.ml
 
-        Db_utils.ml
+            Db_utils.ml
 
-        Schema.ml
-        Schema.mli
+            Schema.ml
+            schema.mli
 
-        Match_schedule_table.ml
-        Raw_match_data_table.ml
-        Robot_pictures_table.ml
-        Team_names_table.ml
+            Match_schedule_table.ml
+            Raw_match_data_table.ml
+            Robot_pictures_table.ml
+            Team_names_table.ml
 
-        # This can be removed once DkCoder integrated into DkSDK CMake
-        DkSDKFFI_OCaml0.ml
-        )
-add_library(SquirrelScout::Std ALIAS SquirrelScout_Std)
-set_target_properties(SquirrelScout_Std PROPERTIES EXPORT_NAME Std)
+            # This can be removed once DkCoder integrated into DkSDK CMake
+            DkSDKFFI_OCaml0.ml
+            )
+    add_library(SquirrelScout::Std ALIAS SquirrelScout_Std)
+    set_target_properties(SquirrelScout_Std PROPERTIES EXPORT_NAME Std)
 
-target_sources(SquirrelScout_Std INTERFACE
-        StdEntry.mli)
-target_link_libraries(SquirrelScout_Std PRIVATE
-        Findlib::fmt
+    target_sources(SquirrelScout_Std INTERFACE
+            StdEntry.mli)
+    target_link_libraries(SquirrelScout_Std PRIVATE
+            Findlib::fmt
 
-        Findlib::logs.fmt
-        Findlib::logs.lwt
-        Findlib::lwt
-       
-        Findlib::capnp
-        Findlib::vector
-        Findlib::yojson  
-        Findlib::base64
-       
-        Findlib::sqlite3
-        Findlib::qrc
-        Findlib::xdg
-        Findlib::fpath
-        Findlib::bos
+            Findlib::logs.fmt
+            Findlib::logs.lwt
+            Findlib::lwt
+        
+            Findlib::capnp
+            Findlib::vector
+            Findlib::yojson  
+            Findlib::base64
+        
+            Findlib::sqlite3
+            Findlib::qrc
+            Findlib::xdg
+            Findlib::fpath
+            Findlib::bos
 
-        Findlib::lwt.unix)
-
+            Findlib::lwt.unix)
+endif()
 
 # ----- CAPNP ---- 
 
@@ -96,6 +97,15 @@ set(import_DEPENDS
 # OCaml Message Schema
 # --------------
 if(NOT DKSDK_GOLDEN_SOURCE_CODE)
+    if(TARGET capnpc-ocaml)
+        # With DkCoder compilation we needed a manual install in dependencies/ to get
+        # an IMPORTED capnpc-ocaml target
+        set(capnpc-ocaml_PATH "$<TARGET_FILE_DIR:capnpc-ocaml>")
+    else()
+        # With native compilation, [capnp_ocaml] is an opam dependency that will bring
+        # in capnpc-ocaml.exe through the usual `dune build` of OCamlDune
+        set(capnpc-ocaml_PATH ${CMAKE_OCamlDune_DUNE_PROJECT_PATH}/_build/install/default/bin)
+    endif()
     add_custom_command(OUTPUT
         ${CMAKE_CURRENT_SOURCE_DIR}/Schema.ml
         ${CMAKE_CURRENT_SOURCE_DIR}/Schema.mli
@@ -108,8 +118,8 @@ if(NOT DKSDK_GOLDEN_SOURCE_CODE)
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         COMMAND
 
-        # Add capnpc-ocaml.exe for the host ABI to PATH
-        ${CMAKE_COMMAND} -E env PATH=${CMAKE_OCamlDune_DUNE_PROJECT_PATH}/_build/install/default/bin
+        #   Add capnpc-ocaml.exe for the host ABI to PATH
+        ${CMAKE_COMMAND} -E env --modify "PATH=path_list_prepend:${capnpc-ocaml_PATH}"
         $<TARGET_FILE:capnproto_host-capnp-exe>
         compile
         ${import_COMPILE_ARGS}

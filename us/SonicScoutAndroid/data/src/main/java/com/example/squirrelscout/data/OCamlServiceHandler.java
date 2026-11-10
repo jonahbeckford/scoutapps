@@ -71,7 +71,9 @@ public final class OCamlServiceHandler extends Handler {
         // separate thread because the service normally runs in the process's
         // main thread, which we don't want to block. We also make it
         // background priority so CPU-intensive work doesn't disrupt our UI.
-        HandlerThread thread = new HandlerThread("OCamlServiceHandler",
+        HandlerThread thread = new HandlerThread(
+                // Max 15 characters for thread name in Android Studio debugger
+                "DkMlSvcHandler",
                 android.os.Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
 

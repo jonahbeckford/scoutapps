@@ -1,8 +1,6 @@
 package com.example.squirrelscout_scouter.match_scouting_pages;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Debug;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -54,7 +52,7 @@ public class PopUpWindow extends AppCompatActivity implements View.OnClickListen
         scoreCounter.setOnClickListener(this);
         missedCounter = (TextView) findViewById(R.id.MissedCounter);
         missedCounter.setOnClickListener(this);
-        imageView = findViewById(R.id.imageView);
+        imageView = findViewById(R.id.fieldImageView);
 
         //show updated image
         // Retrieve the marker information from the intent

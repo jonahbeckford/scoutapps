@@ -95,6 +95,7 @@ public class QRCodeActivity extends ComponentActivity implements View.OnClickLis
             intent.putExtra(ScoutingSessionViewModel.INTENT_INITIAL_LONG_SESSION_NUMBER, scoutSingleton.getSn());
             intent.putExtra(ScoutingSessionViewModel.INTENT_INITIAL_STRING_SCOUT_NAME, scoutSingleton.getScoutName());
             intent.putExtra(ScoutingSessionViewModel.INTENT_INITIAL_SHORT_TEAM_NUMBER, scoutSingleton.getValTN());
+            intent.putExtra(ScoutingSessionViewModel.INTENT_MATCH_SHORT_MATCH_NUMBER, scoutSingleton.getMatchNum() + 1);
             // Start the target activity with the Intent
             startActivity(intent);
         }, 250);

@@ -148,11 +148,11 @@ module Installer = struct
       else
         Error
           (`Msg
-            (Fmt.str
-               "Failed to verify the download '%s'. Expected SHA256 checksum \
-                '%a' but got '%a'"
-               url Digestif.SHA256.pp expected_cksum Digestif.SHA256.pp
-               actual_cksum))
+             (Fmt.str
+                "Failed to verify the download '%s'. Expected SHA256 checksum \
+                 '%a' but got '%a'"
+                url Digestif.SHA256.pp expected_cksum Digestif.SHA256.pp
+                actual_cksum))
     in
     Fun.protect
       ~finally:(fun () ->
@@ -184,7 +184,7 @@ module Installer = struct
           in
           let () =
             Lwt_main.run
-            @@ DkNet_Std.Http.download_uri ~max_time_ms:300_000
+            @@ DkNet_Std.Http.download_url ~max_time_ms:300_000
                  ~checksum:(`SHA_256 msys2_sha256) ~destination
                  (Uri.of_string url)
           in
@@ -272,8 +272,8 @@ module Installer = struct
               | _ -> "-euf")
             % Fpath.to_string update_ca_trust)
 
-  (** [install_sh ~target] makes a copy of /bin/dash.exe
-      to [target], and adds msys-2.0.dll if not present. *)
+  (** [install_sh ~target] makes a copy of /bin/dash.exe to [target], and adds
+      msys-2.0.dll if not present. *)
   let install_sh ~msys2_dir ~target =
     let search = [ Fpath.(msys2_dir / "usr" / "bin") ] in
     let* src_sh_opt = OS.Cmd.find_tool ~search (Cmd.v "dash") in
@@ -281,9 +281,9 @@ module Installer = struct
     | None ->
         Error
           (`Msg
-            (Fmt.str "Could not find dash.exe in %a"
-               Fmt.(Dump.list Fpath.pp)
-               search))
+             (Fmt.str "Could not find dash.exe in %a"
+                Fmt.(Dump.list Fpath.pp)
+                search))
     | Some src_sh ->
         let target_dir = Fpath.parent target in
         let* (_created : bool) = OS.Dir.create ~mode:0o750 target_dir in
@@ -309,15 +309,14 @@ end
     into [target_msys2_dir].
 
     Intermediate files will be downloaded into [cache_dir].
-    
+
     Use the [~bits32:()] flag to install 32-bit MSYS2. The 32-bit MSYS2 will
-    automatically be used if a 32-bit OCaml runtime is running
-    (ie. {!Sys.word_size} is 32).
-    
-    Use [~target_sh = Fpath.v "somewhere/sh.exe"] to install a POSIX shell
-    in a separate location. The DLLs will also be installed to that location
-    (ex. ["somewhere/msys-2.0.dll"]).
-    *)
+    automatically be used if a 32-bit OCaml runtime is running (ie.
+    {!Sys.word_size} is 32).
+
+    Use [~target_sh = Fpath.v "somewhere/sh.exe"] to install a POSIX shell in a
+    separate location. The DLLs will also be installed to that location (ex.
+    ["somewhere/msys-2.0.dll"]). *)
 let install ?bits32 ?(trust_anchors = []) ?msys2_base_exe ?target_sh
     ~target_msys2_dir ~cache_dir () =
   let bits32 =
@@ -409,8 +408,6 @@ module Cli = struct
   let cmd = Cmd.v (Cmd.info ("./dk " ^ __MODULE_ID__)) main_t
 end
 
-let () =
-  if Tr1EntryName.module_id = __MODULE_ID__ then begin
-    Tr1Logs_Term.TerminalCliOptions.init ();
-    StdExit.exit (Cmdliner.Cmd.eval Cli.cmd)
-  end
+let __init (_ : DkCoder_Std.Context.t) =
+  Tr1Logs_Term.TerminalCliOptions.init ();
+  StdExit.exit (Cmdliner.Cmd.eval Cli.cmd)

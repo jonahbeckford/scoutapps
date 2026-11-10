@@ -17,7 +17,7 @@
 # Inputs
 # ------
 # Environment vars:
-#   DKRUN_ENV_URL_BASE - optional
+#   DKTOOL_ENV_URL_BASE - optional
 #   DKML_HOST_ABI - optional
 #   DKCODER_LOGLEVEL - optional
 #   DKCODER_LOGLEVEL_OVERRIDE - optional
@@ -25,6 +25,11 @@
 # CMake vars:
 #   DKCODER_DATA_HOME - required
 #   DKCODER_WORKDIR - required
+#   DKCODER_ARG0
+#   DKCODER_PWD
+#   DKCODER_NONCE
+#   DKCODER_TTY
+#   DKCODER_CMDLINE
 
 include(FetchContent)
 
@@ -80,21 +85,21 @@ set(__DkRun_V2_1_SHA256_windows_x86_64 01ae44e396ea336f2633e1e0bf70eea3f79fe9ba0
 set(__DkRun_V2_1_SHA256_windows_x86    1c6a11a9647f9f8e801b570f424f8bcafb1994ca02f098fcfc66deb6bfa7d395)
 set(__DkRun_V2_1_EOL_YYYY_MM_DD "2025-08-30")
 set(__DkRun_V2_1_EOG_YYYY_MM_DD "2026-02-30")
-set(__DkRun_V2_2_COMPILE_VERSION 2.2.1-4)
+set(__DkRun_V2_2_COMPILE_VERSION 2.2.2-0)
 set(__DkRun_V2_2_URL_BASE https://gitlab.com/api/v4/projects/52918795/packages/generic/stdexport/${__DkRun_V2_2_COMPILE_VERSION})
-set(__DkRun_V2_2_SHA256_darwin_x86_64  f2a24f8bebeca982871a1eabd28a6aa654267b44ee4baf4d083596d52bee4752)
-set(__DkRun_V2_2_SHA256_darwin_arm64   3b4d1ec7f6339103c7292b9d375d90daddcb7fc550143eb9590ba93689628c5c)
-set(__DkRun_V2_2_SHA256_linux_x86_64   5119e99fe88979aa0832a1854dc048466c327f7e452776dea626585333852eae)
-set(__DkRun_V2_2_SHA256_linux_x86      0e58b135593c0369844841453b501d972a2e47d8fe1cd5a62d02d2ebee934231)
-set(__DkRun_V2_2_SHA256_windows_x86_64 711a3cfdad82f0b868a08bc21afaad933771208dadcdc4f989fd22bd70bb4ae0)
-set(__DkRun_V2_2_SHA256_windows_x86    c6011016d5c142e99a220e924224ae0d186273c3613b8cbbc57d2b1a352559e3)
+set(__DkRun_V2_2_SHA256_darwin_x86_64  eb70b3f994c6cadde4ec9e87dc264adbf019bd8deb7775b2a4b9cd8173194116)
+set(__DkRun_V2_2_SHA256_darwin_arm64   08b207f63a3d2c9167e2596b696ed5ae674a74babe0a99648bf2ab12a5592709)
+set(__DkRun_V2_2_SHA256_linux_x86_64   c1a6da681666b426f9b7a7de624eeae62f376681f89835738547574cc540f3c1)
+set(__DkRun_V2_2_SHA256_linux_x86      7fe6eab439c32f3ce22450583cbf22655ee1784254bf49ecbf05c9060ae96366)
+set(__DkRun_V2_2_SHA256_windows_x86_64 56202cfc8c5208ff3b395cbbb6a7cca3378ad2b0dfda0093c1c1402c888f1372)
+set(__DkRun_V2_2_SHA256_windows_x86    060a47c817b0ba695bedbfafe6cb6d1dbf09a951cb9e88b2c6365d039c3a8ec0)
 set(__DkRun_V2_2_EOL_YYYY_MM_DD "2025-12-30")
 set(__DkRun_V2_2_EOG_YYYY_MM_DD "2026-06-30")
-#   `Env` is a valid DkCoder version if $DKRUN_ENV_URL_BASE exists. Typically it is a file:// URL.
+#   `Env` is a valid DkCoder version if $DKTOOL_ENV_URL_BASE exists. Typically it is a file:// URL.
 set(__DkRun_Env_URL_BASE)
-if(DEFINED ENV{DKRUN_ENV_URL_BASE})
+if(DEFINED ENV{DKTOOL_ENV_URL_BASE})
     set(__DkRun_Env_COMPILE_VERSION Env)
-    set(__DkRun_Env_URL_BASE "$ENV{DKRUN_ENV_URL_BASE}")
+    set(__DkRun_Env_URL_BASE "$ENV{DKTOOL_ENV_URL_BASE}")
     set(__DkRun_Env_EOL_YYYY_MM_DD "9999-06-30")
     set(__DkRun_Env_EOG_YYYY_MM_DD "9999-12-31")
 endif()
@@ -358,7 +363,7 @@ endfunction()
 # - DKCODER_TOOL - location of the `dkcoder-tool` executable
 # - DKCODER_VERSION - dotted form of DkCoder like 0.2.0.1
 # - DKCODER_RUN - location of the `DkCoder_Edge-Run` executable (here "Edge" means the latest version for the VERSION; aka. the VERSION itself)
-# - DKCODER_RUN_VERSION - `Env` or `V0_2`. Whatever was used to launch in `./dk DkRun_V0_2.Run` (etc.)
+# - DKCODER_TOOL_MODULE - `DkRun_Env.Run` or `DkRun_V0_2.Run`. Whatever was used to launch in `./dk DkRun_V0_2.Run` (etc.)
 # - DKCODER_HELPERS - location of bin directory or DkCoder.bundle/Contents/Helpers on macOS
 # - DKCODER_ETC - location of etc/dkcoder directory
 # - DKCODER_BASE_SITELIB - location of lib/ directory containing the base system that at minimum includes the ocaml-system (ie. lib/ocaml/)
@@ -616,8 +621,8 @@ stdlib="@DKCODER_HOME@/DkCoder.bundle/Contents/Resources/lib/ocaml"]] @ONLY NEWL
     # Export version
     set(DKCODER_VERSION "${compile_version}" PARENT_SCOPE)
 
-    # Export run vid (Env or V0_1)
-    set(DKCODER_RUN_VERSION "${V_id}" PARENT_SCOPE)
+    # Export run module (Env or V0_1)
+    set(DKCODER_TOOL_MODULE "DkRun_${V_id}.Run" PARENT_SCOPE)
 endfunction()
 
 macro(__dkcoder_prep_environment)
@@ -704,7 +709,7 @@ function(__dkcoder_delegate)
         __dkcoder_add_environment_set("DKCODER_NINJA_EXE=${CMAKE_MAKE_PROGRAM}")
     endif()
 
-    # Propagate DKCODER_SHARE and DKCODER_HELPERS and DKCODER_RUN_VERSION.
+    # Propagate DKCODER_SHARE and DKCODER_HELPERS and DKCODER_TOOL_MODULE.
     #   Why not DKCODER_HOST_ABI? DkRun has a hardcoded default (so ABI hardcoding comes from the downloaded DkRun
     #   which is chosen by ./dk). But we don't change the default since a future DkRun may have a better
     #   detection of ABI (ex. ./dk downloads x86_64 for macOS but ABI is detected as arm64).
@@ -724,9 +729,10 @@ function(__dkcoder_delegate)
     elseif(ARG_VERSION VERSION_GREATER 0.4.0.1)
         __dkcoder_add_environment_set("DKCODER_SITELIB=${DKCODER_BASE_SITELIB_NATIVE}")
     endif()
-    __dkcoder_add_environment_set("DKCODER_RUN_VERSION=${DKCODER_RUN_VERSION}")
-    __dkcoder_add_environment_set("DKCODER_RUN_ENV_URL_BASE=${__DkRun_Env_URL_BASE}")
+    __dkcoder_add_environment_set("DKCODER_TOOL_MODULE=${DKCODER_TOOL_MODULE}")
+    __dkcoder_add_environment_set("DKCODER_TOOL_ENV_URL_BASE=${__DkRun_Env_URL_BASE}")
     __dkcoder_add_environment_set("DKCODER_PWD=${DKCODER_PWD}")
+    __dkcoder_add_environment_set("DKCODER_ARG0=${DKCODER_ARG0}")
 
     # Console
     __dkcoder_add_environment_set("DKCODER_TTY=${DKCODER_TTY}")
@@ -807,6 +813,7 @@ SET DK_WORKDIR=
 
 REM Clear variables that influence __dk.cmake. They are not part of DkCoder API.
 SET DKRUN_ENV_URL_BASE=
+SET DKTOOL_ENV_URL_BASE=
 
 "@CMAKE_COMMAND_NATIVE@" -E env @envMods_DOS@ -- @entryExec_PRECOMMAND@"@entryExec_NATIVE@" @dkcoder_ARGS@
 ]]
@@ -825,6 +832,7 @@ unset DK_PROG_INSTALLED_LOCATION
 
 # Clear variables that influence __dk.cmake. They are not part of DkCoder API.
 unset DKRUN_ENV_URL_BASE
+unset DKTOOL_ENV_URL_BASE
 
 exec '@CMAKE_COMMAND@' -E env @envMods_DOS@ -- @entryExec_PRECOMMAND@'@entryExec@' @dkcoder_ARGS@
 ]]
@@ -978,9 +986,9 @@ Environment variables:
         set(__dkrun_compile_version "${__DkRun_${__dkrun_v_id}_COMPILE_VERSION}")
 
         # Validation
-        if(library STREQUAL "Env" AND NOT DEFINED ENV{DKRUN_ENV_URL_BASE})
+        if(library STREQUAL "Env" AND NOT DEFINED ENV{DKTOOL_ENV_URL_BASE})
             # alert: do not expose unsanitized user-supplied data
-            message(FATAL_ERROR "Problem: We want you to use the DKRUN_ENV_URL_BASE environment variable.\n\nSolution: DkSDK subscribers should contact their DkSDK Support representative.")
+            message(FATAL_ERROR "Problem: We want you to use the DKTOOL_ENV_URL_BASE environment variable.\n\nSolution: DkSDK subscribers should contact their DkSDK Support representative.")
         elseif(NOT __dkrun_compile_version)
             __dkcoder_error_wrong_version("")
         endif()

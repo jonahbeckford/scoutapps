@@ -9,33 +9,33 @@ let install_uv ~slots () =
   let uv_dir = uv_dir ~projectdir in
   let (_created : bool) = OS.Dir.create uv_dir |> Utils.rmsg in
   let checksum, tag, archive, uv_exe =
-    match Tr1HostMachine.abi with
-    | `windows_x86_64 ->
+    match DkCoder_Std.Context.(abi (get_exn ())) with
+    | `Windows_x86_64 ->
         ( "ee2468e40320a0a2a36435e66bbd0d861228c4c06767f22d97876528138f4ba0",
           "x86_64-pc-windows-msvc",
           `ZipWin32,
           "uv.exe" )
-    | `windows_x86 ->
+    | `Windows_x86 ->
         ( "2ea709cf816b70661c6aa43d6aff7526faebafc2d45f7167d3192c5b9bb0a28f",
           "i686-pc-windows-msvc",
           `ZipWin32,
           "uv.exe" )
-    | `darwin_arm64 ->
+    | `Darwin_arm64 ->
         ( "d548dffc256014c4c8c693e148140a3a21bcc2bf066a35e1d5f0d24c91d32112",
           "aarch64-apple-darwin",
           `TarGz,
           "uv" )
-    | `darwin_x86_64 ->
+    | `Darwin_x86_64 ->
         ( "8caf91b936ede1167abaebae07c2a1cbb22473355fa0ad7ebb2580307e84fb47",
           "x86_64-apple-darwin",
           `TarGz,
           "uv" )
-    | `linux_x86_64 ->
+    | `Linux_x86_64 ->
         ( "22034760075b92487b326da5aa1a2a3e1917e2e766c12c0fd466fccda77013c7",
           "x86_64-unknown-linux-gnu",
           `TarGz,
           "uv" )
-    | `linux_x86 ->
+    | `Linux_x86 ->
         ( "74fd05a1e04bb8c591cb4531d517848d1e2cdc05762ccd291429c165e2a19aa1",
           "i686-unknown-linux-gnu",
           `TarGz,
@@ -53,7 +53,7 @@ let install_uv ~slots () =
   else begin
     (* https://github.com/Kitware/CMake/releases/download/v3.30.0-rc4/cmake-3.30.0-rc4-windows-x86_64.zip *)
     Lwt_main.run
-    @@ DkNet_Std.Http.download_uri ~max_time_ms:300_000
+    @@ DkNet_Std.Http.download_url ~max_time_ms:300_000
          ~checksum:(`SHA_256 checksum) ~destination:uv_archive
          (Uri.of_string
             (Printf.sprintf
@@ -106,6 +106,6 @@ let run ~slots () =
   let slots = install_uv ~slots () in
   install_python ~slots ()
 
-let __init () =
+let __init (_ : DkCoder_Std.Context.t) =
   let (_ : Slots.t) = run ~slots:(Slots.create ()) () in
   ()

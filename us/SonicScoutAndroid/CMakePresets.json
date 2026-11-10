@@ -21,6 +21,7 @@
       "binaryDir": "build_PRESET",
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Release",
+        "DKSDK_GENERATOR": "DKCODER",
         "DKSDK_GOLDEN_SOURCE_CODE": "ON",
         "FETCHCONTENT_SOURCE_DIR_DKSDK-ACCESS": {
           "type": "FILEPATH",
@@ -56,7 +57,6 @@
       "name": "ci-host-windows_x86",
       "hidden": true,
       "cacheVariables": {
-        "CMAKE_MAKE_PROGRAM": "${sourceDir}/.ci/ninja/bin/ninja",
         "DKSDK_HOST_IMPRECISE_C99_FLOAT": "ON",
         "DKSDK_HOST_IMPRECISE_C99_FLOAT_REASON": "Required for Release config of MSVC 14.26.28801"
       },
@@ -71,7 +71,6 @@
     {
       "name": "ci-target-windows_x86",
       "hidden": true,
-      "generator": "Ninja",
       "architecture": {
         "value": "x86",
         "strategy": "external"
@@ -81,7 +80,6 @@
       "name": "ci-host-windows_x86_64",
       "hidden": true,
       "cacheVariables": {
-        "CMAKE_MAKE_PROGRAM": "${sourceDir}/.ci/ninja/bin/ninja",
         "DKSDK_HOST_IMPRECISE_C99_FLOAT": "ON",
         "DKSDK_HOST_IMPRECISE_C99_FLOAT_REASON": "Required for Release config of MSVC 14.26.28801"
       },
@@ -96,7 +94,6 @@
     {
       "name": "ci-target-windows_x86_64",
       "hidden": true,
-      "generator": "Ninja",
       "architecture": {
         "value": "x64",
         "strategy": "external"

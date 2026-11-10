@@ -1,0 +1,75 @@
+<UserControl
+    x:Class="ScoutApp.Views.PostMatchView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cvt="using:ScoutApp.Converter"
+    xmlns:vm="using:ScoutApp.ViewModels"
+    x:DataType="vm:PostMatchViewModel">
+
+    <UserControl.Resources>
+        <cvt:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <cvt:EnumMemberValueConverter x:Key="EnumMemberValueConverter" />
+
+        <SolidColorBrush x:Key="black" Color="#000000" />
+        <SolidColorBrush x:Key="text" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="background" Color="#3D3D3D" />
+        <SolidColorBrush x:Key="accent" Color="#F36716" />
+        <SolidColorBrush x:Key="lightgrey" Color="#C2C4C3" />
+        <SolidColorBrush x:Key="offwhite" Color="#D1CAC3" />
+        <SolidColorBrush x:Key="darkgrey" Color="#4D4D4D" />
+        <SolidColorBrush x:Key="orange" Color="#FF5722" />
+        <SolidColorBrush x:Key="thirdbutton" Color="#DED6CE" />
+        <SolidColorBrush x:Key="secondary" Color="#0D6EFD" />
+        <SolidColorBrush x:Key="error" Color="#F2110C" />
+        <SolidColorBrush x:Key="green" Color="#1FA659" />
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+
+        <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
+
+            <Button
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Background="{StaticResource darkgrey}"
+                Command="{Binding ToggleSummaryCommand}"
+                Content="SUMMARY"
+                FontSize="{Binding TextSize}"
+                FontWeight="Bold"
+                Foreground="{StaticResource accent}" />
+            <TextBlock
+                Margin="0,10,0,0"
+                FontSize="{Binding TextSize}"
+                IsVisible="{Binding ShowSummary}"
+                Text="{Binding Summary}" />
+            <TextBlock
+                Margin="0,32,0,0"
+                HorizontalAlignment="Center"
+                FontSize="{Binding TextSize}"
+                FontWeight="Bold"
+                Foreground="{StaticResource error}"
+                IsVisible="{Binding MissingFields, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                Text="{Binding MissingFields}" />
+            <Image
+                Width="500"
+                Height="500"
+                Margin="0,32,0,0"
+                Source="{Binding QRCode1}"
+                Stretch="Fill" />
+            <Button
+                Width="500"
+                Margin="0,32,0,0"
+                HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                Background="{StaticResource darkgrey}"
+                Command="{Binding NextMatchCommand}"
+                Content="NEXT MATCH"
+                FontSize="{Binding HeadingsTextSize}"
+                FontWeight="Bold"
+                Foreground="{StaticResource accent}" />
+
+        </StackPanel>
+
+    </ScrollViewer>
+
+</UserControl>

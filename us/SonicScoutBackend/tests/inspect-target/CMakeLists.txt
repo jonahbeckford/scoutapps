@@ -33,9 +33,9 @@ if(DKSDK_EXECUTABLE_FILE)
     endif()
 
     if(test1_pass_regex)
-        set(test1 "${PROJECT_NAME}. GIVEN main-cli WHEN inspect with 'file' THEN get architecture")
+        set(test1 "${PROJECT_NAME}. GIVEN sonic-scout-cli WHEN inspect with 'file' THEN get architecture")
         add_test(NAME ${test1}
-            COMMAND ${DKSDK_EXECUTABLE_FILE} $<TARGET_FILE:main-cli>)
+            COMMAND ${DKSDK_EXECUTABLE_FILE} $<TARGET_FILE:sonic-scout-cli>)
         set_tests_properties(${test1} PROPERTIES
             PASS_REGULAR_EXPRESSION "${test1_pass_regex}"
             ENVIRONMENT "TEST_FILE=${CMAKE_CURRENT_LIST_FILE};TEST_LINE=${CMAKE_CURRENT_LIST_LINE}")

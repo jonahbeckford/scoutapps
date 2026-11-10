@@ -1,0 +1,766 @@
+<UserControl
+    x:Class="ScoutApp.Views.MainView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cvt="using:ScoutApp.Converter"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:ScoutApp.Views"
+    xmlns:vm="using:ScoutApp.ViewModels"
+    d:DesignHeight="1000"
+    d:DesignWidth="750"
+    x:DataType="vm:MainViewModel">
+
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <cvt:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <cvt:EnumMemberValueConverter x:Key="EnumMemberValueConverter" />
+
+        <SolidColorBrush x:Key="black" Color="#000000" />
+        <SolidColorBrush x:Key="text" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="background" Color="#3D3D3D" />
+        <SolidColorBrush x:Key="accent" Color="#F36716" />
+        <SolidColorBrush x:Key="lightgrey" Color="#C2C4C3" />
+        <SolidColorBrush x:Key="offwhite" Color="#D1CAC3" />
+        <SolidColorBrush x:Key="darkgrey" Color="#4D4D4D" />
+        <SolidColorBrush x:Key="orange" Color="#FF5722" />
+        <SolidColorBrush x:Key="thirdbutton" Color="#DED6CE" />
+        <SolidColorBrush x:Key="secondary" Color="#0D6EFD" />
+        <SolidColorBrush x:Key="error" Color="#F2110C" />
+        <SolidColorBrush x:Key="green" Color="#1FA659" />
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="Button.heading">
+            <Setter Property="Foreground" Value="{StaticResource accent}" />
+            <Setter Property="Background" Value="{StaticResource darkgrey}" />
+        </Style>
+        <Style Selector="Button.active">
+            <Setter Property="Background" Value="{StaticResource secondary}" />
+            <Setter Property="Foreground" Value="{StaticResource text}" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+
+        <Grid
+            HorizontalAlignment="Left"
+            VerticalAlignment="Stretch"
+            Background="{StaticResource background}"
+            ColumnDefinitions="*,*"
+            RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="14,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Foreground="{StaticResource accent}"
+                Text="{Binding PreMatchVM.MatchNumber, StringFormat='Match {0}'}" />
+
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="0,0,14,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Foreground="{StaticResource accent}"
+                Text="{Binding PreMatchVM.TeamNumber, StringFormat='Team {0}'}" />
+
+            <!--  Heading Buttons  -->
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="14,0"
+                HorizontalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="14">
+
+                <Button
+                    Classes="heading"
+                    Classes.active="{Binding SelectedHeadingButton, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:HeadingButtons.PreMatch}}"
+                    Command="{Binding HeadingButtonCommand}"
+                    CommandParameter="{x:Static vm:HeadingButtons.PreMatch}"
+                    Content="PRE MATCH"
+                    FontSize="{Binding HeadingsTextSize}"
+                    FontWeight="Bold" />
+                <Button
+                    Classes="heading"
+                    Classes.active="{Binding SelectedHeadingButton, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:HeadingButtons.Auto}}"
+                    Command="{Binding HeadingButtonCommand}"
+                    CommandParameter="{x:Static vm:HeadingButtons.Auto}"
+                    Content="AUTO"
+                    FontSize="{Binding HeadingsTextSize}"
+                    FontWeight="Bold" />
+                <Button
+                    Classes="heading"
+                    Classes.active="{Binding SelectedHeadingButton, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:HeadingButtons.TeleOp}}"
+                    Command="{Binding HeadingButtonCommand}"
+                    CommandParameter="{x:Static vm:HeadingButtons.TeleOp}"
+                    Content="TELEOP"
+                    FontSize="{Binding HeadingsTextSize}"
+                    FontWeight="Bold" />
+                <Button
+                    Classes="heading"
+                    Classes.active="{Binding SelectedHeadingButton, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:HeadingButtons.PostMatch}}"
+                    Command="{Binding HeadingButtonCommand}"
+                    CommandParameter="{x:Static vm:HeadingButtons.PostMatch}"
+                    Content="POST MATCH"
+                    FontSize="{Binding HeadingsTextSize}"
+                    FontWeight="Bold" />
+
+            </StackPanel>
+
+            <!--  Pre-Match  -->
+            <UserControl
+                Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="0,32"
+                IsVisible="{Binding SelectedHeadingButton, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:HeadingButtons.PreMatch}}">
+                <local:PreMatchView DataContext="{Binding PreMatchVM}" />
+            </UserControl>
+
+            <!--  OLD Pre-Match
+                <StackPanel
+                    Margin="0,32"
+                    HorizontalAlignment="Center"
+                    IsVisible="{Binding SelectedHeadingButton, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:HeadingButtons.PreMatch}}"
+                    Orientation="Vertical">
+
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="{Binding TextSize}"
+                        FontWeight="Bold">
+                        SCOUT NAME:
+                    </TextBlock>
+                    <ComboBox
+                        Width="225"
+                        Margin="0,10,0,50"
+                        HorizontalAlignment="Center"
+                        ItemsSource="{Binding ScoutNames}"
+                        SelectedItem="{Binding ScoutName}" />
+
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="{Binding TextSize}"
+                        FontWeight="Bold">
+                        MATCH NUMBER:
+                    </TextBlock>
+                    <NumericUpDown
+                        Margin="0,10,0,50"
+                        HorizontalAlignment="Center"
+                        FormatString="0"
+                        Minimum="0"
+                        Value="{Binding MatchNumber}" />
+
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="{Binding TextSize}"
+                        FontWeight="Bold">
+                        TEAM NUMBER:
+                    </TextBlock>
+                    <NumericUpDown
+                        Margin="0,10,0,50"
+                        HorizontalAlignment="Center"
+                        FormatString="0"
+                        Minimum="0"
+                        Value="{Binding TeamNumber}" />
+
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="{Binding TextSize}"
+                        FontWeight="Bold">
+                        ALLIANCE POSITION:
+                    </TextBlock>
+                    <ComboBox
+                        Width="225"
+                        Margin="0,10,0,0"
+                        SelectedItem="{Binding SelectedAlliancePosition, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Converter={StaticResource EnumMemberValueConverter}}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                        <ComboBox.Items>
+                            <x:Static Member="vm:AlliancePosition.Red1" />
+                            <x:Static Member="vm:AlliancePosition.Red2" />
+                            <x:Static Member="vm:AlliancePosition.Red3" />
+                            <x:Static Member="vm:AlliancePosition.Blue1" />
+                            <x:Static Member="vm:AlliancePosition.Blue2" />
+                            <x:Static Member="vm:AlliancePosition.Blue3" />
+                        </ComboBox.Items>
+                    </ComboBox>
+
+                </StackPanel>-->
+
+            <UserControl
+                Grid.Row="5"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="0,32"
+                IsVisible="{Binding SelectedHeadingButton, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:HeadingButtons.PostMatch}}">
+                <local:PostMatchView DataContext="{Binding PostMatchVM}" />
+            </UserControl>
+
+            <!--  Post-Match
+            <StackPanel
+                Grid.Row="5"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="0,32"
+                HorizontalAlignment="Center"
+                IsVisible="{Binding SelectedHeadingButton, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:HeadingButtons.PostMatch}}"
+                Orientation="Vertical">
+
+                <Button
+                    HorizontalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Background="{StaticResource darkgrey}"
+                    Command="{Binding ToggleSummaryCommand}"
+                    Content="SUMMARY"
+                    FontSize="{Binding TextSize}"
+                    FontWeight="Bold"
+                    Foreground="{StaticResource accent}" />
+                <TextBlock
+                    Margin="0,10,0,0"
+                    FontSize="{Binding TextSize}"
+                    IsVisible="{Binding ShowSummary}"
+                    Text="{Binding Summary}" />
+                <TextBlock
+                    Margin="0,32,0,0"
+                    HorizontalAlignment="Center"
+                    FontSize="{Binding TextSize}"
+                    FontWeight="Bold"
+                    Foreground="{StaticResource error}"
+                    IsVisible="{Binding MissingFields, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                    Text="{Binding MissingFields}" />
+                <Image
+                    Width="500"
+                    Height="500"
+                    Margin="0,32,0,0"
+                    Source="{Binding QRCode1}"
+                    Stretch="Fill" />
+                <Button
+                    Width="500"
+                    Margin="0,32,0,0"
+                    HorizontalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Background="{StaticResource darkgrey}"
+                    Command="{Binding NextMatchCommand}"
+                    Content="NEXT MATCH"
+                    FontSize="{Binding HeadingsTextSize}"
+                    FontWeight="Bold"
+                    Foreground="{StaticResource accent}" />
+
+            </StackPanel>-->
+
+            <!--  Auto  -->
+            <UserControl
+                Grid.Row="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="0,32"
+                IsVisible="{Binding SelectedHeadingButton, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:HeadingButtons.Auto}}">
+                <local:AutoView DataContext="{Binding AutoVM}" />
+            </UserControl>
+
+            <!--  OLD Auto
+                <StackPanel
+                    Margin="0,0,0,32"
+                    HorizontalAlignment="Center"
+                    IsVisible="{Binding SelectedHeadingButton, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:HeadingButtons.Auto}}">
+
+                    <StackPanel
+                        Margin="0,32,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Height="32"
+                            Margin="0,0,20,0"
+                            FontSize="{Binding TextSize}"
+                            FontWeight="Bold">
+                            STARTING POSITION:
+                        </TextBlock>
+                        <ComboBox Width="225" SelectedItem="{Binding StartingPosition, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumMemberValueConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <ComboBox.Items>
+                                <x:Static Member="vm:AutoStartingPosition.LeftTrench" />
+                                <x:Static Member="vm:AutoStartingPosition.LeftBump" />
+                                <x:Static Member="vm:AutoStartingPosition.Center" />
+                                <x:Static Member="vm:AutoStartingPosition.RightBump" />
+                                <x:Static Member="vm:AutoStartingPosition.RightTrench" />
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel
+                        Margin="0,32,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Height="32"
+                            Margin="0,0,20,0"
+                            FontSize="{Binding TextSize}"
+                            FontWeight="Bold">
+                            AUTO MOVE:
+                        </TextBlock>
+                        <CheckBox
+                            Height="32"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            IsChecked="{Binding AutoMove}" />
+                    </StackPanel>
+
+                    <StackPanel
+                        Margin="0,32,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+
+                        <StackPanel Orientation="Vertical">
+                            <RepeatButton
+                                Width="200"
+                                Height="200"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Background="{StaticResource darkgrey}"
+                                Command="{Binding AutoMissedUpCommand}"
+                                Content="+"
+                                Delay="150"
+                                FontSize="40"
+                                Foreground="{StaticResource accent}"
+                                Interval="75" />
+                            <TextBlock
+                                Margin="0,10"
+                                HorizontalAlignment="Center"
+                                FontSize="{Binding TextSize}"
+                                FontWeight="Bold"
+                                Text="{Binding AutoFuelMissed, StringFormat='MISSED: {0}'}" />
+                            <RepeatButton
+                                Width="200"
+                                Height="200"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Background="{StaticResource darkgrey}"
+                                Command="{Binding AutoMissedDownCommand}"
+                                Content="-"
+                                Delay="150"
+                                FontSize="40"
+                                Foreground="{StaticResource accent}"
+                                Interval="75" />
+                        </StackPanel>
+
+                        <TextBlock
+                            Height="32"
+                            Margin="60,0,60,0"
+                            FontSize="{Binding TextSize}"
+                            FontWeight="Bold">
+                            FUEL
+                        </TextBlock>
+
+                        <StackPanel Orientation="Vertical">
+                            <RepeatButton
+                                Width="200"
+                                Height="200"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Background="{StaticResource darkgrey}"
+                                Command="{Binding AutoScoredUpCommand}"
+                                Content="+"
+                                Delay="150"
+                                FontSize="40"
+                                Foreground="{StaticResource accent}"
+                                Interval="75" />
+                            <TextBlock
+                                Margin="0,10"
+                                HorizontalAlignment="Center"
+                                FontSize="{Binding TextSize}"
+                                FontWeight="Bold"
+                                Text="{Binding AutoFuelScored, StringFormat='SCORED: {0}'}" />
+                            <RepeatButton
+                                Width="200"
+                                Height="200"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Background="{StaticResource darkgrey}"
+                                Command="{Binding AutoScoredDownCommand}"
+                                Content="-"
+                                Delay="150"
+                                FontSize="40"
+                                Foreground="{StaticResource accent}"
+                                Interval="75" />
+                        </StackPanel>
+
+                    </StackPanel>
+
+                    <StackPanel
+                        Margin="0,32,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+
+                        <TextBlock
+                            Height="32"
+                            Margin="0,0,20,0"
+                            FontSize="{Binding TextSize}"
+                            FontWeight="Bold">
+                            OBSTACLES USED:
+                        </TextBlock>
+
+                        <CheckBox
+                            Margin="0,0,20,0"
+                            Content="Bump"
+                            FontSize="{Binding TextSize}"
+                            IsChecked="{Binding AutoBump}" />
+
+                        <CheckBox
+                            Content="Trench"
+                            FontSize="{Binding TextSize}"
+                            IsChecked="{Binding AutoTrench}" />
+
+                    </StackPanel>
+
+                    <StackPanel
+                        Margin="0,32,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+
+                        <TextBlock
+                            Height="32"
+                            Margin="0,0,20,0"
+                            FontSize="{Binding TextSize}"
+                            FontWeight="Bold">
+                            INTAKE FROM:
+                        </TextBlock>
+
+                        <CheckBox
+                            Margin="0,0,20,0"
+                            Content="Depot"
+                            FontSize="{Binding TextSize}"
+                            IsChecked="{Binding AutoIntakeDepot}" />
+
+                        <CheckBox
+                            Margin="0,0,20,0"
+                            Content="Outpost"
+                            FontSize="{Binding TextSize}"
+                            IsChecked="{Binding AutoIntakeOutpost}" />
+
+                        <CheckBox
+                            Content="Neutral Zone"
+                            FontSize="{Binding TextSize}"
+                            IsChecked="{Binding AutoIntakeNeutralZone}" />
+
+                    </StackPanel>
+
+                    <StackPanel
+                        Margin="0,32,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+
+                        <TextBlock
+                            Height="32"
+                            Margin="0,0,20,0"
+                            FontSize="{Binding TextSize}"
+                            FontWeight="Bold">
+                            AUTO CLIMB:
+                        </TextBlock>
+                        <ComboBox Width="225" SelectedItem="{Binding AutoClimb, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumMemberValueConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <ComboBox.Items>
+                                <x:Static Member="vm:Climb2026.Level1" />
+                                <x:Static Member="vm:Climb2026.Failed" />
+                                <x:Static Member="vm:Climb2026.DidNotAttempt" />
+                            </ComboBox.Items>
+                        </ComboBox>
+
+                    </StackPanel>
+
+                </StackPanel>-->
+
+            <!--  Teleop  -->
+            <UserControl
+                Grid.Row="4"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="0,32"
+                IsVisible="{Binding SelectedHeadingButton, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:HeadingButtons.TeleOp}}">
+                <local:TeleopView DataContext="{Binding TeleopVM}" />
+            </UserControl>
+
+            <!--  TeleOp
+                <StackPanel
+                    Margin="0,0,0,32"
+                    HorizontalAlignment="Center"
+                    IsVisible="{Binding SelectedHeadingButton, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter={x:Static vm:HeadingButtons.TeleOp}}">
+
+                    <StackPanel
+                        Margin="0,32,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+
+                        <StackPanel Orientation="Vertical">
+                            <RepeatButton
+                                Width="200"
+                                Height="200"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Background="{StaticResource darkgrey}"
+                                Command="{Binding TeleOpMissedUpCommand}"
+                                Content="+"
+                                Delay="150"
+                                FontSize="40"
+                                Foreground="{StaticResource accent}"
+                                Interval="75" />
+                            <TextBlock
+                                Margin="0,10"
+                                HorizontalAlignment="Center"
+                                FontSize="{Binding TextSize}"
+                                FontWeight="Bold"
+                                Text="{Binding TeleOpFuelMissed, StringFormat='MISSED: {0}'}" />
+                            <RepeatButton
+                                Width="200"
+                                Height="200"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Background="{StaticResource darkgrey}"
+                                Command="{Binding TeleOpMissedDownCommand}"
+                                Content="-"
+                                Delay="150"
+                                FontSize="40"
+                                Foreground="{StaticResource accent}"
+                                Interval="75" />
+                        </StackPanel>
+
+                        <TextBlock
+                            Height="32"
+                            Margin="60,0,60,0"
+                            FontSize="{Binding TextSize}"
+                            FontWeight="Bold">
+                            FUEL
+                        </TextBlock>
+
+                        <StackPanel Orientation="Vertical">
+                            <RepeatButton
+                                Width="200"
+                                Height="200"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Background="{StaticResource darkgrey}"
+                                Command="{Binding TeleOpScoredUpCommand}"
+                                Content="+"
+                                Delay="150"
+                                FontSize="40"
+                                Foreground="{StaticResource accent}"
+                                Interval="75" />
+                            <TextBlock
+                                Margin="0,10"
+                                HorizontalAlignment="Center"
+                                FontSize="{Binding TextSize}"
+                                FontWeight="Bold"
+                                Text="{Binding TeleOpFuelScored, StringFormat='SCORED: {0}'}" />
+                            <RepeatButton
+                                Width="200"
+                                Height="200"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                Background="{StaticResource darkgrey}"
+                                Command="{Binding TeleOpScoredDownCommand}"
+                                Content="-"
+                                Delay="150"
+                                FontSize="40"
+                                Foreground="{StaticResource accent}"
+                                Interval="75" />
+                        </StackPanel>
+
+                    </StackPanel>
+
+                    <StackPanel
+                        Margin="0,32,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+
+                        <TextBlock
+                            Height="32"
+                            Margin="0,0,20,0"
+                            FontSize="{Binding TextSize}"
+                            FontWeight="Bold">
+                            OBSTACLES USED:
+                        </TextBlock>
+
+                        <CheckBox
+                            Margin="0,0,20,0"
+                            Content="Bump"
+                            FontSize="{Binding TextSize}"
+                            IsChecked="{Binding TeleOpBump}" />
+
+                        <CheckBox
+                            Content="Trench"
+                            FontSize="{Binding TextSize}"
+                            IsChecked="{Binding TeleOpTrench}" />
+
+                    </StackPanel>
+
+                    <StackPanel
+                        Margin="0,32,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+
+                        <TextBlock
+                            Height="32"
+                            Margin="0,0,20,0"
+                            FontSize="{Binding TextSize}"
+                            FontWeight="Bold">
+                            INTAKE FROM:
+                        </TextBlock>
+
+                        <CheckBox
+                            Margin="0,0,20,0"
+                            Content="Depot"
+                            FontSize="{Binding TextSize}"
+                            IsChecked="{Binding TeleOpIntakeDepot}" />
+
+                        <CheckBox
+                            Margin="0,0,20,0"
+                            Content="Outpost"
+                            FontSize="{Binding TextSize}"
+                            IsChecked="{Binding TeleOpIntakeOutpost}" />
+
+                        <CheckBox
+                            Content="Neutral Zone"
+                            FontSize="{Binding TextSize}"
+                            IsChecked="{Binding TeleOpIntakeNeutralZone}" />
+
+                    </StackPanel>
+
+                    <StackPanel
+                        Margin="0,32,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Height="32"
+                            Margin="0,0,20,0"
+                            FontSize="{Binding TextSize}"
+                            FontWeight="Bold">
+                            CLIMB:
+                        </TextBlock>
+                        <ComboBox Width="225" SelectedItem="{Binding TeleOpClimb, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumMemberValueConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <ComboBox.Items>
+                                <x:Static Member="vm:Climb2026.Level1" />
+                                <x:Static Member="vm:Climb2026.Level2" />
+                                <x:Static Member="vm:Climb2026.Level3" />
+                                <x:Static Member="vm:Climb2026.Failed" />
+                                <x:Static Member="vm:Climb2026.DidNotAttempt" />
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel
+                        Margin="0,32,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Height="32"
+                            Margin="0,0,20,0"
+                            FontSize="{Binding TextSize}"
+                            FontWeight="Bold"
+                            IsVisible="{Binding ShowClimbTimes}">
+                            CLIMB TIME:
+                        </TextBlock>
+                        <ComboBox
+                            Width="225"
+                            IsVisible="{Binding ShowClimbTimes}"
+                            SelectedItem="{Binding TeleOpClimbTime, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumMemberValueConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <ComboBox.Items>
+                                <x:Static Member="vm:ClimbTimes._0to10Seconds" />
+                                <x:Static Member="vm:ClimbTimes._10to20Seconds" />
+                                <x:Static Member="vm:ClimbTimes._20to30Seconds" />
+                                <x:Static Member="vm:ClimbTimes._30PlusSeconds" />
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </StackPanel>
+
+                    <StackPanel
+                        Margin="0,32,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Height="32"
+                            Margin="0,0,20,0"
+                            FontSize="{Binding TextSize}"
+                            FontWeight="Bold">
+                            BREAKDOWN:
+                        </TextBlock>
+                        <ComboBox Width="225" SelectedItem="{Binding Breakdown, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumMemberValueConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <ComboBox.Items>
+                                <x:Static Member="vm:Breakdown2026.None" />
+                                <x:Static Member="vm:Breakdown2026.Tipped" />
+                                <x:Static Member="vm:Breakdown2026.MechanicalFailure" />
+                                <x:Static Member="vm:Breakdown2026.ConnectionFailure" />
+                                <x:Static Member="vm:Breakdown2026.Disabled" />
+                                <x:Static Member="vm:Breakdown2026.BeachedOnFuel" />
+                                <x:Static Member="vm:Breakdown2026.StuckOnBump" />
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel
+                        Margin="0,32,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                        <TextBlock
+                            Height="32"
+                            Margin="0,0,20,0"
+                            FontSize="{Binding TextSize}"
+                            FontWeight="Bold"
+                            IsVisible="{Binding ShowBreakdownTimes}">
+                            BREAKDOWN TIME:
+                        </TextBlock>
+                        <ComboBox
+                            Width="225"
+                            IsVisible="{Binding ShowBreakdownTimes}"
+                            SelectedItem="{Binding BreakdownTime, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource EnumMemberValueConverter}}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                            <ComboBox.Items>
+                                <x:Static Member="vm:BreakdownTimes._0to15Seconds" />
+                                <x:Static Member="vm:BreakdownTimes._15to30Seconds" />
+                                <x:Static Member="vm:BreakdownTimes._30PlusSeconds" />
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </StackPanel>
+
+                </StackPanel>-->
+
+        </Grid>
+
+    </ScrollViewer>
+
+</UserControl>

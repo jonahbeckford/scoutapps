@@ -1,3 +1,5 @@
+let prerr_endline = Tr1Stdlib_V414Io.StdIo.prerr_endline
+
 let do_setup_log style_renderer level =
   Fmt_tty.setup_std_outputs ?style_renderer ();
   Logs.set_level level;
@@ -212,7 +214,6 @@ let main () =
     ]
   in
 
-  (* let default =  Cmdliner.Term.(ret (const (fun _ -> `Help (`Pager, None)) *)
   exit (Cmdliner.Cmd.eval (Cmdliner.Cmd.group info cmds))
 
 let () = main ()

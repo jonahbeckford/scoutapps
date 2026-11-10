@@ -14,7 +14,7 @@
 
         <!-- Cards to make the design look nice -->
         <View
-            android:id="@+id/view"
+            android:id="@+id/headerView"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_39sdp"
             android:layout_marginStart="@dimen/_6sdp"
@@ -27,13 +27,13 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
-            android:id="@+id/view2"
+            android:id="@+id/bodyView"
             android:layout_width="wrap_content"
             android:layout_height="1100dp"
             android:layout_marginTop="@dimen/_73sdp"
             android:background="@drawable/rounded_rectangle"
             android:backgroundTint="@color/secondary"
-            app:layout_anchor="@+id/linearLayout2"
+            app:layout_anchor="@+id/autoCoralL1Layout"
             app:layout_anchorGravity="bottom|center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,10 +44,10 @@
             android:layout_width="@dimen/_269sdp"
             android:layout_height="@dimen/_150sdp"
             android:layout_marginStart="@dimen/_15sdp"
-            android:layout_marginEnd="@dimen/_14sdp"
-            android:layout_marginTop="@dimen/_109sdp"
+            android:layout_marginTop="276dp"
             android:background="@drawable/rounded_rectangle_subtle"
             android:backgroundTint="@color/offwhite"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -59,6 +59,7 @@
             android:layout_marginTop="@dimen/_320sdp"
             android:background="@drawable/round_rectangle_2"
             android:backgroundTint="@color/offwhite"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,10 +67,11 @@
             android:id="@+id/view10"
             android:layout_width="@dimen/_270sdp"
             android:layout_height="@dimen/_50sdp"
-            android:layout_marginStart="@dimen/_14sdp"
-            android:layout_marginTop="@dimen/_265sdp"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="296dp"
             android:background="@drawable/round_rectangle_2"
             android:backgroundTint="@color/offwhite"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -129,21 +131,815 @@
             android:textColor="@color/accent"
             android:textSize="@dimen/_20ssp"
             android:textStyle="bold"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/fieldImageView"
             android:layout_width="@dimen/_260sdp"
             android:layout_height="@dimen/_140sdp"
             android:scaleType="centerCrop"
             android:src="@drawable/new_field"
             android:translationX="@dimen/_19sdp"
             android:translationY="@dimen/_115sdp"
-            android:layout_marginTop="@dimen/_100sdp"/>
+            android:visibility="gone"
+            tools:layout_editor_absoluteX="46dp"
+            tools:layout_editor_absoluteY="276dp" />
 
         <!-- range Layout -->
+
+        <LinearLayout
+            android:id="@+id/teleOpCoralLevelsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="80dp"
+            android:orientation="vertical"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
+            app:layout_constraintTop_toTopOf="@+id/bodyView"
+            app:layout_constraintVertical_bias="0.819"
+            tools:layout_editor_absoluteX="46dp"><![CDATA[>
+
+            ]]>
+
+            <LinearLayout
+                android:id="@+id/teleOpCoralL4Layout"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_29sdp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="@dimen/_29sdp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/teleOpL4Label"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="L4"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/teleOpCoralL4Score"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="@dimen/_29sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="5dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="0"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL4ScoreIncrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="+"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL4ScoreDecrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="-"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!--                misses-->
+                <TextView
+                    android:id="@+id/teleOpCoralL4Miss"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="@dimen/_29sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="0"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL4MissIncrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="+"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL4MissDecrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="-"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/autoCoralL3Layout"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_29sdp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="@dimen/_29sdp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/L3Label"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="L3"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/teleOpCoralL3Score"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="@dimen/_29sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="5dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="0"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL3ScoreIncrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="+"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL3ScoreDecrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="-"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/teleOpCoralL3Miss"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="@dimen/_29sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="0"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL3MissIncrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="+"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL3MissDecrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="-"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/teleOpCoralL2Layout"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_29sdp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="@dimen/_29sdp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/teleOpL2Label"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="L2"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/teleOpCoralL2Score"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="@dimen/_29sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="5dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="0"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL2ScoreIncrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="+"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL2ScoreDecrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="-"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/teleOpCoralL2Miss"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="@dimen/_29sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="0"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL2MissIncrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="+"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL2MissDecrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="-"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/teleOpCoralL1Layout"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_29sdp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="@dimen/_29sdp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/teleOpL1Label"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="L1"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/teleOpCoralL1Score"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="@dimen/_29sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="5dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="0"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL1ScoreIncrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="+"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL1ScoreDecrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="-"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/teleOpCoralL1Miss"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="@dimen/_29sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="0"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL1MissIncrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="+"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpCoralL1MissDecrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="-"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/teleOpProcessorLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_29sdp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/teleOpProcessorLabel"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="Pro"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/teleOpProcessorScore"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="@dimen/_29sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="5dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="0"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpProcessorScoreIncrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="+"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpProcessorScoreDecrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="-"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/teleOpProcessorMiss"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="@dimen/_29sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="0"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpProcessorMissIncrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="+"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpProcessorMissDecrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="-"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/teleOpNetLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/_29sdp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <TextView
+                    android:id="@+id/teleOpNetLabel"
+                    android:layout_width="80dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="Net"
+                    android:textAllCaps="false"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/teleOpNetScore"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="@dimen/_29sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="5dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="0"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpNetScoreIncrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="+"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpNetScoreDecrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="-"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/teleOpNetMiss"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="@dimen/_29sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginLeft="15dp"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:inputType="none"
+                    android:text="0"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpNetMissIncrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    android:layout_marginEnd="@dimen/_2sdp"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="+"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/teleOpNetMissDecrement"
+                    android:layout_width="@dimen/_29sdp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@drawable/rounded_rectangle_subtle"
+                    android:backgroundTint="@color/background"
+                    android:text="-"
+                    android:textColor="@color/accent"
+                    android:textSize="@dimen/_15ssp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+            </LinearLayout>
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/linearLayout21"
             android:layout_width="match_parent"
@@ -152,6 +948,7 @@
             android:layout_marginTop="@dimen/_275sdp"
             android:layout_marginEnd="@dimen/_29sdp"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -176,14 +973,14 @@
                 android:layout_width="@dimen/_36sdp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
+                android:gravity="center"
                 android:inputType="none"
                 android:text="Close"
+                android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12ssp"
                 android:textStyle="bold"
-                android:textAlignment="center"
-                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -192,26 +989,26 @@
                 android:id="@+id/checkBox"
                 android:layout_width="@dimen/_21sdp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="-15dp"
-                android:gravity="center"
                 android:layout_gravity="center"
+                android:layout_marginStart="-15dp"
                 android:button="@null"
-                android:drawableRight="@drawable/checkbox"/>
+                android:drawableRight="@drawable/checkbox"
+                android:gravity="center" />
 
             <TextView
                 android:id="@+id/WingRange"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/_5sdp"
                 android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:gravity="center"
                 android:inputType="none"
                 android:text="Wing"
+                android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12ssp"
                 android:textStyle="bold"
-                android:textAlignment="center"
-                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -220,26 +1017,26 @@
                 android:id="@+id/checkBox1"
                 android:layout_width="@dimen/_21sdp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="-13dp"
-                android:gravity="center"
                 android:layout_gravity="center"
+                android:layout_marginStart="-13dp"
                 android:button="@null"
-                android:drawableRight="@drawable/checkbox"/>
+                android:drawableRight="@drawable/checkbox"
+                android:gravity="center" />
 
             <TextView
                 android:id="@+id/CenterRange"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
-                android:inputType="none"
                 android:layout_marginStart="@dimen/_5sdp"
+                android:gravity="center"
+                android:inputType="none"
                 android:text="Center"
+                android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_12ssp"
                 android:textStyle="bold"
-                android:textAlignment="center"
-                android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -248,11 +1045,11 @@
                 android:id="@+id/checkBox2"
                 android:layout_width="@dimen/_21sdp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="-13dp"
-                android:gravity="center"
                 android:layout_gravity="center"
+                android:layout_marginStart="-13dp"
                 android:button="@null"
-                android:drawableRight="@drawable/checkbox"/>
+                android:drawableRight="@drawable/checkbox"
+                android:gravity="center" />
         </LinearLayout>
 
         <!-- Amp Scoring  -->
@@ -262,7 +1059,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/_355sdp"
-            android:translationX="-233dp"
             android:inputType="none"
             android:rotation="-90"
             android:text="AMP"
@@ -271,23 +1067,26 @@
             android:textColor="@color/accent"
             android:textSize="@dimen/_20ssp"
             android:textStyle="bold"
+            android:translationX="-233dp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:id="@+id/linearLayout1"
+            android:id="@+id/autoCoralL4Layout"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_29sdp"
             android:layout_marginStart="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_335sdp"
             android:layout_marginEnd="@dimen/_29sdp"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/AmpScoredLabel"
+                android:id="@+id/L4Label"
                 android:layout_width="@dimen/_115sdp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
@@ -300,12 +1099,34 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
             <TextView
-                android:id="@+id/AmpScoredCounter"
+                android:id="@+id/teleOpCoralL4Score"
+                android:layout_width="@dimen/_115sdp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/_6sdp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:inputType="none"
+                android:text="SCORED"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_15ssp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/teleOpCoralL4Miss"
                 android:layout_width="@dimen/_29sdp"
                 android:layout_height="@dimen/_29sdp"
                 android:layout_alignParentEnd="true"
@@ -322,7 +1143,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/Amp_Score_Increment"
+                android:id="@+id/teleOpCoralL4ScoreIncrement"
                 android:layout_width="@dimen/_29sdp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/_10sdp"
@@ -338,7 +1159,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/Amp_Score_Decrement"
+                android:id="@+id/teleOpCoralL4ScoreDecrement"
                 android:layout_width="@dimen/_29sdp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
@@ -354,20 +1175,22 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </LinearLayout>
+
         <LinearLayout
-            android:id="@+id/linearLayout2"
+            android:id="@+id/autoCoralL1Layout"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_29sdp"
             android:layout_marginStart="@dimen/_40sdp"
             android:layout_marginTop="@dimen/_375sdp"
             android:layout_marginEnd="@dimen/_29sdp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/AmpMissedLabel"
+                android:id="@+id/L1Label"
                 android:layout_width="@dimen/_115sdp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
@@ -380,6 +1203,7 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -397,9 +1221,9 @@
                 android:textColor="@color/black"
                 android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/Amp_Missed_Increment"
@@ -413,9 +1237,9 @@
                 android:textColor="@color/accent"
                 android:textSize="@dimen/_15ssp"
                 app:backgroundTint="@null"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/Amp_Missed_Decrement"
@@ -429,9 +1253,9 @@
                 android:textSize="@dimen/_15ssp"
                 android:textStyle="bold"
                 app:backgroundTint="@null"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
 
         <!-- Robot Breakdown Layout -->
@@ -443,6 +1267,7 @@
             android:layout_marginTop="@dimen/_430sdp"
             android:layout_marginEnd="@dimen/_29sdp"
             android:orientation="horizontal"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -459,7 +1284,7 @@
                 android:textStyle="bold" />
 
             <AutoCompleteTextView
-                android:id="@+id/dropdown"
+                android:id="@+id/breakdownDropdown"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_29sdp"
                 android:layout_marginStart="5dp"
@@ -481,6 +1306,7 @@
             android:layout_marginTop="@dimen/_470sdp"
             android:layout_marginEnd="@dimen/_29sdp"
             android:orientation="horizontal"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -497,7 +1323,7 @@
                 android:textStyle="bold" />
 
             <AutoCompleteTextView
-                android:id="@+id/dropdown2"
+                android:id="@+id/climbDropdown"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_29sdp"
                 android:layout_marginStart="15dp"
@@ -511,6 +1337,8 @@
         </LinearLayout>
 
         <!-- Trap Layout -->
+
+        <!-- Next Page Button -->
         <LinearLayout
             android:id="@+id/linearLayout9"
             android:layout_width="match_parent"
@@ -519,6 +1347,7 @@
             android:layout_marginTop="1050dp"
             android:layout_marginEnd="@dimen/_29sdp"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -571,7 +1400,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
 
-        <!-- Next Page Button -->
         <Button
             android:id="@+id/NEXT"
             android:layout_width="match_parent"
@@ -597,6 +1425,42 @@
             android:gravity="center"
             android:text=""
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/teleOpScoredTitle"
+            android:layout_width="@dimen/_106sdp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="148dp"
+            android:gravity="center"
+            android:inputType="none"
+            android:text="SCORED :"
+            android:textAllCaps="false"
+            android:textColor="@color/accent"
+            android:textSize="@dimen/_20ssp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.38"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/teleOpMissTitle"
+            android:layout_width="@dimen/_106sdp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="148dp"
+            android:gravity="center"
+            android:inputType="none"
+            android:text="MISS :"
+            android:textAllCaps="false"
+            android:textColor="@color/accent"
+            android:textSize="@dimen/_20ssp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.912"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

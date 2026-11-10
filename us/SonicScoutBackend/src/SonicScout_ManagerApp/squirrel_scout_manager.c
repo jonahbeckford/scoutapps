@@ -5,10 +5,14 @@
 #include <caml/mlvalues.h>
 #include <caml/osdeps.h>
 #include <caml/threads.h>
+#include <dksdk_os/logger.h>
+#include <dksdk_os/mem.h>
 #include <squirrel_scout_manager/squirrel_scout_manager.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+
 
 static int cmp_twodash(SQUIRREL_SCOUT_MANAGER_portable_char *arg) {
 #ifdef _MSC_VER
@@ -20,6 +24,26 @@ static int cmp_twodash(SQUIRREL_SCOUT_MANAGER_portable_char *arg) {
 
 static char_os **caml_argv;
 static char **c_argv;
+
+// There are other configuration values present in later schemas, but
+// we just use the defaults.
+typedef enum {
+  dk_caml_config_schema_version0 = 0
+} dk_caml_config_schema_version;
+struct dk_caml_config {
+  dk_caml_config_schema_version config_schema_version;
+};
+
+// From [dksdk-cmake]/cmake/dkcoder/library.bytecode.in.c
+extern size_t dk_caml_startup_get_stack_size(const struct dk_caml_config *config);
+
+// From [dksdk-cmake]/cmake/dkcoder/library.bytecode.in.c
+extern void dk_caml_startup(const struct dk_caml_config *config,
+                            char_os **argv,
+                            struct dksdk_os_stack *stack);
+
+static struct dksdk_os_stack init_ocaml_stack = {0};
+static void *init_ocaml_stack_on_heap = NULL;
 
 void squirrel_scout_manager_init(int argc0, SQUIRREL_SCOUT_MANAGER_portable_char *argv0[],
                                  int *argc, char **argv[]) {
@@ -49,8 +73,22 @@ void squirrel_scout_manager_init(int argc0, SQUIRREL_SCOUT_MANAGER_portable_char
   }
   caml_argv[1 + i - argv0_start_ocaml_inc] = NULL;
 
+  /* Setup logging */
+  dksdk_os_logger_setLevel(LogLevel_INFO);
+  dksdk_os_logger_initConsoleLogger(stderr);
+
+  /* Setup configuration */
+  struct dk_caml_config config = {0};
+
+  /* Setup reserved stack space on the heap */
+  size_t stack_size = dk_caml_startup_get_stack_size(&config);
+  init_ocaml_stack_on_heap = malloc(
+          /* 8 for 64-bit alignment if needed */
+          stack_size + 8 + sizeof(struct dksdk_os_stack_alloc_header));
+  dksdk_os_stack_init(stack_size, init_ocaml_stack_on_heap, 0, &init_ocaml_stack);
+
   /* Run module initializers of OCaml and wait for them to finish */
-  caml_startup(caml_argv);
+  dk_caml_startup(&config, caml_argv, &init_ocaml_stack);
 
   /* Allow other threads, especially the Qt render thread, to grab
      the OCaml runtime lock and run OCaml code. */
@@ -88,6 +126,13 @@ void squirrel_scout_manager_destroy() {
 
   /* Release OCaml resources */
   caml_shutdown();
+
+  /* We have some data that may need to be freed from dk_caml_startup_code_exn() */
+  if (init_ocaml_stack_on_heap) {
+    dksdk_os_stack_free_all(&init_ocaml_stack);
+    free(init_ocaml_stack_on_heap);
+    init_ocaml_stack_on_heap = NULL;
+  }
 }
 
 void squirrel_scout_manager_consume_qr(

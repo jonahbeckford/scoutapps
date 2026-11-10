@@ -542,12 +542,12 @@
     {
       "name": "ci-main",
       "inherits": "ci-base-build",
-      "targets": ["main-cli", "DkSDKTest_Runtime"]
+      "targets": ["sonic-scout-cli", "DkSDKTest_Runtime"]
     },
     {
       "name": "ci-main-and-tests",
       "inherits": "ci-base-build",
-      "targets": ["main-cli", "DkSDKTest_UnitTests_ALL"]
+      "targets": ["sonic-scout-cli", "DkSDKTest_UnitTests_ALL"]
     },
     {
       "name": "ci-devtools",
@@ -557,13 +557,13 @@
     {
       "name": "dbg-main",
       "inherits": "dbg-base-build",
-      "targets": ["main-cli", "DkSDKTest_Runtime"]
+      "targets": ["sonic-scout-cli", "DkSDKTest_Runtime"]
     },
     {
       "name": "wsl2-linux_x86_64-main",
       "configurePreset": "wsl2-linux_x86_64-configure",
       "configuration": "Debug",
-      "targets": ["main-cli", "DkSDKTest_Runtime"]
+      "targets": ["sonic-scout-cli", "DkSDKTest_Runtime"]
     }
   ],
   "testPresets": [

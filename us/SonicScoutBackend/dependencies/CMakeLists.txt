@@ -24,6 +24,7 @@ get_property(dksdk-ffi-c_REPOSITORY GLOBAL PROPERTY DKSDK_FFI_C_REPOSITORY)
 # --- Fetch dksdk-ffi-c
 
 DkSDKFetchContent_DeclareSecondParty(NAME dksdk-ffi-c
+    ALLOW_OUTSIDE_SOURCE_TREE
     GIT_REPOSITORY "${dksdk-ffi-c_REPOSITORY}"
     GIT_TAG main)
 # MSVC Fatal error: Unsupported relocation kind 0003 for __GSHandlerCheck in _deps\dksdk-ffi-c-build\src\dksdk_ffi_c-StaticExports.lib(_deps\dksdk-ffi-c-build\src\CMakeFiles\dksdk_ffi_c-StaticExports.dir\sha256.c.obj)
@@ -112,34 +113,73 @@ DkSDKProject_DeclareAvailable(bos
 # Using DkSDKProject_DeclareAvailable() alone does not pull it into CMake.
 # You also have to use DkSDKProject_MakeAvailable(xxx FINDLIBS yyy) and use a
 # target_link_libraries() on one of the `yyy`.
-DkSDKProject_MakeAvailable(
-        cmdliner
-        fmt
-        logs
-        lwt
 
-        capnp_ocaml
-        qrc
-        vector
-        yojson
-        core
-        base64
-        sqlite3
-        xdg
-        fpath
-        bos
-)
+if(SONIC_SCOUT_FEATURE_COM)
+    if(SONIC_SCOUT_NATIVE_COM)
+        DkSDKProject_MakeAvailable(
+                # need capnpc-ocaml executable to generate Schema.{java,ml}
+                capnp_ocaml
+        )
+        DkSDKProject_MakeAvailable(
+                cmdliner
+                fmt
+                logs
+                lwt
+
+                capnp_ocaml
+                qrc
+                vector
+                yojson
+                core
+                base64
+                sqlite3
+                xdg
+                fpath
+                bos
+        )
+
+        DkSDKProject_MakeAvailable(TEST
+                tezt)
+    else()
+        # Fetch capnnc-ocaml executable directly. Only available for Win32 64-bit though!
+        include(ExternalProject)
+        set(exe capnpc-ocaml${CMAKE_EXECUTABLE_SUFFIX})
+        ExternalProject_Add(capnpc-ocaml-proj
+            # TODO: Migrate to asset link. And fold this entire ExternalProject_Add into DkSDK CMake (maybe in DkSDKOCaml.cmake)
+            URL "https://github.com/diskuv/scoutapps/releases/download/2024.06.28/capnpc-ocaml.exe"
+            URL_HASH SHA256=ed9d55a306fff3f11befb131b781a690b7dbe1ad3857630b077eab00e83adec5
+            DOWNLOAD_NO_EXTRACT ON
+            CONFIGURE_COMMAND ""
+            BUILD_COMMAND ""
+            INSTALL_COMMAND ${CMAKE_COMMAND} -D "SRCFILE=<DOWNLOADED_FILE>" -D "DESTFILE=<INSTALL_DIR>/${exe}" -P "${CMAKE_CURRENT_LIST_DIR}/install-exe.script.cmake"
+            TEST_COMMAND ""
+            #   [CMake < 3.26]
+            #   If CMake >= 3.26, we could use INSTALL_BYPRODUCTS instead.
+            #   Confer: "Common Issues" section of Professional CMake.
+            BUILD_BYPRODUCTS <INSTALL_DIR>/${exe}
+            STEP_TARGETS install
+        )
+        ExternalProject_Get_Property(capnpc-ocaml-proj INSTALL_DIR)
+        #   [CMake < 3.26]
+        #   Require [capnpc-ocaml] target to use the Install step of the above ExternalProject.
+        #   If CMake >= 3.26, we could use INSTALL_BYPRODUCTS instead, and remove this [add_dependencies]
+        #   Confer: "Common Issues" section of Professional CMake.
+        add_executable(capnpc-ocaml IMPORTED GLOBAL)
+        add_dependencies(capnpc-ocaml capnpc-ocaml-proj-install)
+        set_target_properties(capnpc-ocaml PROPERTIES IMPORTED_LOCATION "${INSTALL_DIR}/${exe}")
+    endif()
+endif()
+
 DkSDKFetchContent_MakeAvailableNoInstall(
-        # "Build tools" that must run on the build host.
-        # Implementation: Built by CMake directly.
+    # "Build tools" that must run on the build host.
+    # Implementation: Built by CMake directly.
 
-        capnproto_and_host_tools
-        capnproto_java_and_host_tools
+    capnproto_and_host_tools
+    capnproto_java_and_host_tools
 )
-
-DkSDKProject_MakeAvailable(TEST
-        tezt)
 
 add_subdirectory(zxing)
 
-DkSDKRequire_Add(FFI OCaml)
+if(SONIC_SCOUT_FEATURE_COM AND SONIC_SCOUT_NATIVE_COM)
+    DkSDKRequire_Add(FFI OCaml)
+endif()

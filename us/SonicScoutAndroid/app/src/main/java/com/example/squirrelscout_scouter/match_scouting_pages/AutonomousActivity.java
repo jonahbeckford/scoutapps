@@ -19,17 +19,49 @@ import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.example.squirrelscout_scouter.MainApplication;
 import com.example.squirrelscout_scouter.R;
-import com.example.squirrelscout_scouter.ui.viewmodels.ModifiableRawMatchDataUiState;
 import com.example.squirrelscout_scouter.ui.viewmodels.ScoutingSessionViewModel;
 import com.example.squirrelscout_scouter.util.ScoutSingleton;
-
-import java.io.StreamCorruptedException;
 
 public class AutonomousActivity extends ComponentActivity implements View.OnClickListener {
 
     //Increment/decrement buttons
-    Button speakerScoreIncrement, speakerScoreDecrement, speakerMissIncrement, speakerMissDecrement, ampScoreIncrement, ampScoreDecrement, ampMissInrecement, ampMissDecrement;
-    TextView speakerScore, speakerMiss, ampScore, ampMiss;
+    Button speakerScoreIncrement, speakerScoreDecrement, speakerMissIncrement, speakerMissDecrement;
+    
+    Button autoCoralL4ScoreIncrement, autoCoralL4ScoreDecrement, ampMissInrecement, ampMissDecrement;
+
+    Button autoCoralL3ScoreIncrement, autoCoralL3ScoreDecrement;
+
+    Button autoCoralL2ScoreDecrement, autoCoralL2ScoreIncrement;
+
+    Button autoCoralL1ScoreIncrement, autoCoralL1ScoreDecrement;
+
+    Button autoCoralL4MissIncrement, autoCoralL4MissDecrement;
+
+    Button autoCoralL3MissIncrement, autoCoralL3MissDecrement;
+
+    Button autoCoralL2MissIncrement, autoCoralL2MissDecrement;
+
+    Button autoCoralL1MissIncrement, autoCoralL1MissDecrement;
+
+    Button autoProcessorScoreIncrement, autoProcessorMissDecrement;
+    Button autoProcessorScoreDecrement, autoProcessorMissIncrement;
+
+    Button autoNetScoreIncrement, autoNetScoreDecrement;
+
+    Button autoNetMissIncrement, autoNetMissDecrement;
+
+
+
+    
+
+    TextView speakerScore, speakerMiss, autoCoralL4Score, ampMiss;
+
+    //2025 auto
+    CheckBox autoPreplacedCoral;
+    TextView autoCoralL4Miss, autoCoralL3Score, autoCoralL3Miss;
+    TextView autoCoralL2Score, autoCoralL2Miss, autoCoralL1Score, autoCoralL1Miss;
+
+    TextView autoProcessorScore, autoProcessorMiss, autoNetScore, autoNetMiss;
 
     //robot position
     Button leftPosition, centerPosition, rightPosition;
@@ -74,30 +106,71 @@ public class AutonomousActivity extends ComponentActivity implements View.OnClic
 
         //speaker & amp scoring, Initializing all the variables listed above by connecting them to an
         //an xml object in the relative xml file
-        speakerScoreIncrement = (Button) findViewById(R.id.Speaker_Scored_increment);
-        speakerScoreIncrement.setOnClickListener(this);
-        speakerScoreDecrement = (Button) findViewById(R.id.Speaker_Scored_decrement);
-        speakerScoreDecrement.setOnClickListener(this);
-        speakerMissIncrement = (Button) findViewById(R.id.Speaker_Missed_Increment);
-        speakerMissIncrement.setOnClickListener(this);
-        speakerMissDecrement = (Button) findViewById(R.id.Speaker_Missed_Decrement);
-        speakerMissDecrement.setOnClickListener(this);
-        ampScoreIncrement = (Button) findViewById(R.id.Amp_Score_Increment);
-        ampScoreIncrement.setOnClickListener(this);
-        ampScoreDecrement = (Button) findViewById(R.id.Amp_Score_Decrement);
-        ampScoreDecrement.setOnClickListener(this);
-        ampMissInrecement = (Button) findViewById(R.id.Amp_Missed_Increment);
-        ampMissInrecement.setOnClickListener(this);
-        ampMissDecrement = (Button) findViewById(R.id.Amp_Missed_Decrement);
-        ampMissDecrement.setOnClickListener(this);
-        speakerScore = (TextView) findViewById(R.id.SpeakerScoredCounter);
-        speakerScore.setOnClickListener(this);
-        speakerMiss = (TextView) findViewById(R.id.SpeakerMissedCounter);
-        speakerMiss.setOnClickListener(this);
-        ampScore = (TextView) findViewById(R.id.AmpScoredCounter);
-        ampScore.setOnClickListener(this);
-        ampMiss = (TextView) findViewById(R.id.AmpMissedCounter);
-        ampMiss.setOnClickListener(this);
+
+        autoCoralL3ScoreDecrement = (Button) findViewById(R.id.autoCoralL3ScoreDecrement);
+        autoCoralL3ScoreDecrement.setOnClickListener(this);
+        autoCoralL2ScoreIncrement = (Button) findViewById(R.id.autoCoralL2ScoreIncrement);
+        autoCoralL2ScoreIncrement.setOnClickListener(this);
+        autoCoralL2ScoreDecrement = (Button) findViewById(R.id.autoCoralL2ScoreDecrement);
+        autoCoralL2ScoreDecrement.setOnClickListener(this);
+        autoCoralL4ScoreIncrement = (Button) findViewById(R.id.autoCoralL4ScoreIncrement);
+        autoCoralL4ScoreIncrement.setOnClickListener(this);
+        autoCoralL4ScoreDecrement = (Button) findViewById(R.id.autoCoralL4ScoreDecrement);
+        autoCoralL4ScoreDecrement.setOnClickListener(this);
+        autoCoralL3ScoreIncrement = (Button) findViewById(R.id.autoCoralL3ScoreIncrement);
+        autoCoralL3ScoreIncrement.setOnClickListener(this);
+        autoCoralL1ScoreIncrement = (Button) findViewById(R.id.autoCoralL1ScoreIncrement);
+        autoCoralL1ScoreIncrement.setOnClickListener(this);
+        autoCoralL1ScoreDecrement = (Button) findViewById(R.id.autoCoralL1ScoreDecrement);
+        autoCoralL1ScoreDecrement.setOnClickListener(this);
+
+        autoCoralL4MissIncrement = (Button) findViewById(R.id.autoCoralL4MissIncrement);
+        autoCoralL4MissIncrement.setOnClickListener(this);
+        autoCoralL4MissDecrement = (Button) findViewById(R.id.autoCoralL4MissDecrement);
+        autoCoralL4MissDecrement.setOnClickListener(this);
+
+        autoCoralL3MissIncrement = (Button) findViewById(R.id.autoCoralL3MissIncrement);
+        autoCoralL3MissIncrement.setOnClickListener(this);
+        autoCoralL3MissDecrement = (Button) findViewById(R.id.autoCoralL3MissDecrement);
+        autoCoralL3MissDecrement.setOnClickListener(this);
+
+        autoCoralL2MissIncrement = (Button) findViewById(R.id.autoCoralL2MissIncrement);
+        autoCoralL2MissIncrement.setOnClickListener(this);
+        autoCoralL2MissDecrement = (Button) findViewById(R.id.autoCoralL2MissDecrement);
+        autoCoralL2MissDecrement.setOnClickListener(this);
+
+        autoCoralL1MissIncrement = (Button) findViewById(R.id.autoCoralL1MissIncrement);
+        autoCoralL1MissIncrement.setOnClickListener(this);
+        autoCoralL1MissDecrement = (Button) findViewById(R.id.autoCoralL1MissDecrement);
+        autoCoralL1MissDecrement.setOnClickListener(this);
+
+
+        autoProcessorScoreIncrement = (Button) findViewById(R.id.autoProcessorScoreIncrement);
+        autoProcessorScoreIncrement.setOnClickListener(this);
+        autoProcessorScoreDecrement = (Button) findViewById(R.id.autoProcessorScoreDecrement);
+        autoProcessorScoreDecrement.setOnClickListener(this);
+        autoProcessorMissIncrement = (Button) findViewById(R.id.autoProcessorMissIncrement);
+        autoProcessorMissIncrement.setOnClickListener(this);
+        autoProcessorMissDecrement = (Button) findViewById(R.id.autoProcessorMissDecrement);
+        autoProcessorMissDecrement.setOnClickListener(this);
+
+
+
+        autoNetScoreIncrement = (Button) findViewById(R.id.autoNetScoreIncrement);
+        autoNetScoreIncrement.setOnClickListener(this);
+        autoNetScoreDecrement = (Button) findViewById(R.id.autoNetScoreDecrement);
+        autoNetScoreDecrement.setOnClickListener(this);
+        autoNetMissIncrement = (Button) findViewById(R.id.autoNetMissIncrement);
+        autoNetMissIncrement.setOnClickListener(this);
+        autoNetMissDecrement = (Button) findViewById(R.id.autoNetMissDecrement);
+        autoNetMissDecrement.setOnClickListener(this);
+
+
+
+
+
+        //ampMiss = (TextView) findViewById(R.id.AmpMissedCounter);
+        //ampMiss.setOnClickListener(this);
 
         //robot Position
         leftPosition = (Button) findViewById(R.id.Start_Left);
@@ -142,11 +215,53 @@ public class AutonomousActivity extends ComponentActivity implements View.OnClic
         nextButton.setOnClickListener(this);
         //...
         info = (TextView) findViewById(R.id.textView3);
-        titleCard = (View) findViewById(R.id.view);
-        mainCard = (View) findViewById(R.id.view2);
+        titleCard = (View) findViewById(R.id.headerView);
+        mainCard = (View) findViewById(R.id.bodyView);
         firstCard = (View) findViewById(R.id.view3);
         secondCard = (View) findViewById(R.id.view4);
         title = (TextView) findViewById(R.id.textView2);
+
+        // 2025 new fields
+        autoPreplacedCoral = (CheckBox) findViewById(R.id.checkBox);;
+        //autoCoralL3Miss = (TextView) findViewById(R.id.SpeakerScoredCounter);
+        //autoCoralL2Miss = autoCoralL1Miss = (TextView) findViewById(R.id.SpeakerScoredCounter);
+        //autoProcessorScore = autoProcessorMiss = autoNetScore = autoNetMiss = (TextView) findViewById(R.id.L3Label);
+
+        autoCoralL4Score = (TextView) findViewById(R.id.autoCoralL4Score);
+        autoCoralL4Score.setOnClickListener(this);
+        autoCoralL4Miss = (TextView) findViewById(R.id.autoCoralL4Miss);
+        autoCoralL3Score = (TextView) findViewById(R.id.autoCoralL3Score);
+        autoCoralL3Score.setOnClickListener(this);
+        autoCoralL3Miss = (TextView) findViewById(R.id.autoCoralL3Miss);
+        autoCoralL3Miss.setOnClickListener(this);
+        autoCoralL2Score = (TextView) findViewById(R.id.autoCoralL2Score);
+        autoCoralL2Score.setOnClickListener(this);
+        autoCoralL2Miss = (TextView) findViewById(R.id.autoCoralL2Miss);
+        autoCoralL2Miss.setOnClickListener(this);
+        autoCoralL1Score = (TextView) findViewById(R.id.autoCoralL1Score);
+        autoCoralL1Score.setOnClickListener(this);
+        autoCoralL1Miss = (TextView) findViewById(R.id.autoCoralL1Miss);
+        autoCoralL1Miss.setOnClickListener(this);
+
+        autoProcessorScore = (TextView) findViewById(R.id.autoProcessorScore);
+        autoProcessorScore.setOnClickListener(this);
+        autoProcessorMiss = (TextView) findViewById(R.id.autoProcessorMiss);
+        autoProcessorMiss.setOnClickListener(this);
+
+
+        autoNetScore = (TextView) findViewById(R.id.autoNetScore);
+        autoNetScore.setOnClickListener(this);
+        autoNetMiss = (TextView) findViewById(R.id.autoNetMiss);
+        autoNetMiss.setOnClickListener(this);
+
+
+
+
+
+
+
+        //ampMiss = (TextView) findViewById(R.id.AmpMissedCounter);
+        //ampMiss.setOnClickListener(this);
 
         //start animation (Was not used in 2024 season but was used in 2023 off season)
         //animationStart();
@@ -155,30 +270,103 @@ public class AutonomousActivity extends ComponentActivity implements View.OnClic
     public void onClick(View view){
         int clickedId = view.getId();
 
-        if(clickedId == R.id.Amp_Score_Increment){
-            counterIncrementLogic(ampScore);
+        if(clickedId == R.id.autoCoralL4ScoreIncrement){
+            counterIncrementLogic(autoCoralL4Score);
         }
-        else if(clickedId == R.id.Amp_Score_Decrement){
-            counterDecrementLogic(ampScore);
+        else if(clickedId == R.id.autoCoralL4ScoreDecrement){
+            counterDecrementLogic(autoCoralL4Score);
         }
-        else if(clickedId == R.id.Amp_Missed_Increment){
-            counterIncrementLogic(ampMiss);
+        else if(clickedId == R.id.autoCoralL1ScoreIncrement){
+            counterIncrementLogic(autoCoralL1Score);
         }
-        else if(clickedId == R.id.Amp_Missed_Decrement){
-            counterDecrementLogic(ampMiss);
+        else if(clickedId == R.id.autoCoralL1ScoreDecrement){
+            counterDecrementLogic(autoCoralL1Score);
         }
-        else if(clickedId == R.id.Speaker_Scored_increment){
-            counterIncrementLogic(speakerScore);
+        else if(clickedId == R.id.autoCoralL3ScoreIncrement){
+            counterIncrementLogic(autoCoralL3Score);
         }
-        else if(clickedId == R.id.Speaker_Scored_decrement){
-            counterDecrementLogic(speakerScore);
+        else if(clickedId == R.id.autoCoralL3ScoreDecrement){
+            counterDecrementLogic(autoCoralL3Score);
         }
-        else if(clickedId == R.id.Speaker_Missed_Increment){
-            counterIncrementLogic(speakerMiss);
+        else if(clickedId == R.id.autoCoralL2ScoreIncrement){
+            counterIncrementLogic(autoCoralL2Score);
         }
-        else if(clickedId == R.id.Speaker_Missed_Decrement){
-            counterDecrementLogic(speakerMiss);
+        else if(clickedId == R.id.autoCoralL2ScoreDecrement){
+            counterDecrementLogic(autoCoralL2Score);
         }
+
+        else if(clickedId == R.id.autoCoralL4MissIncrement) {
+            counterIncrementLogic(autoCoralL4Miss);
+        }
+
+        else if(clickedId == R.id.autoCoralL4MissDecrement) {
+            counterDecrementLogic(autoCoralL4Miss);
+        }
+
+        else if(clickedId == R.id.autoCoralL3MissIncrement) {
+            counterIncrementLogic(autoCoralL3Miss);
+        }
+
+        else if(clickedId == R.id.autoCoralL3MissDecrement) {
+            counterDecrementLogic(autoCoralL3Miss);
+        }
+
+        else if(clickedId == R.id.autoCoralL2MissIncrement) {
+            counterIncrementLogic(autoCoralL2Miss);
+        }
+
+        else if(clickedId == R.id.autoCoralL2MissDecrement) {
+            counterDecrementLogic(autoCoralL2Miss);
+        }
+
+
+        else if(clickedId == R.id.autoCoralL1MissIncrement) {
+            counterIncrementLogic(autoCoralL1Miss);
+        }
+
+        else if(clickedId == R.id.autoCoralL1MissDecrement) {
+            counterDecrementLogic(autoCoralL1Miss);
+        }
+
+        else if(clickedId == R.id.autoProcessorScoreIncrement) {
+            counterIncrementLogic(autoProcessorScore);
+        }
+
+        else if(clickedId == R.id.autoProcessorScoreDecrement) {
+            counterDecrementLogic(autoProcessorScore);
+        }
+
+        else if(clickedId == R.id.autoProcessorMissIncrement) {
+            counterIncrementLogic(autoProcessorMiss);
+        }
+
+        else if(clickedId == R.id.autoProcessorMissDecrement) {
+            counterDecrementLogic(autoProcessorMiss);
+        }
+
+        else if(clickedId == R.id.autoNetScoreIncrement) {
+            counterIncrementLogic(autoNetScore);
+        }
+
+        else if(clickedId == R.id.autoNetScoreDecrement) {
+            counterDecrementLogic(autoNetScore);
+        }
+
+        else if(clickedId == R.id.autoNetMissIncrement) {
+            counterIncrementLogic(autoNetMiss);
+        }
+
+        else if(clickedId == R.id.autoNetMissDecrement) {
+            counterDecrementLogic(autoNetMiss);
+        }
+
+
+
+
+
+
+
+
         else if(clickedId == R.id.Start_Left){
             robotLeftLogic();
         }
@@ -388,11 +576,25 @@ public class AutonomousActivity extends ComponentActivity implements View.OnClic
                 checkBox9.isChecked(),
                 checkBox10.isChecked(),
                 checkBox11.isChecked(),
-                Integer.parseInt(ampScore.getText().toString()),
-                Integer.parseInt(ampMiss.getText().toString()),
-                Integer.parseInt(speakerScore.getText().toString()),
-                Integer.parseInt(speakerMiss.getText().toString()),
-                leaveBool
+                0, //Integer.parseInt(ampScore.getText().toString()),
+                0,//Integer.parseInt(ampMiss.getText().toString()),
+                0, //Integer.parseInt(speakerScore.getText().toString()),
+                0,//Integer.parseInt(speakerMiss.getText().toString()),
+                leaveBool,
+                //2025 captureAutoData
+                autoPreplacedCoral.isChecked(),
+                Integer.parseInt(autoCoralL4Score.getText().toString()),
+                Integer.parseInt(autoCoralL4Miss.getText().toString()),
+                Integer.parseInt(autoCoralL3Score.getText().toString()),
+                Integer.parseInt(autoCoralL3Miss.getText().toString()),
+                Integer.parseInt(autoCoralL2Score.getText().toString()),
+                Integer.parseInt(autoCoralL2Miss.getText().toString()),
+                Integer.parseInt(autoCoralL1Score.getText().toString()),
+                Integer.parseInt(autoCoralL1Miss.getText().toString()),
+                Integer.parseInt(autoProcessorScore.getText().toString()),
+                Integer.parseInt(autoProcessorMiss.getText().toString()),
+                Integer.parseInt(autoNetScore.getText().toString()),
+                Integer.parseInt(autoNetMiss.getText().toString())
         );
 
     }

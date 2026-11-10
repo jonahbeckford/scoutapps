@@ -22,6 +22,7 @@ let run ~slots () =
   OS.Cmd.run
     Cmd.(
       v (p sqlite3_exe)
-      % "-cmd" % ".schema" % "-csv" % "-header" % "-readonly" % "-safe"
+      % "-cmd" % ".schema" % "-csv" % "-header" % "-readonly"
+       (* % "-safe" *)
       % p sqlite3_db)
   |> rmsg

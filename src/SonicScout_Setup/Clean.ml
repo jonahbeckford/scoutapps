@@ -26,6 +26,9 @@ let clean (_ : Tr1Logs_Term.TerminalCliOptions.t) areas =
           |> Utils.rmsg
       | _ -> ()
     end;
+    Dependencies.clean areas;
+    DotNetBuild.clean areas;
+    CMakeNinja.clean areas;
     ScoutAndroid.clean areas;
     ScoutBackend.clean areas;
     Utils.done_steps "Cleaning"
@@ -74,13 +77,6 @@ module Cli = struct
                  will resynchronize dksdk-cmake from its upstream on the next \
                  SonicScout_Setup.Develop command."
               [ "dksdk-cmake" ] );
-          ( [ `DkSdkWsl2; `AndroidGradleCxx ],
-            info ~docs:s_areas
-              ~doc:
-                "Clean the DkSDK WSL2 distributions used for the Android \
-                 Gradle Plugin, and the Android Gradle C++ artifacts that \
-                 depend on those WSL2 distributions."
-              [ "dksdk-wsl2" ] );
           ( [ `AndroidBuilds; `AndroidGradleCxx ],
             info ~docs:s_areas ~doc:"Clean the Android build artifacts."
               [ "android-builds" ] );
@@ -89,6 +85,9 @@ module Cli = struct
               [ "backend-builds" ] );
           ( [ `AndroidBuilds; `BackendBuilds ],
             info ~docs:s_areas ~doc:"Clean the build artifacts." [ "builds" ] );
+          ( [ `DotNet ],
+            info ~docs:s_areas ~doc:"Clean the C# .NET artifacts." [ "dotnet" ]
+          );
           ( [ `DkCoderWork ],
             info ~docs:s_areas ~doc:"Clean the DkCoder work directories."
               [ "dkcoder-work" ] );
@@ -99,16 +98,20 @@ module Cli = struct
             info ~docs:s_areas
               ~doc:"Clean the DkSDK portions of the Maven repository."
               [ "maven-repo" ] );
+          ( [ `CMakeNinja ],
+            info ~docs:s_areas ~doc:"Clean the CMake and Ninja installations."
+              [ "cmake" ] );
           ( [
               `AndroidBuilds;
               `AndroidGradleCxx;
               `BackendBuilds;
+              `CMakeNinjaInstallation;
               `DkSdkSourceCode;
               `DkSdkCMake;
               `DkCoderWork;
+              `DotNet;
               `QtInstallation;
               `MavenRepository;
-              `DkSdkWsl2;
             ],
             info ~docs:s_areas ~doc:"Cleans everything." [ "all" ] );
         ]
@@ -128,6 +131,6 @@ module Cli = struct
         $ areas_t)
 end
 
-let () =
+let __init (_ : DkCoder_Std.Context.t) =
   Tr1Logs_Term.TerminalCliOptions.init ();
   StdExit.exit (Cmdliner.Cmd.eval Cli.cmd)

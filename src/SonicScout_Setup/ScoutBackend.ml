@@ -57,8 +57,8 @@ let package ~notarize () =
   let projectdir = Fpath.(cwd / "us" / "SonicScoutBackend") in
   let builddir = Fpath.(projectdir // build_reldir) in
   let tools_dir = Qt.tools_dir ~projectdir in
-  match Tr1HostMachine.abi with
-  | `darwin_x86_64 | `darwin_arm64 ->
+  match DkCoder_Std.Context.(abi (get_exn ())) with
+  | `Darwin_x86_64 | `Darwin_arm64 ->
       let env = OS.Env.current () |> rmsg in
       let env =
         if notarize then env |> OSEnvMap.(add "SCOUT_NOTARIZE" "1") else env
@@ -78,7 +78,7 @@ let package ~notarize () =
           / "SonicScoutBackend-1.0.0-Darwin" / "SonicScoutQRScanner.dmg")
       in
       Logs.app (fun l -> l "The macOS dmg for publishing is at %a" Fpath.pp dmg)
-  | `windows_x86_64 | `windows_x86 | `windows_arm32 | `windows_arm64 ->
+  | `Windows_x86_64 | `Windows_x86 | `Windows_arm32 | `Windows_arm64 ->
       let default_search =
         OS.Cmd.search_path_dirs (Sys.getenv "PATH") |> rmsg
       in
@@ -126,10 +126,10 @@ let package ~notarize () =
         let cmake_zip = Fpath.(tools_dir / "cmake.zip") in
         (* https://github.com/Kitware/CMake/releases/download/v3.30.0-rc4/cmake-3.30.0-rc4-windows-x86_64.zip *)
         Lwt_main.run
-        @@ DkNet_Std.Http.download_uri ~max_time_ms:300_000
+        @@ DkNet_Std.Http.download_url ~max_time_ms:300_000
              ~checksum:
                (`SHA_256
-                 "9086fa9c83e5a3da2599220d4e426d1dfeefac417f2abf19862a91620c38faee")
+                  "9086fa9c83e5a3da2599220d4e426d1dfeefac417f2abf19862a91620c38faee")
              ~destination:cmake_zip
              (Uri.of_string
                 "https://github.com/Kitware/CMake/releases/download/v3.30.0-rc4/cmake-3.30.0-rc4-windows-x86_64.zip");
@@ -163,24 +163,32 @@ let cmake_properties ~cwd ~(opts : Utils.opts) slots : string list =
   in
   let cprops =
     Fmt.str "-DCMAKE_BUILD_TYPE=%s"
-      (match opts.build_type with `Debug -> "Debug" | `Release -> "Release")
+      (match Utils.build_type opts with
+      | `Debug -> "Debug"
+      | `Release -> "Release")
     :: cprops
   in
+  (* Avoid:
+        C:\VS\VC\Tools\MSVC\14.38.33130\bin\Hostx64\x64\cl.exe  /nologo /TP -DKJ_USE_FIBERS -IC:\scoutapps2\us\SonicScoutBackend\build_dev\_deps\capnproto-src\c++\src /wo4503 -std:c++14 /showIncludes /Foc++\src\kj\CMakeFiles\kj-async.dir\async.c++.obj /Fdc++\src\kj\CMakeFiles\kj-async.dir\kj-async.pdb /FS -c C:\scoutapps2\us\SonicScoutBackend\build_dev\_deps\capnproto-src\c++\src\kj\async.c++
+        C:\scoutapps2\us\SonicScoutBackend\build_dev\_deps\capnproto-src\c++\src\kj\async.h(39): fatal error C1189: #error:  "Fibers cannot be enabled when exceptions are disabled."
+  *)
+  let cprops = "-DWITH_FIBERS=OFF" :: cprops in
+  let cprops = "-DSONIC_SCOUT_FEATURE_CLI=OFF" :: cprops in
   let open Utils in
   let cprops =
-    match opts with
-    | { fetch_siblings = true; _ } ->
-        (* Override what is forced in CMakePresets.json *)
-        let sib project =
-          let project_upcase = String.uppercase_ascii project in
+    (* Override what is forced in CMakePresets.json *)
+    let p project =
+      let project_upcase = String.uppercase_ascii project in
+      match opts with
+      | { fetch_siblings = true; _ } ->
           Fmt.str "-DFETCHCONTENT_SOURCE_DIR_%s=%s" project_upcase
             (Utils.sibling_dir_mixed ~cwd ~project)
-        in
-        sib "dkml-runtime-common"
-        :: sib "dkml-runtime-distribution"
-        :: sib "dkml-compiler" :: sib "dksdk-access" :: sib "dksdk-cmake"
-        :: cprops
-    | { fetch_siblings = false; _ } -> cprops
+      | { fetch_siblings = false; _ } ->
+          Fmt.str "-DFETCHCONTENT_SOURCE_DIR_%s=%s" project_upcase
+            (Utils.mixed_path Fpath.(cwd / "fetch" / project))
+    in
+    p "dkml-runtime-common" :: p "dkml-compiler" :: p "dksdk-access"
+    :: p "dksdk-cmake" :: p "dksdk-ffi-c" :: cprops
   in
   cprops
 
@@ -192,38 +200,38 @@ let run ?(opts = Utils.default_opts) ?global_dkml ~slots () =
   let dk_env = dk_env ~opts () in
   let dk = dk ~env:dk_env in
   let preset =
-    match (Tr1HostMachine.abi, global_dkml) with
-    | `darwin_x86_64, _ -> "dev-AppleIntel"
-    | `darwin_arm64, _ ->
+    match DkCoder_Std.Context.(abi (get_exn ())) with
+    | `Darwin_x86_64 -> "dev-AppleIntel"
+    | `Darwin_arm64 ->
         (* We would like [dev-AppleSilicon]. But only Qt6.2.0+ are universal binaries!
            So until the manager app (SonicScoutBackend) has an upgrade to Qt6, we are stuck with Rosetta emulation. *)
         "dev-AppleIntel"
-    | `windows_x86_64, Some () ->
-        (* We get the Qt scanning application abort in caml_startup() if we mix and match DkML
-           with Visual Studio of RunCMake. Instead use local OCaml (no DkML). *)
-        "dev-Windows64"
-    | `windows_x86_64, None ->
-        (* We get the Qt scanning application abort in caml_startup() if we mix and match DkML
-           with Visual Studio of RunCMake. So use local OCaml (no DkML). *)
-        "dev-Windows64-with-localocaml"
-    | `linux_x86_64, _ -> "dev-Linux-x86_64"
+    | `Windows_x86_64 -> "dev-Windows64"
+    | `Linux_x86_64 -> "dev-Linux-x86_64"
     | _ ->
         failwith "Currently your host machine is not supported by Sonic Scout"
   in
   OS.Dir.with_current projectdir
     (fun () ->
-      (if not opts.skip_fetch then
-         let project_get =
-           if opts.next then [ "DKSDK_CMAKE_GITREF"; "next" ] else []
-         in
-         dk ~slots ("dksdk.project.get" :: project_get));
-      dk ~slots [ "dksdk.cmake.link"; "QUIET" ];
-      Utils.dk_ninja_link_or_copy ~dk:(dk ~slots);
+      if Utils.not_skip_fetch opts then
+        dk ~slots [ "dksdk.cmake.link"; "QUIET" ];
+      if Utils.not_skip_fetch opts then
+        Utils.dk_ninja_link_or_copy ~opts ~dk:(dk ~slots) ();
       let user_presets = Fpath.v "CMakeUserPresets.json" in
       if not (OS.File.exists user_presets |> rmsg) then
         OS.File.write user_presets
           (OS.File.read (Fpath.v "CMakeUserPresets-SUGGESTED.json") |> rmsg)
         |> rmsg;
+
+      (* DkCoder has no way to detect changes to .ml source files. *)
+      DkFs_C99.Path.rm ~recurse:() ~force:() ~kill:()
+        Fpath.
+          [
+            projectdir / "build_dev" / "DkFiles" / "c";
+            projectdir / "build_dev" / "src" / "SonicScout_MainCLI";
+            projectdir / "build_dev" / "src" / "SonicScout_ManagerApp";
+          ]
+      |> rmsg;
 
       RunCMake.run ?global_dkml ~projectdir ~name:"backend-preset" ~slots
         ([ "--preset"; preset ] @ cmake_properties ~cwd ~opts slots);
@@ -232,7 +240,6 @@ let run ?(opts = Utils.default_opts) ?global_dkml ~slots () =
           "--build";
           Fpath.to_string build_reldir;
           "--target";
-          "main-cli";
           "DkSDK_DevTools";
           "DkSDKTest_UnitTests_ALL";
           "ManagerApp_ALL";

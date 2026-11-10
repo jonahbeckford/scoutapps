@@ -37,6 +37,20 @@ public interface RawMatchDataUiState {
     int autoSpeakerScore();
     int autoSpeakerMiss();
     boolean autoLeave();
+    boolean preplacedCoral();
+    int autoCoralL4Score();
+    int autoCoralL3Score();
+    int autoCoralL2Score();
+    int autoCoralL1Score();
+    int autoProcessorScore();
+    int autoProcessorMiss();
+    int autoNetScore();
+    int autoNetMiss();
+    int autoCoralL4Miss();
+    int autoCoralL3Miss();
+    int autoCoralL2Miss();
+    int autoCoralL1Miss();
+
 
     //teleop
     int teleSpeakerScore();
@@ -44,8 +58,26 @@ public interface RawMatchDataUiState {
     int teleAmpScore();
     int teleAmpMiss();
     String teleRange();
-    String teleBreakdown();
-    String endgameClimb();
+    //String teleBreakdown();
+    String breakdownDropdown();
+    //String endgameClimb();
+    String climbDropdown();
     boolean endgameTrap();
     String pickUpAbility();
+
+    int teleOpCoralL4Score();
+    int teleOpCoralL4Miss();
+    int teleOpCoralL3Score();
+    int teleOpCoralL3Miss();
+
+    int teleOpCoralL2Score();
+    int teleOpCoralL2Miss();
+    int teleOpCoralL1Score();
+    int teleOpCoralL1Miss();
+    int teleOpProcessorScore();
+    int teleOpProcessorMiss();
+    int teleOpNetScore();
+    int teleOpNetMiss();
+
+
 }

@@ -1,0 +1,240 @@
+<UserControl
+    x:Class="ScoutApp.Views.AutoView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cvt="using:ScoutApp.Converter"
+    xmlns:vm="using:ScoutApp.ViewModels"
+    x:DataType="vm:AutoViewModel">
+
+    <UserControl.Resources>
+        <cvt:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
+        <cvt:EnumMemberValueConverter x:Key="EnumMemberValueConverter" />
+
+        <SolidColorBrush x:Key="black" Color="#000000" />
+        <SolidColorBrush x:Key="text" Color="#FFFFFF" />
+        <SolidColorBrush x:Key="background" Color="#3D3D3D" />
+        <SolidColorBrush x:Key="accent" Color="#F36716" />
+        <SolidColorBrush x:Key="lightgrey" Color="#C2C4C3" />
+        <SolidColorBrush x:Key="offwhite" Color="#D1CAC3" />
+        <SolidColorBrush x:Key="darkgrey" Color="#4D4D4D" />
+        <SolidColorBrush x:Key="orange" Color="#FF5722" />
+        <SolidColorBrush x:Key="thirdbutton" Color="#DED6CE" />
+        <SolidColorBrush x:Key="secondary" Color="#0D6EFD" />
+        <SolidColorBrush x:Key="error" Color="#F2110C" />
+        <SolidColorBrush x:Key="green" Color="#1FA659" />
+    </UserControl.Resources>
+
+    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+
+        <StackPanel
+            HorizontalAlignment="Center"
+            Orientation="Vertical"
+            Spacing="32">
+
+            <StackPanel
+                HorizontalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="20">
+                <TextBlock
+                    Height="32"
+                    FontSize="{Binding TextSize}"
+                    FontWeight="Bold">
+                    STARTING POSITION:
+                </TextBlock>
+                <ComboBox Width="225" SelectedItem="{Binding StartingPosition, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumMemberValueConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <ComboBox.Items>
+                        <x:Static Member="vm:AutoStartingPosition.LeftTrench" />
+                        <x:Static Member="vm:AutoStartingPosition.LeftBump" />
+                        <x:Static Member="vm:AutoStartingPosition.Center" />
+                        <x:Static Member="vm:AutoStartingPosition.RightBump" />
+                        <x:Static Member="vm:AutoStartingPosition.RightTrench" />
+                    </ComboBox.Items>
+                </ComboBox>
+            </StackPanel>
+
+            <StackPanel
+                HorizontalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="20">
+                <TextBlock
+                    Height="32"
+                    FontSize="{Binding TextSize}"
+                    FontWeight="Bold">
+                    AUTO MOVE:
+                </TextBlock>
+                <CheckBox
+                    Height="32"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    IsChecked="{Binding AutoMove}" />
+            </StackPanel>
+
+            <!--  FUEL  -->
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+
+                <StackPanel Orientation="Vertical" Spacing="10">
+                    <RepeatButton
+                        Width="200"
+                        Height="200"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Background="{StaticResource darkgrey}"
+                        Command="{Binding AutoMissedUpCommand}"
+                        Content="+"
+                        Delay="150"
+                        FontSize="40"
+                        Foreground="{StaticResource accent}"
+                        Interval="75" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="{Binding TextSize}"
+                        FontWeight="Bold"
+                        Text="{Binding AutoFuelMissed, StringFormat='MISSED: {0}'}" />
+                    <RepeatButton
+                        Width="200"
+                        Height="200"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Background="{StaticResource darkgrey}"
+                        Command="{Binding AutoMissedDownCommand}"
+                        Content="-"
+                        Delay="150"
+                        FontSize="40"
+                        Foreground="{StaticResource accent}"
+                        Interval="75" />
+                </StackPanel>
+
+                <TextBlock
+                    Height="32"
+                    Margin="60,0,60,0"
+                    FontSize="{Binding TextSize}"
+                    FontWeight="Bold">
+                    FUEL
+                </TextBlock>
+
+                <StackPanel Orientation="Vertical" Spacing="10">
+                    <RepeatButton
+                        Width="200"
+                        Height="200"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Background="{StaticResource darkgrey}"
+                        Command="{Binding AutoScoredUpCommand}"
+                        Content="+"
+                        Delay="150"
+                        FontSize="40"
+                        Foreground="{StaticResource accent}"
+                        Interval="75" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="{Binding TextSize}"
+                        FontWeight="Bold"
+                        Text="{Binding AutoFuelScored, StringFormat='SCORED: {0}'}" />
+                    <RepeatButton
+                        Width="200"
+                        Height="200"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Background="{StaticResource darkgrey}"
+                        Command="{Binding AutoScoredDownCommand}"
+                        Content="-"
+                        Delay="150"
+                        FontSize="40"
+                        Foreground="{StaticResource accent}"
+                        Interval="75" />
+                </StackPanel>
+
+            </StackPanel>
+
+            <!--  OBSTACLES  -->
+            <StackPanel
+                HorizontalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="20">
+
+                <TextBlock
+                    Height="32"
+                    FontSize="{Binding TextSize}"
+                    FontWeight="Bold">
+                    OBSTACLES USED:
+                </TextBlock>
+
+                <CheckBox
+                    Content="Bump"
+                    FontSize="{Binding TextSize}"
+                    IsChecked="{Binding AutoBump}" />
+
+                <CheckBox
+                    Content="Trench"
+                    FontSize="{Binding TextSize}"
+                    IsChecked="{Binding AutoTrench}" />
+
+            </StackPanel>
+
+            <!--  INTAKE  -->
+            <StackPanel
+                HorizontalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="20">
+
+                <TextBlock
+                    Height="32"
+                    FontSize="{Binding TextSize}"
+                    FontWeight="Bold">
+                    INTAKE FROM:
+                </TextBlock>
+
+                <CheckBox
+                    Content="Depot"
+                    FontSize="{Binding TextSize}"
+                    IsChecked="{Binding AutoIntakeDepot}" />
+
+                <CheckBox
+                    Content="Outpost"
+                    FontSize="{Binding TextSize}"
+                    IsChecked="{Binding AutoIntakeOutpost}" />
+
+                <CheckBox
+                    Content="Neutral Zone"
+                    FontSize="{Binding TextSize}"
+                    IsChecked="{Binding AutoIntakeNeutralZone}" />
+
+            </StackPanel>
+
+            <!--  CLIMB  -->
+            <StackPanel
+                HorizontalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="20">
+
+                <TextBlock
+                    Height="32"
+                    FontSize="{Binding TextSize}"
+                    FontWeight="Bold">
+                    AUTO CLIMB:
+                </TextBlock>
+                <ComboBox Width="225" SelectedItem="{Binding AutoClimb, Mode=TwoWay}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource EnumMemberValueConverter}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    <ComboBox.Items>
+                        <x:Static Member="vm:Climb2026.Level1" />
+                        <x:Static Member="vm:Climb2026.Failed" />
+                        <x:Static Member="vm:Climb2026.DidNotAttempt" />
+                    </ComboBox.Items>
+                </ComboBox>
+
+            </StackPanel>
+
+        </StackPanel>
+
+    </ScrollViewer>
+
+</UserControl>

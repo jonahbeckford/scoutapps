@@ -1,10 +1,10 @@
 let package ({ dksdk_data_home; opts; global_dkml } : Develop.common) notarize =
   let global_dkml = if global_dkml then Some () else None in
   try
-    InitialSteps.run ~dksdk_data_home ();
-    Qt.run ();
-    Sqlite3.run ();
     let slots = Slots.create () in
+    InitialSteps.run ~dksdk_data_home ();
+    Qt.run ~slots ();
+    Sqlite3.run ();
     let slots = DkML.run ?global_dkml ~slots () in
     let slots = ScoutBackend.run ?global_dkml ~opts ~slots () in
     ScoutBackend.package ~notarize ();
@@ -30,8 +30,6 @@ module Cli = struct
       Term.(const package $ Develop.Cli.common_t $ notarize_t)
 end
 
-let () =
-  if Tr1EntryName.module_id = __MODULE_ID__ then begin
-    Tr1Logs_Term.TerminalCliOptions.init ();
-    StdExit.exit (Cmdliner.Cmd.eval Cli.cmd)
-  end
+let __init (_:DkCoder_Std.Context.t) =
+  Tr1Logs_Term.TerminalCliOptions.init ();
+  StdExit.exit (Cmdliner.Cmd.eval Cli.cmd)

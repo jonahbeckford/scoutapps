@@ -30,158 +30,121 @@ module type Table_type = sig
   include Fetchable_Data
 end
 
+type field_type =
+  | Integer
+  | Bool
+  | String
+  [@@warning "-unused-type-declaration"]
+
+type field_kind =
+  | Scouter_Name
+  | Match_Number
+  | Team_number
+
+type field = {
+  field_name: string;
+  field_type: field_type;
+  field_is_primary : bool;
+  field_kind : field_kind option;
+}
+let fi field_name = { field_name; field_is_primary=false; field_type = Integer; field_kind=None }
+let fb field_name = { field_name; field_is_primary=false; field_type = Bool; field_kind=None }
+let fs field_name = { field_name; field_is_primary=false; field_type = String; field_kind=None }
+let as_primary field = { field with field_is_primary=true }
+let as_kind kind field = { field with field_kind = Some kind }
+
+let fields = [
+  (* An individual QR scan is tied to an individual scout ("Name")
+     who scouts a single team ("Team") at an individual match ("Match").
+
+     See [already_contains_record] which uses these fields. *)
+  as_primary (as_kind Team_number (fi "Team"));
+  as_primary (as_kind Match_Number (fi "Match"));
+  as_primary (as_kind Scouter_Name (fs "Name"));
+  fs "Alliance";
+  fs "StartingPosition";
+  fs "AutoMove";
+  fi "AutoFuelScored";
+  fi "AutoFuelMissed";
+  fs "AutoObstacles";
+  fs "AutoIntakes";
+  fs "AutoClimb";
+  fi "TeleOpFuelScored";
+  fi "TeleOpFuelMissed";
+  fs "TeleOpObstacles";
+  fs "TeleOpIntakes";
+  fs "TowerClimb";
+  fs "ClimbTime";
+  fs "Breakdown";
+  fs "BreakdownTime";
+]
+
+let getfield name =
+  List.find_opt
+    (fun { field_name; _} -> String.equal field_name name)
+    fields
+
+let getcolname ~kindname kind = 
+  let maybe_found =
+    List.find_opt
+      (fun field -> match field.field_kind with Some ct when ct = kind -> true | _ -> false)
+      fields
+  in
+  match maybe_found with
+  | Some field -> field.field_name
+  | None -> failwith (Printf.sprintf "No field with field kind %s found! Use `as_kind %s (fs \"field_name\")` in `let fields = [...]` to designate a field as the field kind." kindname kindname)
+
+let col_team_number () = getcolname ~kindname:"Team_number" Team_number
+let col_match_number () = getcolname ~kindname:"Match_Number" Match_Number
+let col_scouter_name () = getcolname ~kindname:"Scouter_Name" Scouter_Name
+
+let primaryfields () =
+  let fields =
+    List.filter_map
+      (fun {field_is_primary; field_name; field_type=_; field_kind=_} ->
+        if field_is_primary then Some field_name else None)
+      fields
+  in
+  match fields with
+  | [] -> failwith "No primary fields defined for the Raw_match_data_table! Use `as_primary (fs \"field_name\")` in `let fields = [...]` to make a field primary."
+  | _ :: _ -> fields
+
 (*Code which can be edited for each specific season*)
 module Table : Table_type = struct
   let table_name = "raw_match_data"
 
-  (*Code which can be modified based on what data points are wanted for
-    that specific robotics season*)
-  type colums =
-    (* [not game specific] generic info *)
-    | Team_number
-    | Team_name
-    | Match_Number
-    | Scouter_Name
-    (* [Game specific] auto*)
-    | Starting_Position
-    | Wing_Note1
-    | Wing_Note2
-    | Wing_Note3
-    | Center_Note1
-    | Center_Note2
-    | Center_Note3
-    | Center_Note4
-    | Center_Note5
-    | Auto_Amp_Score
-    | Auto_Amp_Miss
-    | Auto_Speaker_Score
-    | Auto_Speaker_Miss
-    | Auto_Leave
-    (* [Game specific] tele data points *)
-    | Tele_Speaker_Score
-    | Tele_Speaker_Miss
-    | Tele_Amp_Score
-    | Tele_Amp_Miss
-    | Distance
-    | Tele_Breakdown
-    | Endgame_Climb
-    | Endgame_Trap
-
-  (* This is how the column will be seen in the SQL database or the
-    .csv file upon exportation*)
-  (*The # of column_name should match the # of columns defined in above function*)
-  let colum_name = function
-    | Team_number -> "team_number"
-    | Team_name -> "team_name"
-    | Match_Number -> "match_number"
-    | Scouter_Name -> "scouter_name"
-    (*  *)
-    | Starting_Position -> "starting_position"
-    | Wing_Note1 -> "wing_note1"
-    | Wing_Note2 -> "wing_note2"
-    | Wing_Note3 -> "wing_note3"
-    | Center_Note1 -> "center_note1"
-    | Center_Note2 -> "center_note2"
-    | Center_Note3 -> "center_note3"
-    | Center_Note4 -> "center_note4"
-    | Center_Note5 -> "center_note5"
-    | Auto_Amp_Score -> "auto_amp_score"
-    | Auto_Amp_Miss -> "auto_amp_miss"
-    | Auto_Speaker_Score -> "auto_speaker_score"
-    | Auto_Speaker_Miss -> "auto_speaker_miss"
-    | Auto_Leave -> "auto_leave"
-    (*  *)
-    | Tele_Speaker_Score -> "tele_speaker_score"
-    | Tele_Speaker_Miss -> "tele_speaker_miss"
-    | Tele_Amp_Score -> "tele_amp_score"
-    | Tele_Amp_Miss -> "tele_amp_miss"
-    | Distance -> "distance"
-    | Tele_Breakdown -> "tele_breakdown"
-    | Endgame_Climb -> "endgame_climb"
-    | Endgame_Trap -> "endgame_trap"
-
-  (* This defines what kind of data type each column will store. There are only two options: TEXT or INT*)
-  (* # of colum_datatype should be matching # of columns defined in above functions*)
-  let colum_datatype = function
-    | Team_number -> "INT"
-    | Team_name -> "TEXT"
-    | Match_Number -> "INT"
-    | Scouter_Name -> "TEXT"
-    (*  *)
-    | Starting_Position -> "TEXT"
-    | Wing_Note1 -> "TEXT"
-    | Wing_Note2 -> "TEXT"
-    | Wing_Note3 -> "TEXT"
-    | Center_Note1 -> "TEXT"
-    | Center_Note2 -> "TEXT"
-    | Center_Note3 -> "TEXT"
-    | Center_Note4 -> "TEXT"
-    | Center_Note5 -> "TEXT"
-    | Auto_Amp_Score -> "INT"
-    | Auto_Amp_Miss -> "INT"
-    | Auto_Speaker_Score -> "INT"
-    | Auto_Speaker_Miss -> "INT"
-    | Auto_Leave -> "TEXT"
-    (*  *)
-    | Tele_Speaker_Score -> "INT"
-    | Tele_Speaker_Miss -> "INT"
-    | Tele_Amp_Score -> "INT"
-    | Tele_Amp_Miss -> "INT"
-    | Distance -> "Text"
-    | Tele_Breakdown -> "TEXT"
-    | Endgame_Climb -> "TEXT"
-    | Endgame_Trap -> "TEXT"
-
-  (*This defines how the order of the columns seen in databse will be written and captured from QR code*)
-  let colums_in_order =
-    [
-      Team_number;
-      Team_name;
-      Match_Number;
-      Scouter_Name;
-      (*Alliance;*)
-      (* Auto *)
-      Starting_Position;
-      Wing_Note1;
-      Wing_Note2;
-      Wing_Note3;
-      Center_Note1;
-      Center_Note2;
-      Center_Note3;
-      Center_Note4;
-      Center_Note5;
-      Auto_Amp_Score;
-      Auto_Amp_Miss;
-      Auto_Speaker_Score;
-      Auto_Speaker_Miss;
-      Auto_Leave;
-      (* Teleop *)
-      Tele_Speaker_Score;
-      Tele_Speaker_Miss;
-      Tele_Amp_Score;
-      Tele_Amp_Miss;
-      Distance;
-      Tele_Breakdown;
-      Endgame_Climb;
-      Endgame_Trap;
-    ]
-
-  (*Set's primary keys for identification of data. Do not change under normal circumstanes.*)
-  let primary_keys = [ Team_number; Match_Number; Scouter_Name ]
-
   let create_table db =
-    Db_utils.create_table db ~table_name ~colums:colums_in_order ~primary_keys
-      ~to_name:colum_name ~to_datatype:colum_datatype
+    let columns = Buffer.create 1024 in
+    List.iteri
+      (fun idx { field_name; field_type=_; field_is_primary=_; field_kind=_ } ->
+            if (idx > 0) then (
+              Buffer.add_string columns " ,";
+            );
+            Printf.bprintf columns "%s" field_name)
+      fields;
+    let createtable = Printf.sprintf "CREATE TABLE IF NOT EXISTS %s (%s, PRIMARY KEY (%s))"
+      table_name
+      (Buffer.contents columns)
+      (String.concat "," (primaryfields ()))
+    in
+    match Sqlite3.exec db createtable with
+    | Sqlite3.Rc.OK ->
+        print_endline "create table successful";
+        Db_utils.Successful
+    | r ->
+        Db_utils.formatted_error_message db r
+          (Printf.sprintf "failed to create table with sql: %s" createtable);
+        Db_utils.Failed
 
   let drop_table _db = Db_utils.Failed
 
   let already_contains_record db ~team_number ~match_number ~scouter_name =
-    let to_select = colum_name Team_number in
+    let to_select = col_team_number () in
     let where =
       [
-        (colum_name Team_number, Db_utils.Select.Int team_number);
-        (colum_name Match_Number, Db_utils.Select.Int match_number);
-        (colum_name Scouter_Name, Db_utils.Select.String scouter_name);
+        (col_team_number (), Db_utils.Select.Int team_number);
+        (col_match_number (), Db_utils.Select.Int match_number);
+        (col_scouter_name (), Db_utils.Select.String scouter_name);
       ]
     in
 
@@ -191,143 +154,101 @@ module Table : Table_type = struct
 
     match result with _ :: [] -> true | _ -> false
 
-  let insert_record db capnp_string =
-    let module ProjectSchema = Schema.Make (DkSDKFFI_OCaml0.ComMessageC) in
-    let match_data =
-      (* Get a stream of the bytes to deserialize *)
-      let host_segment_allocator = DkSDKFFI_OCaml0.HostStorageOptions.C_Options.host_segment_allocator in
-      let stream =
-        DkSDKFFI_OCaml0.ComCodecs.FramedStreamC.of_string
-          ~host_segment_allocator
-          ~compression:`None capnp_string
-      in
-      (* Attempt to get the next frame from the stream in the form of a Message *)
-      match DkSDKFFI_OCaml0.ComCodecs.FramedStreamC.get_next_frame stream
-      with
-      | Result.Ok message -> ProjectSchema.Reader.RawMatchData.of_message message
-      | Result.Error _ -> failwith "could not decode capnp data"
+  (** The QR code format is carriage-return, line-feed separated
+      name value parameters.
+
+      An example code is the following, broken onto many lines
+      for readability:
+
+      {v
+        Name-\r\nSPos-Left\r\nTeam-0\r\n
+        Match-0\r\nALeave-True\r\nAL4-0\r\n
+        AL3-0\r\nAL2-0\r\nAL1-0\r\nAM4-0\r\n
+        AM3-0\r\nAM2-0\r\nAM1-0\r\n
+        GPickup-False\r\nTL4-0\r\nTL3-0\r\n
+        TL2-0\r\nTL1-0\r\nTM4-0\r\nTM3-0\r\n
+        TM2-0\r\nTM1-0\r\nAPS-0\r\nAPM-0\r\n
+        ANS-0\r\nANM-0\r\nTPS-0\r\nTPM-0\r\n
+        TNS-0\r\nTNM-0\r\nTBK-None\r\nCLB-Success
+      v}
+
+      For example, the name ["GPickup"] has the value ["False"].
+    *)
+  let insert_record db qr_string =
+    (* NAME1-VALUE1\r\nNAME2-VALUE2\r\n...
+       ==>
+       NAME1-VALUE1\r
+       NAME2-VALUE2\r
+       ... *)
+    let namevalues = String.split_on_char '\n' qr_string in
+    (* NAME1-VALUE1\r
+       NAME2-VALUE2\r
+       ==>
+       NAME1-VALUE1
+       NAME2-VALUE2
+       ... *)
+    let namevalues = List.map String.trim namevalues in
+    (* NAME1-VALUE1
+       NAME2-VALUE2
+       ==>
+       (NAME1,VALUE1)
+       (NAME2,VALUE2)
+       ... *)
+    let namevalues = List.filter_map (fun s ->
+      let splitted = String.split_on_char '-' s in
+      match splitted with
+      | [name; value] ->
+        (* Printf.eprintf "(name, value) = (%s, %s)\n%!" name value; *)
+        Some (name, value)
+      | _ -> None
+      ) namevalues in
+
+    (* This uses string manipulation to make a SQL command ...
+       it follows what the original authors did in 2023.
+       If you were making an application for a customer, this would
+       be a security vulnerability because a malicious person
+       could make a QR code that ran arbitrary commands on your
+       computer. Not good! It is an attack called
+       "SQL injection attack". *)
+    let column_names = Buffer.create 1024 in
+    let field_values = Buffer.create 1024 in
+    List.iteri
+      (fun idx (name, value) ->
+        match getfield name with
+        | None ->
+            Printf.eprintf "WARNING! The QR code contained `%s` but the QR scanning code in %s.ml did not add a field for it.\n" name __MODULE__
+        | Some { field_name; field_type=_; field_is_primary=_; field_kind=_ } ->
+            if (idx > 0) then (
+              Buffer.add_string column_names " ,";
+              Buffer.add_string field_values " ,";
+            );
+            Buffer.add_string column_names field_name;
+            Buffer.add_string field_values ("\"" ^ value ^ "\""))
+      namevalues;
+
+    let sql = Printf.sprintf "INSERT INTO %s(%s) VALUES(%s)"
+          table_name
+          (Buffer.contents column_names)
+          (Buffer.contents field_values)
     in
+    Logs.info (fun l -> l "raw_match_table sql: %s" sql);
 
-    (*All these following functions give function on how the Enum data created in schema.capnp will be read and written*)
-    let position_to_string : ProjectSchema.Reader.SPosition.t -> string = function
-      | AmpSide -> "AMPSIDE"
-      | Center -> "CENTER"
-      | SourceSide -> "SOURCESIDE"
-      | Undefined _ -> "UNDEFINED"
-    in
-
-    let breakdown_to_string : ProjectSchema.Reader.TBreakdown.t -> string = function
-      | None -> "NONE"
-      | Tipped -> "TIPPED"
-      | MechanicalFailure -> "MECHANICAL_FAILURE"
-      | Incapacitated -> "INCAPACITATED"
-      | NoteStuck -> "NOTE_STUCK"
-      | Undefined _ -> "NONE"
-    in
-
-    let teleopClimb_to_string : ProjectSchema.Reader.EClimb.t -> string = function
-      | Success -> "SUCCESS"
-      | Failed -> "FAILED"
-      | DidNotAttempt -> "DID_NOT_ATTEMPT"
-      | Harmony -> "HARMONY"
-      | Parked -> "PARKED"
-      | Undefined _ -> "UNDEFINED"
-    in
-
-    (* let alliance_to_string : ProjectSchema.Reader.RobotPosition.t -> string = function
-      | Red1 -> "RED1"
-      | Red2 -> "RED2"
-      | Red3 -> "RED3"
-      | Blue1 -> "BLUE1"
-      | Blue2 -> "BLUE2"
-      | Blue3 -> "BLUE3"
-      | Undefined _ -> "UNDEFINED"
-    in *)
-
-    let string_to_cmd_line_form s = "\"" ^ s ^ "\"" in
-
-    let bool_to_string_as_num bool =
-      match bool with true -> "1" | false -> "0"
-    in
-
-    let open ProjectSchema.Reader.RawMatchData in
-    let team_number = match_data |> team_number_get in
-    let match_number = match_data |> match_number_get in
-    let scouter_name = match_data |> scouter_name_get in
-
-    let record_already_exists =
-      already_contains_record db ~team_number ~match_number ~scouter_name
-    in
-    (*Code if you wanted to check something quick from the outputs when scanning QR codes*)
-    Format.eprintf "auto_speaker_miss_get = %d@." (auto_speaker_miss_get match_data);
-
-    if record_already_exists then Db_utils.Successful
-    else
-      (* RELEASE_BLOCKER: jonahbeckford@
-
-         This is not how to insert data into a database.
-         It is INCREDIBLY unsafe, although the OCaml library
-         does not give you any examples of how to do it safely
-         with prepared statements. All someone would need to
-         do is make a special QR code and they could hack your phone. *)
-      let values =
-        Printf.sprintf
-        (*Number of %s should match number of columns*)
-        "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, \n\
-        \         %s, %s, %s, %s, %s, %s, %s, %s, %s"
-        (match_data |> team_number_get |> string_of_int)
-        (match_data |> team_name_get |> string_to_cmd_line_form)
-        (match_data |> match_number_get |> string_of_int)
-        (match_data |> scouter_name_get |> string_to_cmd_line_form)
-        (*  *)
-        (match_data |> starting_position_get |> position_to_string
-       |> string_to_cmd_line_form)
-        (match_data |> wing_note1_get |> bool_to_string_as_num)
-        (match_data |> wing_note2_get |> bool_to_string_as_num)
-        (match_data |> wing_note3_get |> bool_to_string_as_num)
-        (match_data |> center_note1_get |> bool_to_string_as_num)
-        (match_data |> center_note2_get |> bool_to_string_as_num)
-        (match_data |> center_note3_get |> bool_to_string_as_num)
-        (match_data |> center_note4_get |> bool_to_string_as_num)
-        (match_data |> center_note5_get |> bool_to_string_as_num)
-        (match_data |> auto_amp_score_get |> string_of_int)
-        (match_data |> auto_amp_miss_get |> string_of_int)
-        (match_data |> auto_speaker_score_get |> string_of_int)
-        (match_data |> auto_speaker_miss_get |> string_of_int)
-        (match_data |> auto_leave_get |> bool_to_string_as_num)
-        (*  *)
-        (match_data |> tele_speaker_score_get |> string_of_int)
-        (match_data |> tele_speaker_miss_get |> string_of_int)
-        (match_data |> tele_amp_score_get |> string_of_int)
-        (match_data |> tele_amp_miss_get |> string_of_int)
-        (match_data |> distance_get |> string_to_cmd_line_form)
-        (match_data |> tele_breakdown_get |> breakdown_to_string
-       |> string_to_cmd_line_form)
-        (match_data |> endgame_climb_get |> teleopClimb_to_string
-       |> string_to_cmd_line_form)
-        (match_data |> endgame_trap_get |> bool_to_string_as_num)
-      in
-
-      let sql = "INSERT INTO " ^ table_name ^ " VALUES(" ^ values ^ ")" in
-
-      Logs.debug (fun l -> l "raw_match_table sql: %s" sql);
-
-      match Sqlite3.exec db sql with
-      | Sqlite3.Rc.OK ->
-          print_endline "exec successful";
-          Db_utils.Successful
-      | r ->
-          Db_utils.formatted_error_message db r
-            "failed to exec raw_match_data insert sql";
-          Db_utils.Failed
+    match Sqlite3.exec db sql with
+    | Sqlite3.Rc.OK ->
+        print_endline "exec successful";
+        Db_utils.Successful
+    | r ->
+        Db_utils.formatted_error_message db r
+          "failed to exec raw_match_data insert sql";
+        Db_utils.Failed
 
   module Fetch = struct
     let latest_match_number db =
-      let to_select = colum_name Match_Number in
+      let to_select = col_match_number () in
 
       let where = [] in
 
-      let order_by = [ (colum_name Match_Number, Db_utils.Select.DESC) ] in
+      let order_by = [ (col_match_number (), Db_utils.Select.DESC) ] in
 
       let result =
         Db_utils.Select.select_ints_where db ~table_name ~to_select ~where
@@ -337,14 +258,14 @@ module Table : Table_type = struct
       match result with [] -> None | x :: _ -> Some x
 
     let all_match_numbers_in_db db =
-      let to_select = colum_name Match_Number in
+      let to_select = col_match_number () in
 
       Db_utils.Select.select_ints_where db ~table_name ~to_select ~where:[]
 
     let teams_for_match_number db match_num =
-      let to_select = colum_name Team_number in
+      let to_select = col_team_number () in
       let where =
-        [ (colum_name Match_Number, Db_utils.Select.Int match_num) ]
+        [ (col_match_number (), Db_utils.Select.Int match_num) ]
       in
 
       Db_utils.Select.select_ints_where db ~table_name ~to_select ~where
@@ -362,9 +283,9 @@ module Table : Table_type = struct
       | None -> []
       | Some l_match ->
           let num_entries_for_match_num match_num =
-            let to_select = colum_name Match_Number in
+            let to_select = col_match_number () in
             let where =
-              [ (colum_name Match_Number, Db_utils.Select.Int match_num) ]
+              [ (col_match_number (), Db_utils.Select.Int match_num) ]
             in
 
             List.length
